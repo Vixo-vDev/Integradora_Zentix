@@ -21,6 +21,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+
 public class HelloApplication extends Application {
 
     @Override
@@ -116,6 +118,9 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
+        ConnectionBD con = new ConnectionBD();
+        con.conectar();
+
         launch(args);
     }
 }
