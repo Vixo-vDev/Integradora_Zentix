@@ -40,13 +40,6 @@ public class HelloApplication extends Application {
         rectanguloFondo.widthProperty().bind(panelIzquierdo.widthProperty());
         rectanguloFondo.heightProperty().bind(panelIzquierdo.heightProperty());
 
-        /*ImageView vistaImagen = new ImageView();
-        Image imagen = new Image(getClass().getResourceAsStream("/login-image.jpg"));
-        vistaImagen.setImage(imagen);
-        vistaImagen.setPreserveRatio(true);
-        vistaImagen.setFitWidth(100);
-        vistaImagen.setFitHeight(100);*/
-
         panelIzquierdo.getChildren().addAll(rectanguloFondo);
 
         VBox panelDerecho = new VBox(20);
@@ -101,6 +94,11 @@ public class HelloApplication extends Application {
         enlaceCrearCuenta.setFont(Font.font("Arial", 14));
         enlaceCrearCuenta.setTextFill(Color.BLUE);
         panelInferior.getChildren().addAll(etiquetaSinCuenta, enlaceCrearCuenta);
+
+        enlaceCrearCuenta.setOnAction(e -> {
+            Registro registro = new Registro();
+            registro.start(ventanaPrincipal);
+        });
 
         gridCampos.add(etiquetaUsuario, 0, 0);
         gridCampos.add(campoUsuario, 0, 1);
