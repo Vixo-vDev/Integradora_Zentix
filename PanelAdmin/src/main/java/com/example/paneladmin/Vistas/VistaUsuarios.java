@@ -1,16 +1,36 @@
 package com.example.paneladmin.Vistas;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import com.example.paneladmin.Controladores.ControladorUsuarios;
+import com.example.paneladmin.Modelos.Usuario;
+import javafx.geometry.Insets;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 
-public class VistaUsuarios extends Application {
+public class VistaUsuarios {
+    private ControladorUsuarios controlador;
+    private VBox vista;
+    private TableView<Usuario> tabla;
 
-    public static void main(String[] args) {
-        launch(args);
+    public VistaUsuarios() {
+        vista = new VBox(20);
+        vista.setPadding(new Insets(20));
+        this.controlador = new ControladorUsuarios(this); // Inicializar el controlador
+        controlador.inicializarUI();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public VBox getVista() {
+        return vista;
+    }
 
+    public TableView<Usuario> getTabla() {
+        return tabla;
+    }
+
+    public void setTabla(TableView<Usuario> tabla) {
+        this.tabla = tabla;
+        if (tabla != null) {
+            tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            tabla.setStyle("-fx-background-color: white;");
+        }
     }
 }
