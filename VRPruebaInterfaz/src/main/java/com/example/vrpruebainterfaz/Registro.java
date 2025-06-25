@@ -26,7 +26,7 @@ public class Registro {
         HBox contenedorPrincipal = new HBox();
 
         StackPane panelIzquierdo = new StackPane();
-        panelIzquierdo.setPrefWidth(500);
+        panelIzquierdo.setPrefWidth(300);
 
         Rectangle rectanguloFondo = new Rectangle();
         rectanguloFondo.setFill(Color.LIGHTGRAY);
@@ -37,14 +37,14 @@ public class Registro {
 
         VBox panelDerecho = new VBox(20);
         panelDerecho.setPadding(new Insets(40));
-        panelDerecho.setAlignment(Pos.CENTER);
-        panelDerecho.setPrefWidth(500);
+        panelDerecho.setAlignment(Pos.TOP_LEFT);
+        panelDerecho.setPrefWidth(700);
 
         Label titulo = new Label("Registrarse");
         titulo.setFont(Font.font("Arial", FontWeight.BOLD, 28));
 
         GridPane gridCampos = new GridPane();
-        gridCampos.setAlignment(Pos.CENTER);
+        gridCampos.setAlignment(Pos.TOP_LEFT);
         gridCampos.setHgap(15);
         gridCampos.setVgap(15);
 
@@ -75,21 +75,12 @@ public class Registro {
             Reutilizamos el mismo Stage
         });*/
 
-
-        HBox panelInferior = new HBox(5);
-        panelInferior.setAlignment(Pos.CENTER);
-        Label etiquetaSinCuenta = new Label("No tienes una cuenta?");
-        Hyperlink enlaceCrearCuenta = new Hyperlink("Crea una cuenta");
-        enlaceCrearCuenta.setFont(Font.font("Arial", 14));
-        enlaceCrearCuenta.setTextFill(Color.BLUE);
-        panelInferior.getChildren().addAll(etiquetaSinCuenta, enlaceCrearCuenta);
-
         gridCampos.add(etiquetaUsuario, 0, 0);
         gridCampos.add(campoUsuario, 0, 1);
         gridCampos.add(etiquetaContrasena, 0, 2);
         gridCampos.add(campoContrasena, 0, 3);
 
-        panelDerecho.getChildren().addAll(titulo, gridCampos, botonContinuar, panelInferior);
+        panelDerecho.getChildren().addAll(titulo, gridCampos, botonContinuar);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
 
         Scene escena = new Scene(contenedorPrincipal);
