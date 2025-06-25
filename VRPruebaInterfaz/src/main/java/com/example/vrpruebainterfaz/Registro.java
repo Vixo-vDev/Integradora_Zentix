@@ -46,19 +46,23 @@ public class Registro {
         GridPane gridCampos = new GridPane();
         gridCampos.setAlignment(Pos.TOP_LEFT);
         gridCampos.setHgap(15);
-        gridCampos.setVgap(15);
+        gridCampos.setVgap(12);
 
-        Label etiquetaUsuario = new Label("Usuario:");
-        etiquetaUsuario.setFont(Font.font("Arial", 16));
-        TextField campoUsuario = new TextField();
-        campoUsuario.setPrefWidth(250);
-        campoUsuario.setPrefHeight(35);
+        //Personalización de campo nombre
+        Label etiquetaName = new Label("Nombre");
+        etiquetaName.setFont(Font.font("Arial", 15));
 
-        Label etiquetaContrasena = new Label("Contrasena:");
-        etiquetaContrasena.setFont(Font.font("Arial", 16));
-        PasswordField campoContrasena = new PasswordField();
-        campoContrasena.setPrefWidth(250);
-        campoContrasena.setPrefHeight(35);
+        TextField campoName = new TextField();
+        campoName.setPrefWidth(200);
+        campoName.setPrefHeight(20);
+
+        //Personalización de campo apellido
+        Label etiquetaLastName = new Label("Apellido");
+        etiquetaLastName.setFont(Font.font("Arial", 15));
+
+        TextField campoLastName = new TextField();
+        campoLastName.setPrefWidth(200);
+        campoLastName.setPrefHeight(20);
 
         Button botonContinuar = new Button("Continuar");
         botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -66,19 +70,14 @@ public class Registro {
         botonContinuar.setPrefWidth(250);
         botonContinuar.setPrefHeight(40);
 
-        /*botonContinuar.setOnAction(e -> {
-            Crear una nueva raíz vacía para la nueva escena
 
-            Main nuevaVentana = new Main();
-            nuevaVentana.mostrar(ventanaPrincipal);
+        //Etiquetas fila 0
+        gridCampos.add(etiquetaName, 0, 0);
+        gridCampos.add(etiquetaLastName, 1, 0);
 
-            Reutilizamos el mismo Stage
-        });*/
-
-        gridCampos.add(etiquetaUsuario, 0, 0);
-        gridCampos.add(campoUsuario, 0, 1);
-        gridCampos.add(etiquetaContrasena, 0, 2);
-        gridCampos.add(campoContrasena, 0, 3);
+        //TextField fila 0
+        gridCampos.add(campoName, 0, 1);
+        gridCampos.add(campoLastName, 1, 1);
 
         panelDerecho.getChildren().addAll(titulo, gridCampos, botonContinuar);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
