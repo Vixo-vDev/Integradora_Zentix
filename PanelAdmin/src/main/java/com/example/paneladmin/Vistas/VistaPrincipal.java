@@ -16,4 +16,14 @@ public class VistaPrincipal {
         controlador.inicializarUI();
     }
 
+    public void mostrar(Stage escenario) {
+        Scene escena = new Scene(raiz, 1200, 750);
+        escenario.setTitle("Panel de Administracion");
+        escenario.setScene(escena);
+        escenario.show();
+    }
+
+    public BorderPane getRaiz() {
+        return raiz;
+    }
 }
