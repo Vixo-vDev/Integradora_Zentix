@@ -10,4 +10,10 @@ public class VistaPrincipal {
     private ControladorPrincipal controlador;
     private BorderPane raiz;
 
+    public VistaPrincipal() {
+        controlador = new ControladorPrincipal(this);
+        raiz = new BorderPane();
+        controlador.inicializarUI();
+    }
+
 }
