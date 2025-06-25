@@ -16,5 +16,15 @@ public class ControladorPrincipal {
     private VistaPrincipal vista;
     private VBox barraLateral;
 
+    public ControladorPrincipal(VistaPrincipal vista) {
+        this.vista = vista;
+    }
+
+    public void inicializarUI() {
+        barraLateral = crearBarraLateral();
+        vista.getRaiz().setLeft(barraLateral);
+        mostrarContenidoBienvenida();
+    }
+
 
 }
