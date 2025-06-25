@@ -1,16 +1,13 @@
 package com.example.paneladmin.Vistas;
 
-import javafx.application.Application;
+import com.example.paneladmin.Controladores.ControladorPrincipal;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class VistaPrincipal extends Application {
+public class VistaPrincipal {
+    private ControladorPrincipal controlador;
+    private BorderPane raiz;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-
-    }
 }
