@@ -85,7 +85,21 @@ public class ControladorPrincipal {
         return boton;
     }
 
+    private void mostrarContenidoBienvenida() {
+        VBox contenidoBienvenida = new VBox(20);
+        contenidoBienvenida.setAlignment(Pos.CENTER);
 
+        Label etiquetaBienvenida = new Label("Bienvenido al Panel de Administracion");
+        etiquetaBienvenida.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        etiquetaBienvenida.setTextFill(Color.web("#2c3e50"));
+
+        Label etiquetaInstrucciones = new Label("Seleccione una opcion del menu lateral para comenzar");
+        etiquetaInstrucciones.setFont(Font.font("Arial", 16));
+        etiquetaInstrucciones.setTextFill(Color.GRAY);
+
+        contenidoBienvenida.getChildren().addAll(etiquetaBienvenida, etiquetaInstrucciones);
+        vista.getRaiz().setCenter(contenidoBienvenida);
+    }
 
     private void mostrarVistaInventario() {
         VistaInventario vistaInventario = new VistaInventario();
