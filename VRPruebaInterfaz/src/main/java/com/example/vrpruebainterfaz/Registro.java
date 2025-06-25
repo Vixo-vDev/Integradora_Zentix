@@ -89,11 +89,11 @@ public class Registro {
         etiquetaLada.setFont(Font.font("Arial", 15));
 
         TextField campoLada = new TextField();
-        campoLada.setPrefWidth(100);
+        campoLada.setPrefWidth(20);
         campoLada.setPrefHeight(25);
 
         //Personalización de campo Teléfono
-        Label etiquetaTelefono = new Label("Lada ");
+        Label etiquetaTelefono = new Label("Teléfono");
         etiquetaTelefono.setFont(Font.font("Arial", 15));
 
         TextField campoTelefono = new TextField();
@@ -131,9 +131,11 @@ public class Registro {
         gridCampos.add(etiquetaLastName, 1, 0);
         gridCampos.add(etiquetaEmail, 2, 0);
 
-        //Etiquetas Columna 1
+        //Etiquetas Columna 2
         gridCampos.add(etiquetaCalle, 0,2);
-        girdCampo
+        gridCampos.add(etiquetaLada, 1, 2);
+        gridCampos.add(etiquetaTelefono, 2, 2);
+        gridCampos.add(eitquetaDate, 3 ,2);
 
         //TextField Columna 0
         gridCampos.add(campoName, 0, 1);
@@ -142,6 +144,9 @@ public class Registro {
 
         //TextField Columna 1
         gridCampos.add(campoCalle, 0,3);
+        gridCampos.add(campoLada,1,3);
+        gridCampos.add(campoTelefono,2,3);
+        gridCampos.add(campofecha, 3,3);
 
 
         panelDerecho.getChildren().addAll(titulo, section1, gridCampos, buttons);
