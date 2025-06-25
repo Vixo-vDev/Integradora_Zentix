@@ -21,7 +21,7 @@ public class Registro {
 
         //Asignando dimensiones de la vetana registro
         ventanaRegistro.setWidth(1000);
-        ventanaRegistro.setHeight(700);
+        ventanaRegistro.setHeight(600);
 
         HBox contenedorPrincipal = new HBox();
 
@@ -76,7 +76,33 @@ public class Registro {
         campoEmail.setPrefWidth(200);
         campoEmail.setPrefHeight(25);
 
+        //Personalización de campo calle
+        Label etiquetaCalle = new Label("Calle");
+        etiquetaCalle.setFont(Font.font("Arial", 15));
 
+        TextField campoCalle = new TextField();
+        campoCalle.setPrefWidth(200);
+        campoCalle.setPrefHeight(25);
+
+        //Personalización de campo LADA
+        Label etiquetaLada = new Label("Lada ");
+        etiquetaLada.setFont(Font.font("Arial", 15));
+
+        TextField campoLada = new TextField();
+        campoLada.setPrefWidth(100);
+        campoLada.setPrefHeight(25);
+
+        //Personalización de campo Teléfono
+        Label etiquetaTelefono = new Label("Lada ");
+        etiquetaTelefono.setFont(Font.font("Arial", 15));
+
+        TextField campoTelefono = new TextField();
+        campoTelefono.setPrefWidth(150);
+        campoTelefono.setPrefHeight(25);
+
+        //Personalizacion de campo date
+        Label eitquetaDate = new Label("Fecha");
+        DatePicker campofecha = new DatePicker();
 
         HBox buttons = new HBox(15);
         buttons.setAlignment(Pos.CENTER);
@@ -100,16 +126,23 @@ public class Registro {
 
         buttons.getChildren().addAll(botonContinuar, botonCancelar);
 
-
-        //Etiquetas fila 0
+        //Etiquetas Columna 0
         gridCampos.add(etiquetaName, 0, 0);
         gridCampos.add(etiquetaLastName, 1, 0);
         gridCampos.add(etiquetaEmail, 2, 0);
 
-        //TextField fila 0
+        //Etiquetas Columna 1
+        gridCampos.add(etiquetaCalle, 0,2);
+        girdCampo
+
+        //TextField Columna 0
         gridCampos.add(campoName, 0, 1);
         gridCampos.add(campoLastName, 1, 1);
         gridCampos.add(campoEmail, 2, 1);
+
+        //TextField Columna 1
+        gridCampos.add(campoCalle, 0,3);
+
 
         panelDerecho.getChildren().addAll(titulo, section1, gridCampos, buttons);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
