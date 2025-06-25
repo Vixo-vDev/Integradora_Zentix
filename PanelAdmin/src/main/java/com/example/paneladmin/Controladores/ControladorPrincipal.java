@@ -1,16 +1,20 @@
 package com.example.paneladmin.Controladores;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 
-public class ControladorPrincipal extends Application {
+import com.example.paneladmin.Vistas.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class ControladorPrincipal {
+    private VistaPrincipal vista;
+    private VBox barraLateral;
 
-    @Override
-    public void start(Stage primaryStage) {
 
-    }
 }
