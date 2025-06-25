@@ -1,16 +1,21 @@
 package com.example.paneladmin.Vistas;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import com.example.paneladmin.Controladores.ControladorConfiguracion;
+import javafx.geometry.Insets;
+import javafx.scene.layout.VBox;
 
-public class VistaConfiguracion extends Application {
+public class VistaConfiguracion {
+    private ControladorConfiguracion controlador;
+    private VBox vista;
 
-    public static void main(String[] args) {
-        launch(args);
+    public VistaConfiguracion() {
+        vista = new VBox(20);
+        vista.setPadding(new Insets(20));
+        this.controlador = new ControladorConfiguracion(this);
+        controlador.inicializarUI();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-
+    public VBox getVista() {
+        return vista;
     }
 }
