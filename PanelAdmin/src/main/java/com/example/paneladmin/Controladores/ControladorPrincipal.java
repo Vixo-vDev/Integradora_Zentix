@@ -28,7 +28,7 @@ public class ControladorPrincipal {
 
     private VBox crearBarraLateral() {
         VBox barraLateral = new VBox(15);
-        barraLateral.setStyle("-fx-background-color: #2c3e50;");
+        barraLateral.setStyle("-fx-background-color: #d9d9d9;");
         barraLateral.setPadding(new Insets(20, 15, 20, 15));
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
@@ -116,14 +116,12 @@ public class ControladorPrincipal {
         grid.setAlignment(Pos.CENTER);
         grid.setStyle("-fx-background-color: #ecf0f1;"); // Fondo gris claro
 
-        // Crear tarjetas
         VBox tarjetaInventario = crearTarjeta("Inventario", "/com/example/paneladmin/iconos/inventario_icon.png", e -> mostrarVistaInventario());
         VBox tarjetaFormulario = crearTarjeta("Formulario", "/com/example/paneladmin/iconos/formulario_icon.png", e -> mostrarVistaFormularios());
         VBox tarjetaSolicitudes = crearTarjeta("Solicitudes", "/com/example/paneladmin/iconos/solicitudes_icon.png", e -> mostrarVistaSolicitudes());
         VBox tarjetaUsuarios = crearTarjeta("Usuarios", "/com/example/paneladmin/iconos/usuarios_icon.png", e -> mostrarVistaUsuarios());
         VBox tarjetaEstadisticas = crearTarjeta("Estadísticas", "/com/example/paneladmin/iconos/estadisticas_icon.png", e -> mostrarVistaEstadisticas());
 
-        // Posicionar tarjetas en el GridPane
         grid.add(tarjetaInventario, 0, 0);
         grid.add(tarjetaFormulario, 1, 0);
         grid.add(tarjetaSolicitudes, 2, 0);
@@ -140,16 +138,10 @@ public class ControladorPrincipal {
         tarjeta.setStyle("-fx-background-color: #f0f0f0; -fx-background-radius: 10; -fx-border-color: #bdc3c7; -fx-border-radius: 10; -fx-border-width: 1;"); // Fondo gris claro, bordes redondeados
 
         ImageView icono = new ImageView();
-        try {
+
             icono.setImage(new Image(getClass().getResourceAsStream(iconoRuta)));
             icono.setFitWidth(80); // Tamaño del icono
             icono.setFitHeight(80);
-        } catch (Exception e) {
-            System.err.println("Error al cargar icono para " + titulo + ": " + e.getMessage());
-            Label errorLabel = new Label("Icono no cargado");
-            errorLabel.setStyle("-fx-text-fill: red;");
-            tarjeta.getChildren().add(errorLabel);
-        }
 
 
         Label etiquetaTitulo = new Label(titulo);
