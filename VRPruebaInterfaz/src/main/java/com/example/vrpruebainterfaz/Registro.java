@@ -5,6 +5,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Registro {
 
@@ -22,10 +25,22 @@ public class Registro {
         ventanaRegistro.setWidth(1000);
         ventanaRegistro.setHeight(600);
 
+
         HBox contenedorPrincipal = new HBox();
 
         StackPane panelIzquierdo = new StackPane();
         panelIzquierdo.setPrefWidth(300);
+
+        Image logoUtez = new Image(getClass().getResourceAsStream("/img/logo_utez.png"));
+        ImageView logoUtezV = new ImageView(logoUtez);
+        logoUtezV.setFitHeight(100);
+        logoUtezV.setFitWidth(200);
+        logoUtezV.setPreserveRatio(true);
+
+        VBox contenedorVertical = new VBox(logoUtezV);
+        contenedorVertical.setAlignment(Pos.TOP_CENTER);  // imagen arriba y centrada
+        contenedorVertical.setPadding(new Insets(20));    // espacio superior
+
 
         Rectangle rectanguloFondo = new Rectangle();
         rectanguloFondo.setFill(Color.LIGHTGRAY);
@@ -226,6 +241,7 @@ public class Registro {
         gridCampos.add(campoEdad,4,3);*/
 
 
+        panelIzquierdo.getChildren().add(contenedorVertical);
         panelDerecho.getChildren().addAll(titulo, gridCampos,buttons);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
 

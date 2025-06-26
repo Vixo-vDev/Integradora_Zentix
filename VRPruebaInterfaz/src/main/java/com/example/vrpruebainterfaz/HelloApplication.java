@@ -30,6 +30,7 @@ public class HelloApplication extends Application {
         ventanaPrincipal.setWidth(1000);
         ventanaPrincipal.setHeight(600);
 
+
         HBox contenedorPrincipal = new HBox();
 
         StackPane panelIzquierdo = new StackPane();
