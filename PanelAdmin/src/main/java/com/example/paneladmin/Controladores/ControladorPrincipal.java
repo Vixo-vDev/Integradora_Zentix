@@ -33,42 +33,52 @@ public class ControladorPrincipal {
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
 
-
         ImageView logoUtez = new ImageView();
-
-
-
-            logoUtez.setImage(new Image(getClass().getResourceAsStream("/com/example/paneladmin/imagenes/logo_utez.png")));
-            logoUtez.setFitWidth(150);
-            logoUtez.setPreserveRatio(true);
+        logoUtez.setImage(new Image(getClass().getResourceAsStream("/com/example/paneladmin/imagenes/logo_utez.png")));
+        logoUtez.setFitWidth(150);
+        logoUtez.setPreserveRatio(true);
 
 
 
         VBox logoContainer = new VBox(5, logoUtez);
-        logoContainer.setAlignment(Pos.CENTER);
-        logoContainer.setPadding(new Insets(0, 0, 20, 0));
+        logoContainer.setAlignment(Pos.TOP_CENTER);
+        logoContainer.setPadding(new Insets(0, 0, 20, 0)); // Espacio debajo del logo
 
 
-        // Información del usuario
-        ImageView userIcon = new ImageView(new Image(getClass().getResourceAsStream("/com/example/paneladmin/imagenes/user_placeholder.png"))); // Icono de usuario
+        //InformacionDelUsuario
+        ImageView userIcon = new ImageView(new Image(getClass().getResourceAsStream("/com/example/paneladmin/imagenes/user_placeholder.png")));
         userIcon.setFitWidth(60);
         userIcon.setFitHeight(60);
-        Label nombreUsuario = new Label("[Name]"); // Placeholder para el nombre
-        nombreUsuario.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        nombreUsuario.setTextFill(Color.WHITE);
 
-        Label rolUsuario = new Label("[Rol]"); // Placeholder para el rol
+        Label nombreUsuario = new Label("[Name]");
+        nombreUsuario.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        nombreUsuario.setTextFill(Color.BLACK);
+
+        Label rolUsuario = new Label("[Rol]");
         rolUsuario.setFont(Font.font("Arial", 14));
-        rolUsuario.setTextFill(Color.LIGHTGRAY);
+        rolUsuario.setTextFill(Color.DARKGRAY);
 
         VBox userInfo = new VBox(5, userIcon, nombreUsuario, rolUsuario);
-        userInfo.setAlignment(Pos.CENTER);
+        userInfo.setAlignment(Pos.TOP_CENTER);
         userInfo.setPadding(new Insets(0, 0, 20, 0));
-//Botones inferiores
+
+
+
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS); // ESTE LE DA ESPAICO PARA QUE LOS BOTONES CERRAR SESION Y CONDIGURACION ESTEN ABAJO.
+
+
         Button btnConfig = crearBotonMenu("Configuración", e -> mostrarVistaConfiguracion());
         Button btnCerrarSesion = crearBotonCerrarSesion();
 
-        barraLateral.getChildren().addAll(btnConfig, btnCerrarSesion);
+        barraLateral.getChildren().clear();
+        barraLateral.getChildren().addAll(
+                logoContainer,
+                userInfo,
+                spacer,
+                btnConfig,
+                btnCerrarSesion
+        );
 
         return barraLateral;
     }
@@ -89,7 +99,7 @@ public class ControladorPrincipal {
         boton.setMaxWidth(Double.MAX_VALUE);
         boton.setAlignment(Pos.CENTER_LEFT);
         boton.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-padding: 10 15;");
-        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #34495e; -fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-padding: 10 15;"));
+        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #7c7c7c; -fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-padding: 10 15;"));
         boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-padding: 10 15;"));
         boton.setOnAction(e -> mostrarConfirmacionCerrarSesion());
         return boton;
@@ -98,8 +108,8 @@ public class ControladorPrincipal {
     private void mostrarContenidoPrincipal() {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(50));
-        grid.setHgap(40); // Espacio horizontal entre tarjetas
-        grid.setVgap(40); // Espacio vertical entre tarjetas
+        grid.setHgap(40);
+        grid.setVgap(40);
         grid.setAlignment(Pos.CENTER);
         grid.setStyle("-fx-background-color: #ecf0f1;"); // Fondo gris claro
 
@@ -121,13 +131,13 @@ public class ControladorPrincipal {
     private VBox crearTarjeta(String titulo, String iconoRuta, javafx.event.EventHandler<javafx.event.ActionEvent> accionVer) {
         VBox tarjeta = new VBox(10);
         tarjeta.setAlignment(Pos.CENTER);
-        tarjeta.setPrefSize(180, 180); // Ajusta el tamaño de la tarjeta
-        tarjeta.setStyle("-fx-background-color: #f0f0f0; -fx-background-radius: 10; -fx-border-color: #bdc3c7; -fx-border-radius: 10; -fx-border-width: 1;"); // Fondo gris claro, bordes redondeados
+        tarjeta.setPrefSize(180, 180);
+        tarjeta.setStyle("-fx-background-color: #f0f0f0; -fx-background-radius: 10; -fx-border-color: #bdc3c7; -fx-border-radius: 10; -fx-border-width: 1;");
 
         ImageView icono = new ImageView();
 
             icono.setImage(new Image(getClass().getResourceAsStream(iconoRuta)));
-            icono.setFitWidth(80); // Tamaño del icono
+            icono.setFitWidth(80);
             icono.setFitHeight(80);
 
 
