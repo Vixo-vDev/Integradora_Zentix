@@ -5,10 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -44,68 +41,110 @@ public class Registro {
         titulo.setFont(Font.font("Arial", FontWeight.BOLD, 28));
 
         GridPane gridCampos = new GridPane();
-        gridCampos.setAlignment(Pos.TOP_LEFT);
         gridCampos.setHgap(15);
-        gridCampos.setVgap(12);
+        gridCampos.setVgap(15);
+        gridCampos.setAlignment(Pos.TOP_LEFT);
 
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPrefWidth(150);
+        col1.setHgrow(Priority.NEVER);
 
-        Label section1 = new Label("Información Personal");
-        section1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPrefWidth(150);
+        col2.setHgrow(Priority.ALWAYS);
 
-        //Personalización de campo nombre
-        Label etiquetaName = new Label("Nombre");
-        etiquetaName.setFont(Font.font("Arial", 15));
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPrefWidth(150);
+        col3.setHgrow(Priority.ALWAYS);
 
-        TextField campoName = new TextField();
-        campoName.setPrefWidth(200);
-        campoName.setPrefHeight(25);
+        ColumnConstraints col4 = new ColumnConstraints();
+        col4.setPrefWidth(150);
+        col4.setHgrow(Priority.ALWAYS);
 
-        //Personalización de campo apellido
-        Label etiquetaLastName = new Label("Apellidos");
-        etiquetaLastName.setFont(Font.font("Arial", 15));
+        ColumnConstraints col5 = new ColumnConstraints();
+        col5.setPrefWidth(150);
+        col5.setHgrow(Priority.ALWAYS);
 
-        TextField campoLastName = new TextField();
-        campoLastName.setPrefWidth(200);
-        campoLastName.setPrefHeight(25);
+        gridCampos.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
 
-        //Personalización de campo correo institucional
-        Label etiquetaEmail = new Label("Correo Institucional");
-        etiquetaEmail.setFont(Font.font("Arial", 15));
+        Label infoPersonal = new Label("Información personal");
+        infoPersonal.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        gridCampos.add(infoPersonal, 0, 0, 5, 1);
 
-        TextField campoEmail = new TextField();
-        campoEmail.setPrefWidth(200);
-        campoEmail.setPrefHeight(25);
+        // Línea 1: Nombre, Apellidos, Correo institucional
+        Label lblNombre = new Label("Nombre:");
+        TextField campoNombre = new TextField();
+        gridCampos.add(lblNombre, 0, 1);
+        gridCampos.add(campoNombre, 0, 2);
 
-        //Personalización de campo calle
-        Label etiquetaCalle = new Label("Calle");
-        etiquetaCalle.setFont(Font.font("Arial", 15));
+        Label lblApellidos = new Label("Apellidos:");
+        TextField campoApellidos = new TextField();
+        gridCampos.add(lblApellidos, 1, 1);
+        gridCampos.add(campoApellidos, 1, 2);
 
+        Label lblCorreo = new Label("Correo institucional:");
+        lblCorreo.setWrapText(true);
+        TextField campoCorreo = new TextField();
+        gridCampos.add(lblCorreo, 2, 1, 2, 1);
+        gridCampos.add(campoCorreo, 2, 2, 2, 1);
+
+            // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
+        Label lblCalle = new Label("Calle:");
         TextField campoCalle = new TextField();
-        campoCalle.setPrefWidth(200);
-        campoCalle.setPrefHeight(25);
+        gridCampos.add(lblCalle, 0, 3);
+        gridCampos.add(campoCalle, 0, 4);
 
-        //Personalización de campo LADA
-        Label etiquetaLada = new Label("Lada ");
-        etiquetaLada.setFont(Font.font("Arial", 15));
-
+        Label lblLada = new Label("Lada:");
         TextField campoLada = new TextField();
-        campoLada.setPrefWidth(20);
-        campoLada.setPrefHeight(25);
+        campoLada.setPrefWidth(60);
+        gridCampos.add(lblLada, 1, 3);
+        gridCampos.add(campoLada, 1, 4);
 
-        //Personalización de campo Teléfono
-        Label etiquetaTelefono = new Label("Teléfono");
-        etiquetaTelefono.setFont(Font.font("Arial", 15));
-
+        Label lblTelefono = new Label("Teléfono:");
         TextField campoTelefono = new TextField();
-        campoTelefono.setPrefWidth(150);
-        campoTelefono.setPrefHeight(25);
+        gridCampos.add(lblTelefono, 2, 3);
+        gridCampos.add(campoTelefono, 2, 4);
 
-        //Personalizacion de campo date
-        Label eitquetaDate = new Label("Fecha");
-        DatePicker campofecha = new DatePicker();
+        Label lblFecha = new Label("Fecha de nacimiento:");
+        DatePicker campoFecha = new DatePicker();
+        gridCampos.add(lblFecha, 3, 3);
+        gridCampos.add(campoFecha, 3, 4);
 
-        HBox buttons = new HBox(15);
-        buttons.setAlignment(Pos.CENTER);
+        Label lblEdad = new Label("Edad:");
+        TextField campoEdad = new TextField();
+        campoEdad.setPrefWidth(60);
+        gridCampos.add(lblEdad, 4, 3);
+        gridCampos.add(campoEdad, 4, 4);
+
+        Label infoAcademica = new Label("Información académica");
+        infoAcademica.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        gridCampos.add(infoAcademica, 0, 5, 5, 1);
+
+        // Línea 3: ComboBox debajo del label
+        Label lblRol = new Label("Rol:");
+        ComboBox<String> comboRol = new ComboBox<>();
+        comboRol.getItems().addAll("Alumno", "Docente", "Administrador");
+        comboRol.setPromptText("Selecciona tu Rol");
+        gridCampos.add(lblRol, 0, 6, 5, 1);
+        gridCampos.add(comboRol, 0, 7, 3, 1);
+
+        Label infoCredenciales = new Label("Credenciales");
+        infoCredenciales.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        gridCampos.add(infoCredenciales, 0, 8, 5, 1);
+
+    // Línea 4: Contraseña y Confirmar contraseña
+        Label lblContrasena = new Label("Contraseña:");
+        PasswordField campoContrasena = new PasswordField();
+        gridCampos.add(lblContrasena, 0, 9);
+        gridCampos.add(campoContrasena, 0, 10);
+
+        Label lblConfirmar = new Label("Confirmar contraseña:");
+        PasswordField campoConfirmar = new PasswordField();
+        lblConfirmar.setWrapText(true);
+        gridCampos.add(lblConfirmar, 1, 9);
+        gridCampos.add(campoConfirmar, 0, 11);
+
+
 
         Button botonContinuar = new Button("Continuar");
         botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -124,10 +163,12 @@ public class Registro {
            regresar.start(ventanaRegistro);
         });
 
+        HBox buttons = new HBox(15);
+        buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(botonContinuar, botonCancelar);
 
         //Etiquetas Columna 0
-        gridCampos.add(etiquetaName, 0, 0);
+        /*gridCampos.add(etiquetaName, 0, 0);
         gridCampos.add(etiquetaLastName, 1, 0);
         gridCampos.add(etiquetaEmail, 2, 0);
 
@@ -136,6 +177,7 @@ public class Registro {
         gridCampos.add(etiquetaLada, 1, 2);
         gridCampos.add(etiquetaTelefono, 2, 2);
         gridCampos.add(eitquetaDate, 3 ,2);
+        gridCampos.add(etiquetaEdad, 4,2);
 
         //TextField Columna 0
         gridCampos.add(campoName, 0, 1);
@@ -147,9 +189,10 @@ public class Registro {
         gridCampos.add(campoLada,1,3);
         gridCampos.add(campoTelefono,2,3);
         gridCampos.add(campofecha, 3,3);
+        gridCampos.add(campoEdad,4,3);*/
 
 
-        panelDerecho.getChildren().addAll(titulo, section1, gridCampos, buttons);
+        panelDerecho.getChildren().addAll(titulo, gridCampos,buttons);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
 
         Scene escena = new Scene(contenedorPrincipal);

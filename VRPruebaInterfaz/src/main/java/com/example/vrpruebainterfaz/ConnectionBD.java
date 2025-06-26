@@ -16,6 +16,7 @@ public class ConnectionBD {
             return DriverManager.getConnection(url, user, password);
 
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("Conexión fallida");
             System.out.println(e.getMessage());
             e.printStackTrace();
             return null;
