@@ -47,9 +47,6 @@ public class ControladorConfiguracion {
         // Sección Notificaciones
         VBox seccionNotificaciones = crearSeccionNotificaciones();
 
-        // Botones de acción
-        HBox contenedorBotones = crearContenedorBotones();
-
         contenidoPrincipal.getChildren().addAll(
                 titulo,
                 seccionCuenta,
@@ -58,8 +55,7 @@ public class ControladorConfiguracion {
                 new Separator(),
                 seccionApariencia,
                 new Separator(),
-                seccionNotificaciones,
-                contenedorBotones
+                seccionNotificaciones
         );
 
         scrollPane.setContent(contenidoPrincipal);
@@ -67,7 +63,7 @@ public class ControladorConfiguracion {
     }
 
     private VBox crearSeccionCuenta() {
-        VBox seccion = new VBox(10);
+        VBox seccion = new VBox(15);
         seccion.setPadding(new Insets(15));
         seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
@@ -78,12 +74,26 @@ public class ControladorConfiguracion {
         campoNombreCuenta.setPromptText("Nombre de la cuenta");
         campoNombreCuenta.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
 
-        seccion.getChildren().addAll(titulo, campoNombreCuenta);
+        // Botón de confirmar para esta sección
+        Button btnConfirmarCuenta = new Button("Guardar Cambios de Cuenta");
+        btnConfirmarCuenta.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnConfirmarCuenta.setOnAction(e -> {
+            if (campoNombreCuenta.getText().isEmpty()) {
+                mostrarAlerta("Error", "El nombre de cuenta no puede estar vacío");
+            } else {
+                mostrarAlerta("Éxito", "Información de cuenta actualizada correctamente");
+            }
+        });
+
+        HBox contenedorBotones = new HBox(btnConfirmarCuenta);
+        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
+
+        seccion.getChildren().addAll(titulo, campoNombreCuenta, contenedorBotones);
         return seccion;
     }
 
     private VBox crearSeccionSeguridad() {
-        VBox seccion = new VBox(10);
+        VBox seccion = new VBox(15);
         seccion.setPadding(new Insets(15));
         seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
@@ -98,12 +108,30 @@ public class ControladorConfiguracion {
         campoNuevaContrasena.setPromptText("Nueva contraseña");
         campoNuevaContrasena.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
 
-        seccion.getChildren().addAll(titulo, campoContrasenaActual, campoNuevaContrasena);
+        // Botón de confirmar para esta sección
+        Button btnConfirmarSeguridad = new Button("Cambiar Contraseña");
+        btnConfirmarSeguridad.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnConfirmarSeguridad.setOnAction(e -> {
+            if (campoContrasenaActual.getText().isEmpty() || campoNuevaContrasena.getText().isEmpty()) {
+                mostrarAlerta("Error", "Ambos campos de contraseña son requeridos");
+            } else if (campoNuevaContrasena.getText().length() < 8) {
+                mostrarAlerta("Error", "La nueva contraseña debe tener al menos 8 caracteres");
+            } else {
+                mostrarAlerta("Éxito", "Contraseña cambiada correctamente");
+                campoContrasenaActual.clear();
+                campoNuevaContrasena.clear();
+            }
+        });
+
+        HBox contenedorBotones = new HBox(btnConfirmarSeguridad);
+        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
+
+        seccion.getChildren().addAll(titulo, campoContrasenaActual, campoNuevaContrasena, contenedorBotones);
         return seccion;
     }
 
     private VBox crearSeccionApariencia() {
-        VBox seccion = new VBox(10);
+        VBox seccion = new VBox(15);
         seccion.setPadding(new Insets(15));
         seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
@@ -115,12 +143,26 @@ public class ControladorConfiguracion {
         comboEstilos.setPromptText("Seleccione un tema");
         comboEstilos.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
 
-        seccion.getChildren().addAll(titulo, comboEstilos);
+        // Botón de confirmar para esta sección
+        Button btnConfirmarApariencia = new Button("Aplicar Tema");
+        btnConfirmarApariencia.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnConfirmarApariencia.setOnAction(e -> {
+            if (comboEstilos.getSelectionModel().isEmpty()) {
+                mostrarAlerta("Error", "Por favor seleccione un tema");
+            } else {
+                mostrarAlerta("Éxito", "Tema aplicado: " + comboEstilos.getValue());
+            }
+        });
+
+        HBox contenedorBotones = new HBox(btnConfirmarApariencia);
+        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
+
+        seccion.getChildren().addAll(titulo, comboEstilos, contenedorBotones);
         return seccion;
     }
 
     private VBox crearSeccionNotificaciones() {
-        VBox seccion = new VBox(10);
+        VBox seccion = new VBox(15);
         seccion.setPadding(new Insets(15));
         seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
@@ -130,45 +172,19 @@ public class ControladorConfiguracion {
         checkNotificacionesApp = new CheckBox("Recibir notificaciones en la aplicación");
         checkNotificacionesApp.setStyle("-fx-font-weight: bold;");
 
-        seccion.getChildren().addAll(titulo, checkNotificacionesApp);
+        // Botón de confirmar para esta sección
+        Button btnConfirmarNotificaciones = new Button("Guardar Preferencias");
+        btnConfirmarNotificaciones.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnConfirmarNotificaciones.setOnAction(e -> {
+            String estado = checkNotificacionesApp.isSelected() ? "activadas" : "desactivadas";
+            mostrarAlerta("Éxito", "Notificaciones " + estado + " correctamente");
+        });
+
+        HBox contenedorBotones = new HBox(btnConfirmarNotificaciones);
+        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
+
+        seccion.getChildren().addAll(titulo, checkNotificacionesApp, contenedorBotones);
         return seccion;
-    }
-
-    private HBox crearContenedorBotones() {
-        HBox contenedor = new HBox(15);
-        contenedor.setAlignment(Pos.CENTER);
-        contenedor.setStyle("-fx-padding: 20 0 10 0;");
-
-        Button btnGuardar = new Button("Guardar Cambios");
-        btnGuardar.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-        btnGuardar.setOnAction(e -> guardarConfiguracion());
-
-        Button btnRestaurar = new Button("Restaurar Valores");
-        btnRestaurar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-        btnRestaurar.setOnAction(e -> restaurarConfiguracion());
-
-        contenedor.getChildren().addAll(btnGuardar, btnRestaurar);
-        return contenedor;
-    }
-
-    private void guardarConfiguracion() {
-        // Validación de contraseña
-        if (campoNuevaContrasena.getText().length() > 0 && campoNuevaContrasena.getText().length() < 8) {
-            mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres");
-            return;
-        }
-
-        // Lógica para guardar configuración
-        mostrarAlerta("Éxito", "Configuración guardada correctamente");
-    }
-
-    private void restaurarConfiguracion() {
-        // Lógica para restaurar valores por defecto
-        campoNombreCuenta.clear();
-        campoContrasenaActual.clear();
-        campoNuevaContrasena.clear();
-        comboEstilos.getSelectionModel().clearSelection();
-        checkNotificacionesApp.setSelected(false);
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
