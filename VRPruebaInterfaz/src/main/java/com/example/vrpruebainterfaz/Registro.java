@@ -74,23 +74,27 @@ public class Registro {
         // Línea 1: Nombre, Apellidos, Correo institucional
         Label lblNombre = new Label("Nombre:");
         TextField campoNombre = new TextField();
+        GridPane.setHgrow(campoNombre, Priority.ALWAYS);
         gridCampos.add(lblNombre, 0, 1);
         gridCampos.add(campoNombre, 0, 2);
 
         Label lblApellidos = new Label("Apellidos:");
         TextField campoApellidos = new TextField();
+        GridPane.setHgrow(campoApellidos, Priority.ALWAYS);
         gridCampos.add(lblApellidos, 1, 1);
         gridCampos.add(campoApellidos, 1, 2);
 
         Label lblCorreo = new Label("Correo institucional:");
         lblCorreo.setWrapText(true);
         TextField campoCorreo = new TextField();
+        GridPane.setHgrow(campoCorreo, Priority.ALWAYS);
         gridCampos.add(lblCorreo, 2, 1, 2, 1);
         gridCampos.add(campoCorreo, 2, 2, 2, 1);
 
             // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
         Label lblCalle = new Label("Calle:");
         TextField campoCalle = new TextField();
+        GridPane.setHgrow(campoCalle, Priority.ALWAYS);
         gridCampos.add(lblCalle, 0, 3);
         gridCampos.add(campoCalle, 0, 4);
 
@@ -102,11 +106,13 @@ public class Registro {
 
         Label lblTelefono = new Label("Teléfono:");
         TextField campoTelefono = new TextField();
+        GridPane.setHgrow(campoTelefono, Priority.ALWAYS);
         gridCampos.add(lblTelefono, 2, 3);
         gridCampos.add(campoTelefono, 2, 4);
 
         Label lblFecha = new Label("Fecha de nacimiento:");
         DatePicker campoFecha = new DatePicker();
+        GridPane.setHgrow(campoTelefono, Priority.ALWAYS);
         gridCampos.add(lblFecha, 3, 3);
         gridCampos.add(campoFecha, 3, 4);
 
@@ -121,10 +127,11 @@ public class Registro {
         gridCampos.add(infoAcademica, 0, 5, 5, 1);
 
         // Línea 3: ComboBox debajo del label
-        Label lblRol = new Label("Rol:");
+        Label lblRol = new Label("Selecciona tu Rol:");
         ComboBox<String> comboRol = new ComboBox<>();
-        comboRol.getItems().addAll("Alumno", "Docente", "Administrador");
+        comboRol.getItems().addAll("Alumno", "Docente");
         comboRol.setPromptText("Selecciona tu Rol");
+        GridPane.setHgrow(comboRol, Priority.ALWAYS);
         gridCampos.add(lblRol, 0, 6, 5, 1);
         gridCampos.add(comboRol, 0, 7, 3, 1);
 
@@ -132,19 +139,21 @@ public class Registro {
         infoCredenciales.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         gridCampos.add(infoCredenciales, 0, 8, 5, 1);
 
-    // Línea 4: Contraseña y Confirmar contraseña
+
         Label lblContrasena = new Label("Contraseña:");
         PasswordField campoContrasena = new PasswordField();
+        campoContrasena.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(campoContrasena, Priority.ALWAYS);
         gridCampos.add(lblContrasena, 0, 9);
-        gridCampos.add(campoContrasena, 0, 10);
+        gridCampos.add(campoContrasena, 0, 10, 2, 1);
 
         Label lblConfirmar = new Label("Confirmar contraseña:");
-        PasswordField campoConfirmar = new PasswordField();
         lblConfirmar.setWrapText(true);
-        gridCampos.add(lblConfirmar, 1, 9);
-        gridCampos.add(campoConfirmar, 0, 11);
-
-
+        PasswordField campoConfirmar = new PasswordField();
+        campoConfirmar.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(campoConfirmar, Priority.ALWAYS);
+        gridCampos.add(lblConfirmar, 2, 9);
+        gridCampos.add(campoConfirmar, 2, 10, 2, 1);
 
         Button botonContinuar = new Button("Continuar");
         botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
