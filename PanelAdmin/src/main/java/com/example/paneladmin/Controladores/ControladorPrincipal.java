@@ -64,20 +64,7 @@ public class ControladorPrincipal {
         VBox userInfo = new VBox(5, userIcon, nombreUsuario, rolUsuario);
         userInfo.setAlignment(Pos.CENTER);
         userInfo.setPadding(new Insets(0, 0, 20, 0));
-
-        barraLateral.getChildren().addAll(logoContainer, userInfo, new Separator());
-
-        // Botones del menú
-        Button btnInventario = crearBotonMenu("Inventario", e -> mostrarVistaInventario());
-        Button btnUsuarios = crearBotonMenu("Usuarios", e -> mostrarVistaUsuarios());
-        Button btnEstadisticas = crearBotonMenu("Estadisticas", e -> mostrarVistaEstadisticas());
-        Button btnFormularios = crearBotonMenu("Formularios", e -> mostrarVistaFormularios());
-        Button btnSolicitudes = crearBotonMenu("Solicitudes", e -> mostrarVistaSolicitudes());
-
-        barraLateral.getChildren().addAll(btnInventario, btnUsuarios, btnEstadisticas,
-                btnFormularios, btnSolicitudes, new Separator());
-
-        // Botones inferiores
+//Botones inferiores
         Button btnConfig = crearBotonMenu("Configuración", e -> mostrarVistaConfiguracion());
         Button btnCerrarSesion = crearBotonCerrarSesion();
 
