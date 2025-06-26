@@ -39,7 +39,7 @@ public class ControladorPrincipal {
 
 
             logoUtez.setImage(new Image(getClass().getResourceAsStream("/com/example/paneladmin/imagenes/logo_utez.png")));
-            logoUtez.setFitWidth(100);
+            logoUtez.setFitWidth(150);
             logoUtez.setPreserveRatio(true);
 
 
