@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+
 public class Registro {
 
     public void start(Stage ventanaRegistro) {
@@ -175,11 +177,21 @@ public class Registro {
             String calle = campoCalle.getText();
             String lada = campoLada.getText();
             String telefono = campoTelefono.getText();
-            String date = campoFecha.getValue().toString();
+            LocalDate date = campoFecha.getValue();
             String rol = comboRol.getSelectionModel().getSelectedItem();
             String password = campoContrasena.getText();
             String passwordConfirmar = campoConfirmar.getText();
+
+            if(nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || calle.isEmpty() || lada.isEmpty()
+            || telefono.isEmpty()  || date== null || rol.isEmpty() || password.isEmpty() || passwordConfirmar.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("LOS CAMPOS NO DEBEN ESTAR VACÍOS");
+                alert.setContentText("Por favor ingrese los campos");
+                alert.showAndWait();
+            }
         });
+
         botonCancelar.setOnAction(e -> {
            HelloApplication regresar = new HelloApplication();
            regresar.start(ventanaRegistro);
