@@ -90,9 +90,9 @@ public class ControladorPrincipal {
         Button boton = new Button(texto);
         boton.setMaxWidth(Double.MAX_VALUE);
         boton.setAlignment(Pos.CENTER_LEFT);
-        boton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;");
-        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;"));
-        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;"));
+        boton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 10 15;");
+        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #7c7c7c; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 10 15;"));
+        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 10 15;"));
         boton.setOnAction(accion);
         return boton;
     }
