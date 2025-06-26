@@ -28,7 +28,7 @@ public class ControladorPrincipal {
 
     private VBox crearBarraLateral() {
         VBox barraLateral = new VBox(15);
-        barraLateral.setStyle("-fx-background-color: #d9d9d9;");
+        barraLateral.setStyle("-fx-background-color: #a8a8a8;");
         barraLateral.setPadding(new Insets(20, 15, 20, 15));
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
