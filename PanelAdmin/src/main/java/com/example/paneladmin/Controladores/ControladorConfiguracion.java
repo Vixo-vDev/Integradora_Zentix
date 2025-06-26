@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class ControladorConfiguracion {
     private VistaConfiguracion vista;
@@ -13,196 +14,161 @@ public class ControladorConfiguracion {
     private TextField campoNombreCuenta;
     private PasswordField campoContrasenaActual;
     private PasswordField campoNuevaContrasena;
-    private CheckBox checkDosFactores;
-    private CheckBox checkCorreo;
-    private CheckBox checkApp;
+    private CheckBox checkNotificacionesApp;
+    private ComboBox<String> comboEstilos;
 
     public ControladorConfiguracion(VistaConfiguracion vista) {
         this.vista = vista;
     }
 
     public void inicializarUI() {
+        // Contenedor principal con scroll
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: white; -fx-border-color: #bdc3c7;");
+
+        VBox contenidoPrincipal = new VBox(20);
+        contenidoPrincipal.setPadding(new Insets(20));
+        contenidoPrincipal.setStyle("-fx-background-color: white;");
+
         // Título
-        Label etiquetaTitulo = new Label("Configuración del Sistema");
-        etiquetaTitulo.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        Label titulo = new Label("Configuración del Sistema");
+        titulo.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
-        // Panel de pestañas
-        TabPane panelPestanas = new TabPane();
-        panelPestanas.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
+        // Sección Información de Cuenta
+        VBox seccionCuenta = crearSeccionCuenta();
 
-        // Pestañas
-        Tab pestanaGeneral = crearPestanaGeneral();
-        Tab pestanaSeguridad = crearPestanaSeguridad();
-        Tab pestanaNotificaciones = crearPestanaNotificaciones();
+        // Sección Seguridad
+        VBox seccionSeguridad = crearSeccionSeguridad();
 
-        panelPestanas.getTabs().addAll(pestanaGeneral, pestanaSeguridad, pestanaNotificaciones);
+        // Sección Apariencia
+        VBox seccionApariencia = crearSeccionApariencia();
+
+        // Sección Notificaciones
+        VBox seccionNotificaciones = crearSeccionNotificaciones();
 
         // Botones de acción
         HBox contenedorBotones = crearContenedorBotones();
 
-        // Configurar la vista completa
-        VBox.setVgrow(panelPestanas, Priority.ALWAYS);
-        vista.getVista().getChildren().addAll(etiquetaTitulo, panelPestanas, contenedorBotones);
+        contenidoPrincipal.getChildren().addAll(
+                titulo,
+                seccionCuenta,
+                new Separator(),
+                seccionSeguridad,
+                new Separator(),
+                seccionApariencia,
+                new Separator(),
+                seccionNotificaciones,
+                contenedorBotones
+        );
+
+        scrollPane.setContent(contenidoPrincipal);
+        vista.getVista().getChildren().add(scrollPane);
     }
 
-    private Tab crearPestanaGeneral() {
-        Tab pestana = new Tab("General");
-        pestana.setClosable(false);
+    private VBox crearSeccionCuenta() {
+        VBox seccion = new VBox(10);
+        seccion.setPadding(new Insets(15));
+        seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
-        VBox contenido = new VBox(15);
-        contenido.setPadding(new Insets(20));
-        contenido.setStyle("-fx-background-color: #f9f9f9;");
+        Label titulo = new Label("Información de la Cuenta");
+        titulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
 
-        // Sección Información de la cuenta
-        Label etiquetaCuenta = new Label("Información de la Cuenta");
-        etiquetaCuenta.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        campoNombreCuenta = new TextField();
+        campoNombreCuenta.setPromptText("Nombre de la cuenta");
+        campoNombreCuenta.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
 
-        campoNombreCuenta = crearCampoTexto("Nombre de la Cuenta");
+        seccion.getChildren().addAll(titulo, campoNombreCuenta);
+        return seccion;
+    }
 
-        // Sección Apariencia
-        Label etiquetaApariencia = new Label("Apariencia");
-        etiquetaApariencia.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+    private VBox crearSeccionSeguridad() {
+        VBox seccion = new VBox(10);
+        seccion.setPadding(new Insets(15));
+        seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
-        ComboBox<String> comboEstilos = new ComboBox<>();
+        Label titulo = new Label("Seguridad");
+        titulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+
+        campoContrasenaActual = new PasswordField();
+        campoContrasenaActual.setPromptText("Contraseña actual");
+        campoContrasenaActual.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
+
+        campoNuevaContrasena = new PasswordField();
+        campoNuevaContrasena.setPromptText("Nueva contraseña");
+        campoNuevaContrasena.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
+
+        seccion.getChildren().addAll(titulo, campoContrasenaActual, campoNuevaContrasena);
+        return seccion;
+    }
+
+    private VBox crearSeccionApariencia() {
+        VBox seccion = new VBox(10);
+        seccion.setPadding(new Insets(15));
+        seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
+
+        Label titulo = new Label("Apariencia");
+        titulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+
+        comboEstilos = new ComboBox<>();
         comboEstilos.getItems().addAll("Claro", "Oscuro", "Sistema");
         comboEstilos.setPromptText("Seleccione un tema");
+        comboEstilos.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
 
-        contenido.getChildren().addAll(
-                etiquetaCuenta, campoNombreCuenta,
-                new Separator(),
-                etiquetaApariencia, comboEstilos
-        );
-
-        pestana.setContent(contenido);
-        return pestana;
+        seccion.getChildren().addAll(titulo, comboEstilos);
+        return seccion;
     }
 
-    private Tab crearPestanaSeguridad() {
-        Tab pestana = new Tab("Seguridad");
-        pestana.setClosable(false);
+    private VBox crearSeccionNotificaciones() {
+        VBox seccion = new VBox(10);
+        seccion.setPadding(new Insets(15));
+        seccion.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 5;");
 
-        VBox contenido = new VBox(15);
-        contenido.setPadding(new Insets(20));
-        contenido.setStyle("-fx-background-color: #f9f9f9;");
+        Label titulo = new Label("Notificaciones");
+        titulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
 
-        Label etiquetaSeguridad = new Label("Configuración de Seguridad");
-        etiquetaSeguridad.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        checkNotificacionesApp = new CheckBox("Recibir notificaciones en la aplicación");
+        checkNotificacionesApp.setStyle("-fx-font-weight: bold;");
 
-        campoContrasenaActual = crearCampoPassword("Contraseña actual");
-        campoNuevaContrasena = crearCampoPassword("Nueva contraseña");
-        checkDosFactores = new CheckBox("Autenticación de dos factores");
-        checkDosFactores.setStyle("-fx-font-weight: bold;");
-
-        contenido.getChildren().addAll(
-                etiquetaSeguridad, campoContrasenaActual, campoNuevaContrasena, checkDosFactores
-        );
-
-        pestana.setContent(contenido);
-        return pestana;
-    }
-
-    private Tab crearPestanaNotificaciones() {
-        Tab pestana = new Tab("Notificaciones");
-        pestana.setClosable(false);
-
-        VBox contenido = new VBox(15);
-        contenido.setPadding(new Insets(20));
-        contenido.setStyle("-fx-background-color: #f9f9f9;");
-
-        Label etiquetaNotificaciones = new Label("Configuración de Notificaciones");
-        etiquetaNotificaciones.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
-        checkCorreo = new CheckBox("Notificaciones por correo");
-        checkApp = new CheckBox("Notificaciones en la aplicación");
-
-        contenido.getChildren().addAll(
-                etiquetaNotificaciones, checkCorreo, checkApp
-        );
-
-        pestana.setContent(contenido);
-        return pestana;
-    }
-
-    private TextField crearCampoTexto(String prompt) {
-        TextField campo = new TextField();
-        campo.setPromptText(prompt);
-        campo.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
-        return campo;
-    }
-
-    private PasswordField crearCampoPassword(String prompt) {
-        PasswordField campo = new PasswordField();
-        campo.setPromptText(prompt);
-        campo.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-padding: 8;");
-        return campo;
+        seccion.getChildren().addAll(titulo, checkNotificacionesApp);
+        return seccion;
     }
 
     private HBox crearContenedorBotones() {
         HBox contenedor = new HBox(15);
         contenedor.setAlignment(Pos.CENTER);
-        contenedor.setStyle("-fx-padding: 15 0;");
+        contenedor.setStyle("-fx-padding: 20 0 10 0;");
 
-        Button btnGuardar = crearBotonAccion("Guardar Cambios", "#2ecc71");
-        Button btnRestaurar = crearBotonAccion("Restaurar Valores", "#3498db");
-        Button btnCancelar = crearBotonAccion("Cancelar", "#e74c3c");
-
-        // Configurar eventos
+        Button btnGuardar = new Button("Guardar Cambios");
+        btnGuardar.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
         btnGuardar.setOnAction(e -> guardarConfiguracion());
-        btnRestaurar.setOnAction(e -> restaurarConfiguracion());
-        btnCancelar.setOnAction(e -> cancelarCambios());
 
-        contenedor.getChildren().addAll(btnGuardar, btnRestaurar, btnCancelar);
+        Button btnRestaurar = new Button("Restaurar Valores");
+        btnRestaurar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
+        btnRestaurar.setOnAction(e -> restaurarConfiguracion());
+
+        contenedor.getChildren().addAll(btnGuardar, btnRestaurar);
         return contenedor;
     }
 
-    private Button crearBotonAccion(String texto, String color) {
-        Button boton = new Button(texto);
-        boton.setStyle("-fx-background-color: " + color + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-padding: 8 15; " +
-                "-fx-background-radius: 5;");
-
-        boton.setOnMouseEntered(e -> boton.setStyle(
-                "-fx-background-color: derive(" + color + ", -20%); " +
-                        "-fx-text-fill: white; " +
-                        "-fx-padding: 8 15; " +
-                        "-fx-background-radius: 5;"
-        ));
-
-        boton.setOnMouseExited(e -> boton.setStyle(
-                "-fx-background-color: " + color + "; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-padding: 8 15; " +
-                        "-fx-background-radius: 5;"
-        ));
-
-        return boton;
-    }
-
-    // Métodos de acción
     private void guardarConfiguracion() {
-        System.out.println("Guardando configuración...");
-        // Validar campos
+        // Validación de contraseña
         if (campoNuevaContrasena.getText().length() > 0 && campoNuevaContrasena.getText().length() < 8) {
             mostrarAlerta("Error", "La contraseña debe tener al menos 8 caracteres");
             return;
         }
 
-        // Aquí iría la lógica para guardar la configuración
+        // Lógica para guardar configuración
         mostrarAlerta("Éxito", "Configuración guardada correctamente");
     }
 
     private void restaurarConfiguracion() {
-        System.out.println("Restaurando valores por defecto...");
-        // Aquí iría la lógica para restaurar valores por defecto
-        mostrarAlerta("Información", "Valores por defecto restaurados");
-    }
-
-    private void cancelarCambios() {
-        System.out.println("Cancelando cambios...");
-        // Aquí iría la lógica para cancelar cambios
-        mostrarAlerta("Información", "Cambios descartados");
+        // Lógica para restaurar valores por defecto
+        campoNombreCuenta.clear();
+        campoContrasenaActual.clear();
+        campoNuevaContrasena.clear();
+        comboEstilos.getSelectionModel().clearSelection();
+        checkNotificacionesApp.setSelected(false);
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
