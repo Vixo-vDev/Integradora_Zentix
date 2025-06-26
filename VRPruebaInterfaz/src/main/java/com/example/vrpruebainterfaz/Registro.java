@@ -81,15 +81,15 @@ public class Registro {
         Label lblApellidos = new Label("Apellidos:");
         TextField campoApellidos = new TextField();
         GridPane.setHgrow(campoApellidos, Priority.ALWAYS);
-        gridCampos.add(lblApellidos, 1, 1);
-        gridCampos.add(campoApellidos, 1, 2);
+        gridCampos.add(lblApellidos, 1, 1, 2 ,1);
+        gridCampos.add(campoApellidos, 1, 2, 2 ,1);
 
         Label lblCorreo = new Label("Correo institucional:");
         lblCorreo.setWrapText(true);
         TextField campoCorreo = new TextField();
         GridPane.setHgrow(campoCorreo, Priority.ALWAYS);
-        gridCampos.add(lblCorreo, 2, 1, 2, 1);
-        gridCampos.add(campoCorreo, 2, 2, 2, 1);
+        gridCampos.add(lblCorreo, 3, 1, 2, 1);
+        gridCampos.add(campoCorreo, 3, 2, 2, 1);
 
             // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
         Label lblCalle = new Label("Calle:");
@@ -113,12 +113,13 @@ public class Registro {
         Label lblFecha = new Label("Fecha de nacimiento:");
         DatePicker campoFecha = new DatePicker();
         GridPane.setHgrow(campoTelefono, Priority.ALWAYS);
-        gridCampos.add(lblFecha, 3, 3);
+        gridCampos.add(lblFecha, 3, 3, 2, 1);
         gridCampos.add(campoFecha, 3, 4);
 
         Label lblEdad = new Label("Edad:");
         TextField campoEdad = new TextField();
         campoEdad.setPrefWidth(60);
+        campoEdad.setEditable(false);
         gridCampos.add(lblEdad, 4, 3);
         gridCampos.add(campoEdad, 4, 4);
 
@@ -152,7 +153,7 @@ public class Registro {
         PasswordField campoConfirmar = new PasswordField();
         campoConfirmar.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(campoConfirmar, Priority.ALWAYS);
-        gridCampos.add(lblConfirmar, 2, 9);
+        gridCampos.add(lblConfirmar, 2, 9, 2, 1);
         gridCampos.add(campoConfirmar, 2, 10, 2, 1);
 
         Button botonContinuar = new Button("Continuar");
@@ -167,6 +168,18 @@ public class Registro {
         botonCancelar.setPrefWidth(200);
         botonCancelar.setPrefHeight(30);
 
+        botonContinuar.setOnAction(e -> {
+            String nombre = campoNombre.getText();
+            String apellidos = campoApellidos.getText();
+            String correo = campoCorreo.getText();
+            String calle = campoCalle.getText();
+            String lada = campoLada.getText();
+            String telefono = campoTelefono.getText();
+            String date = campoFecha.getValue().toString();
+            String rol = comboRol.getSelectionModel().getSelectedItem();
+            String password = campoContrasena.getText();
+            String passwordConfirmar = campoConfirmar.getText();
+        });
         botonCancelar.setOnAction(e -> {
            HelloApplication regresar = new HelloApplication();
            regresar.start(ventanaRegistro);
