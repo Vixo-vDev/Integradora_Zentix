@@ -15,8 +15,10 @@ public class Usuario {
     private String rol;
     private String password;
 
+    //Constructor vacío
     public Usuario(){}
 
+    //Constructor con parámetros
     public Usuario(String nombre, String apellidos, String correo, String calle, String lada, String telefono, String date, int edad, String rol, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -27,6 +29,87 @@ public class Usuario {
         this.date = date;
         this.edad = edad;
         this.rol = rol;
+        this.password = password;
+    }
+
+    //Getters & Setters
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getLada() {
+        return lada;
+    }
+
+    public void setLada(String lada) {
+        this.lada = lada;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 }
