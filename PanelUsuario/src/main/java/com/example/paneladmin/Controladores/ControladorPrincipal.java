@@ -112,22 +112,16 @@ public class ControladorPrincipal {
         dashboard.setHgap(30);
         dashboard.setVgap(30);
 
-        Button cardUsuarios = crearCard("Gestión de Usuarios", "👥", "Administra los usuarios del sistema");
         Button cardInventario = crearCard("Control de Inventario", "📦", "Gestiona productos y existencias");
-        Button cardEstadisticas = crearCard("Estadísticas", "📊", "Reportes y análisis de datos");
         Button cardFormularios = crearCard("Documentación", "📝", "Formularios y documentos");
         Button cardSolicitudes = crearCard("Solicitudes", "🔄", "Gestión de pedidos y solicitudes");
-        Button cardConfiguracion = crearCard("Configuración", "⚙️", "Ajustes del sistema");
 
-        cardUsuarios.setOnAction(e -> vista.getRaiz().setCenter(new VistaUsuarios().getVista()));
         cardInventario.setOnAction(e -> vista.getRaiz().setCenter(new VistaInventario().getVista()));
-        cardEstadisticas.setOnAction(e -> vista.getRaiz().setCenter(new VistaEstadisticas().getVista()));
         cardFormularios.setOnAction(e -> vista.getRaiz().setCenter(new VistaFormularios().getVista()));
         cardSolicitudes.setOnAction(e -> vista.getRaiz().setCenter(new VistaSolicitudes().getVista()));
-        cardConfiguracion.setOnAction(e -> vista.getRaiz().setCenter(new VistaConfiguracion().getVista()));
 
-        dashboard.addRow(0, cardUsuarios, cardInventario, cardEstadisticas);
-        dashboard.addRow(1, cardFormularios, cardSolicitudes, cardConfiguracion);
+        dashboard.addRow(0, cardInventario);
+        dashboard.addRow(0, cardFormularios, cardSolicitudes);
 
         vista.getRaiz().setCenter(dashboard);
     }
