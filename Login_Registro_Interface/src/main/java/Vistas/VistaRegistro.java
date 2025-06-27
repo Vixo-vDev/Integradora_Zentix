@@ -1,6 +1,7 @@
 package Vistas;
 
 import Controladores.*;
+import Modelos.Usuario;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -107,7 +108,7 @@ public class VistaRegistro {
         gridCampos.add(lblCorreo, 3, 1, 2, 1);
         gridCampos.add(campoCorreo, 3, 2, 2, 1);
 
-            // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
+        // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
         Label lblCalle = new Label("Calle:");
         TextField campoCalle = new TextField();
         GridPane.setHgrow(campoCalle, Priority.ALWAYS);
@@ -191,24 +192,17 @@ public class VistaRegistro {
             String calle = campoCalle.getText();
             String lada = campoLada.getText();
             String telefono = campoTelefono.getText();
-            LocalDate date = campoFecha.getValue();
+            String date = campoFecha.getValue().toString();
+            int edad = Integer.parseInt(campoEdad.getText());
             String rol = comboRol.getSelectionModel().getSelectedItem();
             String password = campoContrasena.getText();
             String passwordConfirmar = campoConfirmar.getText();
 
+            //Instancia de usuario
+            Usuario usuario = new Usuario(nombre, apellidos,correo,calle,lada,telefono,date, edad,rol,password);
+
             ControladorRegistro controladorRegistro = new ControladorRegistro();
-
-            controladorRegistro.registro();
-
-
-            if(nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || calle.isEmpty() || lada.isEmpty()
-            || telefono.isEmpty()  || date== null || rol.isEmpty() || password.isEmpty() || passwordConfirmar.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("LOS CAMPOS NO DEBEN ESTAR VACÍOS");
-                alert.setContentText("Por favor ingrese los campos");
-                alert.showAndWait();
-            }
+            controladorRegistro.registro(usuario, passwordConfirmar);
         });
 
         botonCancelar.setOnAction(e -> {

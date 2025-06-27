@@ -1,8 +1,23 @@
 package Controladores;
 
+import Modelos.Usuario;
+
 public class ControladorRegistro {
 
-    public void registro(){
+    public boolean registro(Usuario usuario, String confirmPassword) {
+        if(usuario.getNombre().isEmpty() ||
+                usuario.getApellidos().isEmpty() ||
+                usuario.getCorreo().isEmpty() ||
+                usuario.getLada().isEmpty() ||
+                usuario.getTelefono().isEmpty() ||
+                usuario.getDate().isEmpty() ||
+                usuario.getRol().isEmpty() ||
+                usuario.getPassword().isEmpty() ||
+                confirmPassword.isEmpty()){
 
+            return false;
+        }
+        return true;
     }
+
 }
