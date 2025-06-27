@@ -43,7 +43,7 @@ public class ControladorPrincipal {
         VBox infoUsuario = new VBox(5);
         infoUsuario.setAlignment(Pos.CENTER);
 
-// Imagen personalizada de perfil
+
         ImageView imagenPerfil = new ImageView(new Image("file:src/main/resources/imagenes/Utez-Logo.png"));
         imagenPerfil.setFitWidth(180);
         imagenPerfil.setFitHeight(180);
@@ -52,7 +52,7 @@ public class ControladorPrincipal {
         imagenPerfil.setCache(true);
         imagenPerfil.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 2);");
 
-// Emoji de perfil (puedes quitarlo si usas solo imagen)
+        // Emoji de perfil
         Label iconoUsuario = new Label("👤");
         iconoUsuario.setStyle("-fx-font-size: 36;");
 
