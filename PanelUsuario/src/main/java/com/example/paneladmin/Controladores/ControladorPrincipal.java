@@ -59,7 +59,7 @@ public class ControladorPrincipal {
         Label lblNombre = new Label("Nombre");
         lblNombre.setStyle("-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;");
 
-        Label lblRol = new Label("Administrador");
+        Label lblRol = new Label("Usuario");
         lblRol.setStyle("-fx-text-fill: #555555; -fx-font-size: 14;");
 
         infoUsuario.getChildren().addAll(imagenPerfil, iconoUsuario, lblNombre, lblRol);
