@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b86b78de-7b45-4f6c-8cfd-f36896f88957" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorLogin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorRegistro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +80,7 @@
       <workItem from="1750896907075" duration="13425000" />
       <workItem from="1750950331325" duration="841000" />
       <workItem from="1750953541820" duration="298000" />
-      <workItem from="1750988595643" duration="5620000" />
+      <workItem from="1750988595643" duration="5864000" />
     </task>
     <servers />
   </component>
