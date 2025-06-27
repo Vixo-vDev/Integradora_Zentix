@@ -31,7 +31,7 @@ public class VistaFormularios {
 
         // Botón para refrescar formulario
         Button btnNuevo = new Button("REFRESCAR FORMULARIO");
-        btnNuevo.setStyle("-fx-background-color: #2ecc71; " +
+        btnNuevo.setStyle("-fx-background-color: #009475; " +
                 "-fx-text-fill: white; " +
                 "-fx-font-weight: bold; " +
                 "-fx-font-size: 14; " +
@@ -48,7 +48,7 @@ public class VistaFormularios {
         });
 
         btnNuevo.setOnMouseExited(e -> {
-            btnNuevo.setStyle("-fx-background-color: #2ecc71; " +
+            btnNuevo.setStyle("-fx-background-color: #009475; " +
                     "-fx-text-fill: white; " +
                     "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
         });

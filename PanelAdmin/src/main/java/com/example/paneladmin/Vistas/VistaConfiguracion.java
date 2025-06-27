@@ -48,7 +48,7 @@ public class VistaConfiguracion {
         // Botones de acción
         HBox botones = new HBox(20);
         botones.setAlignment(Pos.CENTER);
-        Button btnGuardar = crearBotonAccion("GUARDAR CAMBIOS", "#27ae60", "#2ecc71");
+        Button btnGuardar = crearBotonAccion("GUARDAR CAMBIOS", "#009475", "#2ecc71");
         Button btnCancelar = crearBotonAccion("CANCELAR", "#e74c3c", "#c0392b");
 
         botones.getChildren().addAll(btnCancelar, btnGuardar);

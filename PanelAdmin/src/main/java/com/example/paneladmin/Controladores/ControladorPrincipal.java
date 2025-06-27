@@ -64,7 +64,7 @@ public class ControladorPrincipal {
 
         infoUsuario.getChildren().addAll(imagenPerfil, iconoUsuario, lblNombre, lblRol);
 
-        Button btnInicio = crearBotonLateral("Inicio", "#27ae60");
+        Button btnInicio = crearBotonLateral("Inicio", "#009475");
         btnInicio.setOnAction(e -> mostrarDashboardInicio());
 
         Pane espaciador = new Pane();
@@ -162,7 +162,7 @@ public class ControladorPrincipal {
         lblDesc.setMaxWidth(250);
 
         Button botonAccion = new Button("Acceder");
-        botonAccion.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; " +
+        botonAccion.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; " +
                 "-fx-background-radius: 10; -fx-padding: 8 16 8 16;");
         botonAccion.setOnAction(card.getOnAction());
 
