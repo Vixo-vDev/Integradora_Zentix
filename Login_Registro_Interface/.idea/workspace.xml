@@ -5,30 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b86b78de-7b45-4f6c-8cfd-f36896f88957" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/com/example/vrpruebainterfaz/ConnectionBD.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/com/example/vrpruebainterfaz/HelloApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/com/example/vrpruebainterfaz/HelloController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/com/example/vrpruebainterfaz/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/com/example/vrpruebainterfaz/Registro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/resources/Imagenes/Logo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/resources/com/example/vrpruebainterfaz/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VRPruebaInterfaz/src/main/resources/img/logo_utez.png" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorLogin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorRegistro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaFXApplication" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -89,7 +84,7 @@
       <workItem from="1750896907075" duration="13425000" />
       <workItem from="1750950331325" duration="841000" />
       <workItem from="1750953541820" duration="298000" />
-      <workItem from="1750988595643" duration="2970000" />
+      <workItem from="1750988595643" duration="5620000" />
     </task>
     <servers />
   </component>

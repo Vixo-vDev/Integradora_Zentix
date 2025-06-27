@@ -1,5 +1,6 @@
 package Vistas;
 
+import Controladores.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -194,6 +195,11 @@ public class VistaRegistro {
             String rol = comboRol.getSelectionModel().getSelectedItem();
             String password = campoContrasena.getText();
             String passwordConfirmar = campoConfirmar.getText();
+
+            ControladorRegistro controladorRegistro = new ControladorRegistro();
+
+            controladorRegistro.registro();
+
 
             if(nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || calle.isEmpty() || lada.isEmpty()
             || telefono.isEmpty()  || date== null || rol.isEmpty() || password.isEmpty() || passwordConfirmar.isEmpty()) {

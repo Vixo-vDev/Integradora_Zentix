@@ -1,6 +1,6 @@
 package Vistas;
 
-import Controladores.ConnectionBD;
+import Controladores.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
