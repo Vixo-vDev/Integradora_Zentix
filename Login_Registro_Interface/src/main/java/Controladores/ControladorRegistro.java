@@ -17,6 +17,10 @@ public class ControladorRegistro {
 
             return false;
         }
+
+        if(!usuario.getPassword().equals(confirmPassword)){
+            return false;
+        }
         return true;
     }
 
