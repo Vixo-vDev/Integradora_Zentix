@@ -1,5 +1,7 @@
 package Modelos;
 
+import java.time.LocalDate;
+
 public class Usuario {
     //Aplicando la abtración y encapsulamiento
 
@@ -10,7 +12,7 @@ public class Usuario {
     private String calle;
     private String lada;
     private String telefono;
-    private String date;
+    private LocalDate date;
     private int edad;
     private String rol;
     private String password;
@@ -19,7 +21,7 @@ public class Usuario {
     public Usuario(){}
 
     //Constructor con parámetros
-    public Usuario(String nombre, String apellidos, String correo, String calle, String lada, String telefono, String date, int edad, String rol, String password) {
+    public Usuario(String nombre, String apellidos, String correo, String calle, String lada, String telefono, LocalDate date, int edad, String rol, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
@@ -81,11 +83,11 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

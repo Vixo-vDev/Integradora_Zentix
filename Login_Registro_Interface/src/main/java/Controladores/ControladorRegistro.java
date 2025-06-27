@@ -10,7 +10,7 @@ public class ControladorRegistro {
                 usuario.getCorreo().isEmpty() ||
                 usuario.getLada().isEmpty() ||
                 usuario.getTelefono().isEmpty() ||
-                usuario.getDate().isEmpty() ||
+                usuario.getDate() == null ||
                 usuario.getRol().isEmpty() ||
                 usuario.getPassword().isEmpty() ||
                 confirmPassword.isEmpty()){

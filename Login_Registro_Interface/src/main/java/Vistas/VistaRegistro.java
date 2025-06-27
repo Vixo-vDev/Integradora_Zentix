@@ -186,34 +186,44 @@ public class VistaRegistro {
         botonCancelar.setPrefHeight(30);
 
         botonContinuar.setOnAction(e -> {
-            String nombre = campoNombre.getText();
-            String apellidos = campoApellidos.getText();
-            String correo = campoCorreo.getText();
-            String calle = campoCalle.getText();
-            String lada = campoLada.getText();
-            String telefono = campoTelefono.getText();
-            String date = campoFecha.getValue().toString();
-            int edad = Integer.parseInt(campoEdad.getText());
-            String rol = comboRol.getSelectionModel().getSelectedItem();
-            String password = campoContrasena.getText();
-            String passwordConfirmar = campoConfirmar.getText();
+            try {
+                String nombre = campoNombre.getText();
+                String apellidos = campoApellidos.getText();
+                String correo = campoCorreo.getText();
+                String calle = campoCalle.getText();
+                String lada = campoLada.getText();
+                String telefono = campoTelefono.getText();
+                LocalDate date = campoFecha.getValue();
+                int edad = Integer.parseInt(campoEdad.getText());
+                String rol = comboRol.getSelectionModel().getSelectedItem();
+                String password = campoContrasena.getText();
+                String passwordConfirmar = campoConfirmar.getText();
 
-            //Instancia de usuario
-            Usuario usuario = new Usuario(nombre, apellidos,correo,calle,lada,telefono,date, edad,rol,password);
-            //Instancia de controladorRegistro
-            ControladorRegistro controladorRegistro = new ControladorRegistro();
+                //Instancia de usuario
+                Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, password);
+                //Instancia de controladorRegistro
+                ControladorRegistro controladorRegistro = new ControladorRegistro();
+                boolean bandera = controladorRegistro.registro(usuario, passwordConfirmar);
 
-            if(controladorRegistro.registro(usuario, passwordConfirmar)){
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                alerta.setHeaderText("Registro exitoso");
-                alerta.setContentText("Tu cuenta ha sido registrada.");
-                alerta.showAndWait();
-            }else{
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                alerta.setHeaderText("Error en registro");
-                alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
-                alerta.showAndWait();
+                if (bandera) {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setHeaderText("Registro exitoso");
+                    alerta.setContentText("Tu cuenta ha sido registrada.");
+                    alerta.showAndWait();
+                } else {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setHeaderText("Error en registro");
+                    alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
+                    alerta.showAndWait();
+                }
             }
+                catch(NumberFormatException ex){
+                    Alert alerta = new Alert(Alert.AlertType.ERROR);
+                    alerta.setHeaderText("Edad inválida");
+                    alerta.setContentText("Por favor ingresa un número válido en el campo de edad.");
+                    alerta.showAndWait();
+                }
+
         });
 
         botonCancelar.setOnAction(e -> {
