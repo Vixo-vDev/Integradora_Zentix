@@ -15,7 +15,8 @@ public class VistaSolicitudes {
     public VistaSolicitudes() {
         vista = new VBox(20);
         vista.setPadding(new Insets(20));
-        this.controlador = new ControladorSolicitudes(this); // Inicialización correcta del controlador
+        vista.setStyle("-fx-background-color: #f8f9fa;");
+        controlador = new ControladorSolicitudes(this);
         controlador.inicializarUI();
     }
 
@@ -29,11 +30,9 @@ public class VistaSolicitudes {
 
     public void setTabla(TableView<Solicitud> tabla) {
         this.tabla = tabla;
-        // Configuración adicional de la tabla
         if (tabla != null) {
             tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            tabla.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
-            // Hacer que la tabla ocupe todo el espacio disponible
+            tabla.setStyle("-fx-background-color: white; -fx-border-color: #ccc;");
             VBox.setVgrow(tabla, Priority.ALWAYS);
         }
     }

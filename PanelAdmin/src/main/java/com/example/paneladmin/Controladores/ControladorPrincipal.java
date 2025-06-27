@@ -1,6 +1,6 @@
 package com.example.paneladmin.Controladores;
-
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import com.example.paneladmin.Vistas.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,16 +25,61 @@ public class ControladorPrincipal {
         vista.getRaiz().setLeft(barraLateral);
         mostrarContenidoBienvenida();
     }
+    
+    private void mostrarVistaSolicitudes() {
+    // Ocultar la barra lateral
+    vista.getRaiz().setLeft(null);
+
+    HBox barraSuperior = crearBarraSuperior();
+
+    VistaSolicitudes vistaSolicitudes = new VistaSolicitudes();
+
+    BorderPane contenedor = new BorderPane();
+    contenedor.setTop(barraSuperior);
+    contenedor.setCenter(vistaSolicitudes.getVista());
+
+    vista.getRaiz().setCenter(contenedor);
+}
+    //logos
+    private HBox crearBarraSuperior() {
+    HBox barraSuperior = new HBox();
+    barraSuperior.setPadding(new Insets(20));
+    barraSuperior.setSpacing(10);
+    barraSuperior.setStyle("-fx-background-color: #D9D9D9; -fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+
+    ImageView logoIzquierdo = new ImageView(new Image(getClass().getResourceAsStream("/imagenes/usuario.png")));
+    logoIzquierdo.setFitHeight(60);  
+    logoIzquierdo.setPreserveRatio(true);
+
+    Label nombreUsuario = new Label("ADMI");
+    nombreUsuario.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+    nombreUsuario.setTextFill(Color.web("#2c3e50"));
+    nombreUsuario.setAlignment(Pos.CENTER_LEFT);
+
+    HBox usuarioBox = new HBox(nombreUsuario);
+    usuarioBox.setAlignment(Pos.CENTER_LEFT);
+
+    Region espacioCentro = new Region();
+    Region espacioDerecha = new Region();
+    HBox.setHgrow(espacioCentro, Priority.ALWAYS);
+    HBox.setHgrow(espacioDerecha, Priority.ALWAYS);
+
+    ImageView logoDerecho = new ImageView(new Image(getClass().getResourceAsStream("/imagenes/Logo-utez (1).png")));
+    logoDerecho.setFitHeight(60);
+    logoDerecho.setPreserveRatio(true);
+
+    barraSuperior.getChildren().addAll(logoIzquierdo, usuarioBox, espacioCentro, espacioDerecha, logoDerecho);
+    return barraSuperior;
+}
 
     private VBox crearBarraLateral() {
         VBox barraLateral = new VBox(15);
-        barraLateral.setStyle("-fx-background-color: #2c3e50;");
+        barraLateral.setStyle("-fx-background-color: #D9D9D9;");
         barraLateral.setPadding(new Insets(20, 15, 20, 15));
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
 
-        // Información del usuario
-        Label nombreUsuario = new Label("Tony");
+        Label nombreUsuario = new Label("ADMIN");
         nombreUsuario.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         nombreUsuario.setTextFill(Color.WHITE);
 
@@ -44,7 +89,6 @@ public class ControladorPrincipal {
 
         barraLateral.getChildren().addAll(nombreUsuario, rolUsuario, new Separator());
 
-        // Botones del menú
         Button btnInventario = crearBotonMenu("Inventario", e -> mostrarVistaInventario());
         Button btnUsuarios = crearBotonMenu("Usuarios", e -> mostrarVistaUsuarios());
         Button btnEstadisticas = crearBotonMenu("Estadisticas", e -> mostrarVistaEstadisticas());
@@ -54,7 +98,6 @@ public class ControladorPrincipal {
         barraLateral.getChildren().addAll(btnInventario, btnUsuarios, btnEstadisticas,
                 btnFormularios, btnSolicitudes, new Separator());
 
-        // Botones inferiores
         Button btnConfig = crearBotonMenu("Configuracion", e -> mostrarVistaConfiguracion());
         Button btnCerrarSesion = crearBotonCerrarSesion();
 
