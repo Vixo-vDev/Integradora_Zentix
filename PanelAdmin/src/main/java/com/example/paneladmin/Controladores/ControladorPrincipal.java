@@ -163,11 +163,10 @@ public class ControladorPrincipal {
         VistaFormularios vistaFormularios = new VistaFormularios();
         vista.getRaiz().setCenter(vistaFormularios.getVista());
     }
-
-    private void mostrarVistaSolicitudes() {
+    /*private void mostrarVistaSolicitudes() {
         VistaSolicitudes vistaSolicitudes = new VistaSolicitudes();
         vista.getRaiz().setCenter(vistaSolicitudes.getVista());
-    }
+    }*/
 
     private void mostrarVistaConfiguracion() {
         VistaConfiguracion vistaConfiguracion = new VistaConfiguracion();
