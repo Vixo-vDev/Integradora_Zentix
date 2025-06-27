@@ -257,3 +257,6 @@ public class ControladorSolicitudes {
         ventana.show();
     }
 }
+
+
+
