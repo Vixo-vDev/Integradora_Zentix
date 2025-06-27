@@ -79,16 +79,24 @@ public class ControladorPrincipal {
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
 
+        // Imagen de usuario arriba
+        ImageView iconoUsuario = new ImageView(new Image(getClass().getResourceAsStream("/imagenes/usuario.png")));
+        iconoUsuario.setFitHeight(60);
+        iconoUsuario.setPreserveRatio(true);
+
+        // Nombre de usuario y rol
         Label nombreUsuario = new Label("ADMIN");
         nombreUsuario.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        nombreUsuario.setTextFill(Color.WHITE);
+        nombreUsuario.setTextFill(Color.web("#2c3e50")); // Mejor visible con tu fondo
 
         Label rolUsuario = new Label("Administrador");
         rolUsuario.setFont(Font.font("Arial", 14));
-        rolUsuario.setTextFill(Color.LIGHTGRAY);
+        rolUsuario.setTextFill(Color.GRAY);
 
-        barraLateral.getChildren().addAll(nombreUsuario, rolUsuario, new Separator());
+        // Ahora agrega icono, nombre y rol en orden
+        barraLateral.getChildren().addAll(iconoUsuario, nombreUsuario, rolUsuario, new Separator());
 
+        // Botones de menú
         Button btnInventario = crearBotonMenu("Inventario", e -> mostrarVistaInventario());
         Button btnUsuarios = crearBotonMenu("Usuarios", e -> mostrarVistaUsuarios());
         Button btnEstadisticas = crearBotonMenu("Estadisticas", e -> mostrarVistaEstadisticas());
