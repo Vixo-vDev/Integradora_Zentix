@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class VistaRegistro {
 
@@ -139,6 +140,15 @@ public class VistaRegistro {
         campoEdad.setEditable(false);
         gridCampos.add(lblEdad, 4, 3);
         gridCampos.add(campoEdad, 4, 4);
+
+        campoFecha.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                int edadCalculada = Period.between(newValue, LocalDate.now()).getYears();
+                campoEdad.setText(String.valueOf(edadCalculada));
+            } else {
+                campoEdad.clear(); // Si se borra la fecha, limpia edad también
+            }
+        });
 
         Label infoAcademica = new Label("Información académica");
         infoAcademica.setFont(Font.font("Arial", FontWeight.BOLD, 18));
