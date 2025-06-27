@@ -74,7 +74,7 @@ public class ControladorPrincipal {
 
     private VBox crearBarraLateral() {
         VBox barraLateral = new VBox(15);
-        barraLateral.setStyle("-fx-background-color: #D9D9D9;");
+        barraLateral.setStyle("-fx-background-color: #d9d9d9;");
         barraLateral.setPadding(new Insets(20, 15, 20, 15));
         barraLateral.setMinWidth(250);
         barraLateral.setMaxWidth(250);
@@ -118,7 +118,7 @@ public class ControladorPrincipal {
         Button boton = new Button(texto);
         boton.setMaxWidth(Double.MAX_VALUE);
         boton.setAlignment(Pos.CENTER_LEFT);
-        boton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;");
+        boton.setStyle("-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 14px; -fx-padding: 10 15;");
         boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;"));
         boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15;"));
         boton.setOnAction(accion);
