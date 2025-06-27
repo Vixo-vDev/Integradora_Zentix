@@ -2,10 +2,13 @@ package com.example.paneladmin.Controladores;
 
 import com.example.paneladmin.Modelos.Solicitud;
 import com.example.paneladmin.Vistas.VistaSolicitudes;
+
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class ControladorSolicitudes {
     private VistaSolicitudes vista;
@@ -15,8 +18,12 @@ public class ControladorSolicitudes {
     }
 
     public void inicializarUI() {
+        
         Label etiquetaTitulo = new Label("Solicitudes Pendientes");
         etiquetaTitulo.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        VBox.setMargin(etiquetaTitulo, new Insets(20, 0, 10, 0));
+
+
 
         // Configurar tabla
         TableView<Solicitud> tabla = new TableView<>();
@@ -59,10 +66,10 @@ public class ControladorSolicitudes {
         contenedorBotones.setStyle("-fx-padding: 10 0;");
         contenedorBotones.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-        Button btnAprobar = crearBotonAccion("Aprobar", "#2ecc71");
-        Button btnRechazar = crearBotonAccion("Rechazar", "#e74c3c");
-        Button btnDetalles = crearBotonAccion("Detalles", "#3498db");
-        Button btnFiltrar = crearBotonAccion("Filtrar", "#f39c12");
+        Button btnAprobar = crearBotonAccion("Aprobar", "#009475");
+        Button btnRechazar = crearBotonAccion("Rechazar", "#940000");
+        Button btnDetalles = crearBotonAccion("Detalles", "#002E60");
+        Button btnFiltrar = crearBotonAccion("Filtrar", "#E09D00");
 
         // Configurar eventos
         btnAprobar.setOnAction(e -> aprobarSolicitud());
