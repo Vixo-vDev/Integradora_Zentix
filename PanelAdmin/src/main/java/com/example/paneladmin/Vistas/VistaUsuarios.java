@@ -1,36 +1,41 @@
 package com.example.paneladmin.Vistas;
 
-import com.example.paneladmin.Controladores.ControladorUsuarios;
-import com.example.paneladmin.Modelos.Usuario;
-import javafx.geometry.Insets;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.geometry.Pos;
 
 public class VistaUsuarios {
-    private ControladorUsuarios controlador;
     private VBox vista;
-    private TableView<Usuario> tabla;
 
     public VistaUsuarios() {
         vista = new VBox(20);
-        vista.setPadding(new Insets(20));
-        this.controlador = new ControladorUsuarios(this); // Inicializar el controlador
-        controlador.inicializarUI();
+        vista.setStyle("-fx-background-color: transparent; -fx-padding: 20;");
+        vista.setAlignment(Pos.CENTER);
+
+        // Icono de usuarios
+        Label icono = new Label("👥");
+        icono.setStyle("-fx-font-size: 60; -fx-text-fill: #bdc3c7;");
+
+        // Mensaje principal
+        Label titulo = new Label("No hay usuarios registrados");
+        titulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        titulo.setTextFill(Color.web("#7f8c8d"));
+
+        // Mensaje secundario
+        Label subtitulo = new Label("El sistema no tiene usuarios dados de alta actualmente");
+        subtitulo.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+        subtitulo.setTextFill(Color.web("#95a5a6"));
+
+        VBox contenedorMensaje = new VBox(10, icono, titulo, subtitulo);
+        contenedorMensaje.setAlignment(Pos.CENTER);
+
+        vista.getChildren().addAll(contenedorMensaje);
     }
 
     public VBox getVista() {
         return vista;
-    }
-
-    public TableView<Usuario> getTabla() {
-        return tabla;
-    }
-
-    public void setTabla(TableView<Usuario> tabla) {
-        this.tabla = tabla;
-        if (tabla != null) {
-            tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            tabla.setStyle("-fx-background-color: white;");
-        }
     }
 }

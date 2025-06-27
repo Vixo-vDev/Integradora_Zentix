@@ -1,40 +1,65 @@
 package com.example.paneladmin.Vistas;
 
-import com.example.paneladmin.Controladores.ControladorSolicitudes;
-import com.example.paneladmin.Modelos.Solicitud;
-import javafx.geometry.Insets;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.geometry.Pos;
 
 public class VistaSolicitudes {
-    private ControladorSolicitudes controlador;
     private VBox vista;
-    private TableView<Solicitud> tabla;
 
     public VistaSolicitudes() {
         vista = new VBox(20);
-        vista.setPadding(new Insets(20));
-        this.controlador = new ControladorSolicitudes(this); // Inicialización correcta del controlador
-        controlador.inicializarUI();
+        vista.setStyle("-fx-background-color: transparent; -fx-padding: 20;");
+        vista.setAlignment(Pos.CENTER);
+
+        // Icono de solicitudes vacías
+        Label icono = new Label("✉️");
+        icono.setStyle("-fx-font-size: 60; -fx-text-fill: #bdc3c7;");
+
+        // Mensaje principal
+        Label titulo = new Label("No hay solicitudes registradas");
+        titulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        titulo.setTextFill(Color.web("#7f8c8d"));
+
+        // Mensaje secundario
+        Label subtitulo = new Label("No se encontraron solicitudes pendientes o procesadas");
+        subtitulo.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+        subtitulo.setTextFill(Color.web("#95a5a6"));
+
+        // Botón opcional
+        Button btnInfo = new Button("¿Problemas con las solicitudes?");
+        btnInfo.setStyle("-fx-background-color: transparent; " +
+                "-fx-text-fill: #3498db; " +
+                "-fx-font-size: 14; " +
+                "-fx-underline: true; " +
+                "-fx-border-width: 0;");
+
+        // Efecto hover para el botón
+        btnInfo.setOnMouseEntered(e -> {
+            btnInfo.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: #2980b9; " +
+                    "-fx-font-size: 14; " +
+                    "-fx-underline: true;");
+            btnInfo.setCursor(javafx.scene.Cursor.HAND);
+        });
+
+        btnInfo.setOnMouseExited(e -> {
+            btnInfo.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: #3498db; " +
+                    "-fx-font-size: 14; " +
+                    "-fx-underline: true;");
+        });
+
+        VBox contenedorMensaje = new VBox(10, icono, titulo, subtitulo);
+        contenedorMensaje.setAlignment(Pos.CENTER);
+
+        vista.getChildren().addAll(contenedorMensaje, btnInfo);
     }
 
     public VBox getVista() {
         return vista;
-    }
-
-    public TableView<Solicitud> getTabla() {
-        return tabla;
-    }
-
-    public void setTabla(TableView<Solicitud> tabla) {
-        this.tabla = tabla;
-        // Configuración adicional de la tabla
-        if (tabla != null) {
-            tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            tabla.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
-            // Hacer que la tabla ocupe todo el espacio disponible
-            VBox.setVgrow(tabla, Priority.ALWAYS);
-        }
     }
 }
