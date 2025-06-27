@@ -200,9 +200,20 @@ public class VistaRegistro {
 
             //Instancia de usuario
             Usuario usuario = new Usuario(nombre, apellidos,correo,calle,lada,telefono,date, edad,rol,password);
-
+            //Instancia de controladorRegistro
             ControladorRegistro controladorRegistro = new ControladorRegistro();
-            controladorRegistro.registro(usuario, passwordConfirmar);
+
+            if(controladorRegistro.registro(usuario, passwordConfirmar)){
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setHeaderText("Registro exitoso");
+                alerta.setContentText("Tu cuenta ha sido registrada.");
+                alerta.showAndWait();
+            }else{
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setHeaderText("Error en registro");
+                alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
+                alerta.showAndWait();
+            }
         });
 
         botonCancelar.setOnAction(e -> {
