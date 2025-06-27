@@ -154,7 +154,11 @@ public class ControladorPrincipal {
 
     private void mostrarVistaInventario() {
         VistaInventario vistaInventario = new VistaInventario();
-        vista.getRaiz().setCenter(vistaInventario.getVista());
+
+        BorderPane contenedor = new BorderPane();
+        contenedor.setCenter(vistaInventario.getVista());
+
+        vista.getRaiz().setCenter(contenedor);
     }
 
     private void mostrarVistaUsuarios() {
