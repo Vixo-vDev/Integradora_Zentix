@@ -60,7 +60,7 @@ public class ControladorInventario {
         campoBusqueda.setPromptText("Buscar producto...");
         HBox.setHgrow(campoBusqueda, Priority.ALWAYS);
 
-        Button btnBuscar = crearBotonAccion("Buscar", "#f39c12");
+        Button btnBuscar = crearBotonAccion("Buscar", "#BCBCBC");
         btnBuscar.setPrefWidth(100);
 
         barra.getChildren().addAll(campoBusqueda, btnBuscar);
@@ -72,10 +72,10 @@ public class ControladorInventario {
         contenedor.setStyle("-fx-padding: 10 0;");
         contenedor.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-        Button btnAgregar = crearBotonAccion("Agregar", "#2ecc71");
-        Button btnEditar = crearBotonAccion("Editar", "#3498db");
+        Button btnAgregar = crearBotonAccion("Agregar", "#345179");
+        Button btnEditar = crearBotonAccion("Editar", "#777779");
         Button btnEliminar = crearBotonAccion("Eliminar", "#e74c3c");
-        Button btnActualizar = crearBotonAccion("Actualizar", "#9b59b6");
+        Button btnActualizar = crearBotonAccion("Actualizar", "#1F997A");
 
         // Configurar eventos
         btnAgregar.setOnAction(e -> agregarProducto());
