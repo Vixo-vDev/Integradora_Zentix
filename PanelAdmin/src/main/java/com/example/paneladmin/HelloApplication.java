@@ -7,8 +7,9 @@ import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
     @Override
-    public void start(Stage primaryStage) {
-        new ControladorPrincipal(primaryStage);
+    public void start(Stage escenario) {
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        vistaPrincipal.mostrar(escenario);
     }
 
     public static void main(String[] args) {
