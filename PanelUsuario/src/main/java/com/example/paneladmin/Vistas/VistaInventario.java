@@ -39,19 +39,7 @@ public class VistaInventario {
                 "-fx-background-radius: 5; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
 
-        // Efecto hover
-        btnAgregar.setOnMouseEntered(e -> {
-            btnAgregar.setStyle("-fx-background-color: #27ae60; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
-            btnAgregar.setCursor(javafx.scene.Cursor.HAND);
-        });
-
-        btnAgregar.setOnMouseExited(e -> {
-            btnAgregar.setStyle("-fx-background-color: #009475; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-        });
+     
 
         VBox contenedorMensaje = new VBox(10, icono, titulo, subtitulo);
         contenedorMensaje.setAlignment(Pos.CENTER);
