@@ -31,7 +31,7 @@ public class VistaInventario {
         this.tabla = tabla;
         if (tabla != null) {
             tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            tabla.setStyle("-fx-background-color: white; -fx-border-color: #bdc3c7;");
+            tabla.setStyle("-fx-background-color: #cbcbcb; -fx-border-color: #bdc3c7;");
             VBox.setVgrow(tabla, Priority.ALWAYS);
         }
     }
