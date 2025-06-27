@@ -257,6 +257,6 @@ public class ControladorSolicitudes {
         ventana.show();
     }
 }
-
+//jfjgyjt
 
 
