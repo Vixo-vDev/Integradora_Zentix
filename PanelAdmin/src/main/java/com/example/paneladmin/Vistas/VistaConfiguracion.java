@@ -1,173 +1,60 @@
 package com.example.paneladmin.Vistas;
 
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.shape.SVGPath;
 
 public class VistaConfiguracion {
     private VBox vista;
 
-    public VistaConfiguracion() {
+    public VistaConfiguracion(Runnable onBackAction) {
         // Contenedor principal
-        vista = new VBox(20);
+        vista = new VBox();
         vista.setAlignment(Pos.TOP_CENTER);
         vista.setPadding(new Insets(20));
         vista.setStyle("-fx-background-color: transparent;");
 
-        // Título
-        Label titulo = new Label("CONFIGURACIÓN DEL SISTEMA");
-        titulo.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 26));
-        titulo.setStyle("-fx-text-fill: linear-gradient(to right, #2c3e50, #4a148c); " +
-                "-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);");
-        titulo.setPadding(new Insets(0, 0, 20, 0));
+        // Botón de regreso (flecha)
+        Button btnRegresar = new Button();
+        btnRegresar.setStyle("-fx-background-color: transparent; -fx-padding: 5;");
 
-        // Sección Seguridad
-        VBox seccionSeguridad = crearSeccionConfiguracion(
-                "SEGURIDAD",
-                "shield-icon.png",
-                new Control[] {
-                        crearCampoPassword("Nueva contraseña", ""),
-                        crearCampoPassword("Confirmar contraseña", "")
-                }
-        );
+        // Crear icono de flecha usando SVG
+        SVGPath flecha = new SVGPath();
+        flecha.setContent("M10 0 L0 10 L10 20");
+        flecha.setStroke(Color.web("#3498db"));
+        flecha.setStrokeWidth(2);
+        flecha.setFill(null);
 
-        // Sección Preferencias
-        VBox seccionPref = crearSeccionConfiguracion(
-                "PREFERENCIAS",
-                "settings-icon.png",
-                new Control[] {
-                        crearCheckBox("Modo oscuro", false),
-                        crearComboBox("Idioma", new String[]{"Español", "Inglés", "Francés"})
-                }
-        );
+        btnRegresar.setGraphic(flecha);
+        btnRegresar.setOnAction(e -> onBackAction.run());
 
-        // Botones de acción
-        HBox botones = new HBox(20);
-        botones.setAlignment(Pos.CENTER);
-        Button btnGuardar = crearBotonAccion("GUARDAR CAMBIOS", "#009475", "#2ecc71");
-        Button btnCancelar = crearBotonAccion("CANCELAR", "#e74c3c", "#c0392b");
-
-        botones.getChildren().addAll(btnCancelar, btnGuardar);
-
-        vista.getChildren().addAll(
-                titulo,
-                seccionSeguridad,
-                seccionPref,
-                botones
-        );
-    }
-
-    private VBox crearSeccionConfiguracion(String tituloSeccion, String icono, Control[] controles) {
-        VBox seccion = new VBox(15);
-        seccion.setStyle("-fx-background-color: white; " +
-                "-fx-background-radius: 10; " +
-                "-fx-padding: 20; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);");
-        seccion.setAlignment(Pos.TOP_LEFT);
-        seccion.setMaxWidth(800);
-
-        // Encabezado de sección
-        Label lblTitulo = new Label(tituloSeccion);
-        lblTitulo.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        lblTitulo.setTextFill(Color.web("#2c3e50"));
-        lblTitulo.setStyle("-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.05), 1, 0, 1, 1);");
-
-        // Controles de la sección
-        VBox contenedorControles = new VBox(10);
-        for (Control control : controles) {
-            contenedorControles.getChildren().add(control);
-        }
-
-        seccion.getChildren().addAll(lblTitulo, contenedorControles);
-        return seccion;
-    }
-
-    private PasswordField crearCampoPassword(String prompt, String placeholder) {
-        PasswordField campo = new PasswordField();
-        campo.setPromptText(placeholder);
-        campo.setStyle("-fx-background-color: #f8f9fa; " +
-                "-fx-border-color: #dfe6e9; " +
-                "-fx-border-radius: 5; " +
-                "-fx-padding: 10; " +
-                "-fx-font-size: 14;");
-        campo.setMinHeight(40);
-
-        // Efecto hover
-        campo.setOnMouseEntered(e -> campo.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #b2bec3;"));
-        campo.setOnMouseExited(e -> campo.setStyle("-fx-background-color: #f8f9fa; " +
-                "-fx-border-color: #dfe6e9;"));
-        return campo;
-    }
-
-    private CheckBox crearCheckBox(String texto, boolean seleccionado) {
-        CheckBox checkBox = new CheckBox(texto);
-        checkBox.setSelected(seleccionado);
-        checkBox.setStyle("-fx-font-size: 14; " +
-                "-fx-text-fill: #2d3436; " +
-                "-fx-font-weight: bold;");
-        return checkBox;
-    }
-
-    private ComboBox<String> crearComboBox(String prompt, String[] opciones) {
-        ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.getItems().addAll(opciones);
-        comboBox.setPromptText(prompt);
-        comboBox.setStyle("-fx-background-color: #f8f9fa; " +
-                "-fx-border-color: #dfe6e9; " +
-                "-fx-border-radius: 5; " +
-                "-fx-padding: 5; " +
-                "-fx-font-size: 14;");
-        comboBox.setMinHeight(40);
-
-        // Efecto hover
-        comboBox.setOnMouseEntered(e -> comboBox.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #b2bec3;"));
-        comboBox.setOnMouseExited(e -> comboBox.setStyle("-fx-background-color: #f8f9fa; " +
-                "-fx-border-color: #dfe6e9;"));
-        return comboBox;
-    }
-
-    private Button crearBotonAccion(String texto, String colorBase, String colorHover) {
-        Button boton = new Button(texto);
-        boton.setStyle("-fx-background-color: " + colorBase + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-font-size: 14; " +
-                "-fx-padding: 12 25; " +
-                "-fx-background-radius: 5; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-
-        // Efecto hover
-        boton.setOnMouseEntered(e -> {
-            boton.setStyle("-fx-background-color: " + colorHover + "; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
-            boton.setCursor(javafx.scene.Cursor.HAND);
+        // Efecto hover para el botón
+        btnRegresar.setOnMouseEntered(e -> {
+            flecha.setStroke(Color.web("#2980b9"));
+        });
+        btnRegresar.setOnMouseExited(e -> {
+            flecha.setStroke(Color.web("#3498db"));
         });
 
-        boton.setOnMouseExited(e -> {
-            boton.setStyle("-fx-background-color: " + colorBase + "; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-        });
+        // Contenedor para el botón de regreso (alineado a la izquierda)
+        HBox header = new HBox(btnRegresar);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setPadding(new Insets(0, 0, 20, 0));
 
-        // Efecto al presionar
-        boton.setOnMousePressed(e -> {
-            boton.setStyle("-fx-background-color: derive(" + colorHover + ", -20%); " +
-                    "-fx-text-fill: white;");
-        });
+        // Mensaje de no configuración disponible
+        Label mensaje = new Label("No hay configuración disponible");
+        mensaje.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        mensaje.setTextFill(Color.web("#7f8c8d"));
+        mensaje.setStyle("-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);");
 
-        boton.setOnMouseReleased(e -> {
-            boton.setStyle("-fx-background-color: " + colorHover + "; " +
-                    "-fx-text-fill: white;");
-        });
-
-        return boton;
+        vista.getChildren().addAll(header, mensaje);
     }
 
     public VBox getVista() {
