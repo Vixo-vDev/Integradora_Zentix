@@ -124,13 +124,12 @@ public class ControladorPrincipal {
         vista.getRaiz().setCenter(grid);
     }
 
-
     private VBox crearCardSeccion(String titulo, String rutaIcono, String descripcion) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.CENTER);
         card.setStyle("-fx-background-color: #D9D9D9; -fx-background-radius: 15;");
         card.setPadding(new Insets(20));
-        card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // ¡Clave para ocupar espacio!
+        card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         VBox.setVgrow(card, Priority.ALWAYS);
 
         ImageView icono = new ImageView(new Image(rutaIcono));
@@ -150,9 +149,15 @@ public class ControladorPrincipal {
 
         btnVer.setOnAction(e -> {
             switch (titulo) {
-                case "Usuarios" -> vista.getRaiz().setCenter(new VistaUsuarios().getVista());
-                case "Solicitudes" -> vista.getRaiz().setCenter(new VistaSolicitudes().getVista());
-                case "Estadísticas" -> vista.getRaiz().setCenter(new VistaEstadisticas().getVista());
+                case "Usuarios" ->
+                        vista.getRaiz().setCenter(new VistaUsuarios(() ->
+                                mostrarDashboardInicio()).getVista());
+                case "Solicitudes" ->
+                        vista.getRaiz().setCenter(new VistaSolicitudes(() ->
+                                mostrarDashboardInicio()).getVista());
+                case "Estadísticas" ->
+                        vista.getRaiz().setCenter(new VistaEstadisticas(() ->
+                                mostrarDashboardInicio()).getVista());
             }
         });
 
