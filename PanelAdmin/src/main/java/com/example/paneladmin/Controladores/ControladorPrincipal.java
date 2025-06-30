@@ -55,7 +55,7 @@ public class ControladorPrincipal {
         VBox infoUsuario = new VBox(5, imagenPerfil, iconoUsuario, lblNombre, lblRol);
         infoUsuario.setAlignment(Pos.CENTER);
 
-        Button btnConfiguracion = crearBotonLateral("Configuración", "#7f8c8d");
+        Button btnConfiguracion = crearBotonLateral("Configuración", "#009475");
         btnConfiguracion.setOnAction(e -> vista.getRaiz().setCenter(new VistaConfiguracion(() -> {
             mostrarDashboardInicio(); // Acción para regresar al menú principal
         }).getVista()));
@@ -199,9 +199,34 @@ public class ControladorPrincipal {
         descripcionCarrusel.setWrapText(true);
         descripcionCarrusel.setAlignment(Pos.CENTER);
 
-        Button btnVer = new Button("Ver");
-        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10;");
-        btnVer.setOnAction(e -> vista.getRaiz().setCenter(new VistaInventario().getVista()));
+        Button btnVer = new Button("VER");
+        btnVer.setStyle("-fx-background-color: #009475; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 14; " +
+                "-fx-padding: 10 20; " +
+                "-fx-background-radius: 5; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+
+// Efecto hover
+        btnVer.setOnMouseEntered(e -> {
+            btnVer.setStyle("-fx-background-color: #27ae60; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
+            btnVer.setCursor(javafx.scene.Cursor.HAND);
+        });
+
+        btnVer.setOnMouseExited(e -> {
+            btnVer.setStyle("-fx-background-color: #009475; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        });
+
+        btnVer.setOnAction(e -> {
+            vista.getRaiz().setCenter(new VistaInventario(() -> {
+                mostrarDashboardInicio(); // Acción para regresar al menú principal
+            }).getVista());
+        });
 
         contenedor.getChildren().addAll(lblTitulo, imagenCarruselView, navegacion, descripcionCarrusel, btnVer);
         return contenedor;
