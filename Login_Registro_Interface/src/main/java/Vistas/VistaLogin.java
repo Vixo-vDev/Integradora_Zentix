@@ -45,7 +45,7 @@ public class VistaLogin extends Application {
         panelDerecho.setAlignment(Pos.CENTER);
         panelDerecho.setPrefWidth(500);
 
-        Label titulo = new Label("Inicio Sesion");
+        Label titulo = new Label("Inicio Sesión");
         titulo.setFont(Font.font("Arial", FontWeight.BOLD, 28));
 
         GridPane gridCampos = new GridPane();
