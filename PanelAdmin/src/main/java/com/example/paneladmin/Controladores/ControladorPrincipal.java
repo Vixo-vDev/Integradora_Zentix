@@ -101,9 +101,9 @@ public class ControladorPrincipal {
             grid.getRowConstraints().add(fila);
         }
 
-        VBox cardUsuarios = crearCardSeccion("Usuarios", "file:src/main/resources/imagenes/usuarios.png", "[Descripción]");
-        VBox cardSolicitudes = crearCardSeccion("Solicitudes", "file:src/main/resources/imagenes/solicitudes.png", "[Descripción]");
-        VBox cardEstadisticas = crearCardSeccion("Estadísticas", "file:src/main/resources/imagenes/estadisticas.png", "[Descripción]");
+        HBox cardUsuarios = crearCardSeccion("Usuarios", "file:src/main/resources/imagenes/usuarios.png", "[Descripción]");
+        HBox cardSolicitudes = crearCardSeccion("Solicitudes", "file:src/main/resources/imagenes/solicitudes.png", "[Descripción]");
+        HBox cardEstadisticas = crearCardSeccion("Estadísticas", "file:src/main/resources/imagenes/estadisticas.png", "[Descripción]");
 
         VBox carrusel = crearCarrusel("Inventario");
 
@@ -124,17 +124,30 @@ public class ControladorPrincipal {
         vista.getRaiz().setCenter(grid);
     }
 
-    private VBox crearCardSeccion(String titulo, String rutaIcono, String descripcion) {
-        VBox card = new VBox(10);
-        card.setAlignment(Pos.CENTER);
+    private HBox crearCardSeccion(String titulo, String rutaIcono, String descripcion) {
+        // Contenedor principal horizontal
+        HBox card = new HBox(15);
         card.setStyle("-fx-background-color: #D9D9D9; -fx-background-radius: 15;");
         card.setPadding(new Insets(20));
         card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        VBox.setVgrow(card, Priority.ALWAYS);
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        // Contenedor para la imagen (lado izquierdo)
+        VBox contenedorImagen = new VBox();
+        contenedorImagen.setAlignment(Pos.CENTER);
+        contenedorImagen.setMinWidth(100);
 
         ImageView icono = new ImageView(new Image(rutaIcono));
-        icono.setFitWidth(60);
-        icono.setFitHeight(60);
+        icono.setFitWidth(80);
+        icono.setFitHeight(80);
+        icono.setPreserveRatio(true);
+        contenedorImagen.getChildren().add(icono);
+
+        // Contenedor para el texto (lado derecho)
+        VBox contenedorTexto = new VBox(10);
+        contenedorTexto.setAlignment(Pos.CENTER_LEFT);
+        contenedorTexto.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(contenedorTexto, Priority.ALWAYS);
 
         Label lblTitulo = new Label(titulo);
         lblTitulo.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
@@ -142,26 +155,45 @@ public class ControladorPrincipal {
         Label lblDescripcion = new Label(descripcion);
         lblDescripcion.setStyle("-fx-font-size: 14;");
         lblDescripcion.setWrapText(true);
-        lblDescripcion.setAlignment(Pos.CENTER);
+        lblDescripcion.setMaxWidth(300);  // Limitar ancho para mejor legibilidad
 
-        Button btnVer = new Button("Ver");
-        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10;");
+        Button btnVer = new Button("VER");
+        btnVer.setStyle("-fx-background-color: #009475; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 14; " +
+                "-fx-padding: 8 20; " +
+                "-fx-background-radius: 5; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+
+        // Efecto hover
+        btnVer.setOnMouseEntered(e -> {
+            btnVer.setStyle("-fx-background-color: #27ae60; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
+            btnVer.setCursor(javafx.scene.Cursor.HAND);
+        });
+
+        btnVer.setOnMouseExited(e -> {
+            btnVer.setStyle("-fx-background-color: #009475; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        });
 
         btnVer.setOnAction(e -> {
             switch (titulo) {
-                case "Usuarios" ->
-                        vista.getRaiz().setCenter(new VistaUsuarios(() ->
-                                mostrarDashboardInicio()).getVista());
-                case "Solicitudes" ->
-                        vista.getRaiz().setCenter(new VistaSolicitudes(() ->
-                                mostrarDashboardInicio()).getVista());
-                case "Estadísticas" ->
-                        vista.getRaiz().setCenter(new VistaEstadisticas(() ->
-                                mostrarDashboardInicio()).getVista());
+                case "Usuarios" -> vista.getRaiz().setCenter(new VistaUsuarios(() ->
+                        mostrarDashboardInicio()).getVista());
+                case "Solicitudes" -> vista.getRaiz().setCenter(new VistaSolicitudes(() ->
+                        mostrarDashboardInicio()).getVista());
+                case "Estadísticas" -> vista.getRaiz().setCenter(new VistaEstadisticas(() ->
+                        mostrarDashboardInicio()).getVista());
             }
         });
 
-        card.getChildren().addAll(icono, lblTitulo, lblDescripcion, btnVer);
+        contenedorTexto.getChildren().addAll(lblTitulo, lblDescripcion, btnVer);
+        card.getChildren().addAll(contenedorImagen, contenedorTexto);
+
         return card;
     }
 
@@ -256,6 +288,6 @@ public class ControladorPrincipal {
     }
 
     private void mostrarConfirmacionCerrarSesion() {
-        System.out.println("Cerrando sesión...");
+        System.out.println("Cerrando sesión");
     }
 }
