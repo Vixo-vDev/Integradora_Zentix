@@ -4,32 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ConnectionBD.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorLogin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorRegistro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/HelloController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Imagenes/Logo.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/vrpruebainterfaz/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/logo_utez.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/Imagenes/Logo.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/example/vrpruebainterfaz/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/img/logo_utez.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,6 +58,7 @@
       <workItem from="1751343958348" duration="60000" />
       <workItem from="1751344065105" duration="272000" />
       <workItem from="1751344347362" duration="42000" />
+      <workItem from="1751344412921" duration="178000" />
     </task>
     <servers />
   </component>
