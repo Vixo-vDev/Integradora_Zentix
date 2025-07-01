@@ -4,127 +4,65 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b86b78de-7b45-4f6c-8cfd-f36896f88957" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorConfiguracion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorEstadisticas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorFormularios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorInventario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorPrincipal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorSolicitudes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorUsuarios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/HelloApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/HelloController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Formulario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Producto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Solicitud.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Usuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaConfiguracion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaEstadisticas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaFormularios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaInventario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaPrincipal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaSolicitudes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaUsuarios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PanelAdmin/src/main/resources/com/example/paneladmin/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+    <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ConnectionBD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorLogin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/ControladorRegistro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Controladores/HelloController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Imagenes/Logo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/vrpruebainterfaz/hello-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/img/logo_utez.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Imagenes/Logo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/vrpruebainterfaz/hello-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/img/logo_utez.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controladores/ConnectionBD.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controladores/ControladorLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controladores/ControladorRegistro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controladores/HelloController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Modelos/Usuario.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaRegistro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/vrpruebainterfaz/lib/ojdbc8.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Imagenes/Logo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/vrpruebainterfaz/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/img/logo_utez.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="JavaFXApplication" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 8
+  &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="2yyEPwabs0gR9QjFnKMGGQKopjg" />
+  <component name="ProjectId" id="2zFIXCh73MkafjpRXt5GNKAFnfg" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.HelloApplication.executor": "Run",
-    "Application.Registro.executor": "Run",
-    "Application.VistaLogin.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "TTS01",
-    "last_opened_file_path": "C:/Users/mapi1/Desktop/Integradora_Zentix/Login_Registro_Interface",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.VistaLogin.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;TTS01&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mapi1/Desktop/Integradora_Zentix/Login_Registro_Interface&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mapi1\Desktop\Integradora_Zentix\VRPruebaInterfaz\src\main\resources" />
-      <recent name="C:\Users\mapi1\Desktop\Integradora_Zentix\VRPruebaInterfaz\src" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\mapi1\Desktop\Integradora_Zentix\Login_Registro_Interface\src\main\java\com\example\vrpruebainterfaz" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Login_Registro_Interface" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Login_Registro_Interface" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
-  </component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -135,64 +73,25 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b86b78de-7b45-4f6c-8cfd-f36896f88957" name="Changes" comment="" />
-      <created>1750798394812</created>
+      <changelist id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="" />
+      <created>1751320431255</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1750798394812</updated>
-      <workItem from="1750798398180" duration="2222000" />
-      <workItem from="1750822265799" duration="7938000" />
-      <workItem from="1750870287165" duration="264000" />
-      <workItem from="1750876455800" duration="4403000" />
-      <workItem from="1750882052867" duration="266000" />
-      <workItem from="1750896907075" duration="13425000" />
-      <workItem from="1750950331325" duration="841000" />
-      <workItem from="1750953541820" duration="298000" />
-      <workItem from="1750988595643" duration="10143000" />
-      <workItem from="1751029752985" duration="4756000" />
-      <workItem from="1751053110658" duration="724000" />
-      <workItem from="1751223414449" duration="1855000" />
-      <workItem from="1751291416783" duration="595000" />
-      <workItem from="1751319150868" duration="53000" />
-      <workItem from="1751319217295" duration="67000" />
-      <workItem from="1751319296007" duration="1126000" />
+      <updated>1751320431255</updated>
+      <workItem from="1751320432390" duration="856000" />
+      <workItem from="1751342924596" duration="236000" />
+      <workItem from="1751343958348" duration="60000" />
+      <workItem from="1751344065105" duration="272000" />
+      <workItem from="1751344347362" duration="42000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="TTS01" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.ClassNotFoundException" package="java.lang" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../.." />
+    </ignored-roots>
   </component>
 </project>
