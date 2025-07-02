@@ -26,25 +26,4 @@ public class ConnectionBD {
             e.printStackTrace();
         }
     }
-
-    /*private static final String url ="jdbc:oracle:thin:@ice4ge175s4y5vmw_medium";
-    private static final String user = "ADMIN";
-    private static final String password = "v1x0DeV1506!";
-
-    public static Connection conectar() {
-        System.out.println("Conectando a: "+url);
-        try {
-            System.setProperty("oracle.net.tns_admin", "C:\\wallet_prueba");
-            System.setProperty("oracle.net.ssl_server_dn_match", "true");
-            //Class.forName("oracle.jdbc.driver.OracleDriver");
-            System.out.println("Conexión exitosa a la base de datos");
-            return DriverManager.getConnection(url, user, password);
-
-        } catch (SQLException e) {
-            System.out.println("Conexión fallida");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 }
