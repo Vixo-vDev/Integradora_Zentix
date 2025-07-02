@@ -3,11 +3,14 @@ package com.example.paneladmin.Controladores;
 import com.example.paneladmin.Vistas.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import java.util.List;
 
 public class ControladorPrincipal {
@@ -43,7 +46,7 @@ public class ControladorPrincipal {
         imagenPerfil.setFitHeight(180);
         imagenPerfil.setPreserveRatio(true);
 
-        Label iconoUsuario = new Label("👤");
+        Label iconoUsuario = new Label("\uD83D\uDC64");
         iconoUsuario.setStyle("-fx-font-size: 36;");
 
         Label lblNombre = new Label("[Name]");
@@ -57,7 +60,7 @@ public class ControladorPrincipal {
 
         Button btnConfiguracion = crearBotonLateral("Configuración", "#009475");
         btnConfiguracion.setOnAction(e -> vista.getRaiz().setCenter(new VistaConfiguracion(() -> {
-            mostrarDashboardInicio(); // Acción para regresar al menú principal
+            mostrarDashboardInicio();
         }).getVista()));
 
         Button btnCerrarSesion = crearBotonLateral("Cerrar Sesión", "#e74c3c");
@@ -82,18 +85,16 @@ public class ControladorPrincipal {
         grid.setHgap(20);
         grid.setVgap(20);
 
-        // → Columnas
         ColumnConstraints colCentro = new ColumnConstraints();
-        colCentro.setPercentWidth(80); // Cards
+        colCentro.setPercentWidth(80);
         colCentro.setHgrow(Priority.ALWAYS);
 
         ColumnConstraints colDerecha = new ColumnConstraints();
-        colDerecha.setPercentWidth(20); // Carrusel
+        colDerecha.setPercentWidth(20);
         colDerecha.setHgrow(Priority.ALWAYS);
 
         grid.getColumnConstraints().addAll(colCentro, colDerecha);
 
-        // → Filas
         for (int i = 0; i < 3; i++) {
             RowConstraints fila = new RowConstraints();
             fila.setPercentHeight(33.33);
@@ -119,20 +120,18 @@ public class ControladorPrincipal {
         grid.add(cardUsuarios, 0, 0);
         grid.add(cardSolicitudes, 0, 1);
         grid.add(cardEstadisticas, 0, 2);
-        grid.add(carrusel, 1, 0, 1, 3); // Carrusel ocupa todas las filas
+        grid.add(carrusel, 1, 0, 1, 3);
 
         vista.getRaiz().setCenter(grid);
     }
 
     private HBox crearCardSeccion(String titulo, String rutaIcono, String descripcion) {
-        // Contenedor principal horizontal
         HBox card = new HBox(15);
         card.setStyle("-fx-background-color: #D9D9D9; -fx-background-radius: 15;");
         card.setPadding(new Insets(20));
         card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         card.setAlignment(Pos.CENTER_LEFT);
 
-        // Contenedor para la imagen (lado izquierdo)
         VBox contenedorImagen = new VBox();
         contenedorImagen.setAlignment(Pos.CENTER);
         contenedorImagen.setMinWidth(100);
@@ -143,7 +142,6 @@ public class ControladorPrincipal {
         icono.setPreserveRatio(true);
         contenedorImagen.getChildren().add(icono);
 
-        // Contenedor para el texto (lado derecho)
         VBox contenedorTexto = new VBox(10);
         contenedorTexto.setAlignment(Pos.CENTER_LEFT);
         contenedorTexto.setMaxWidth(Double.MAX_VALUE);
@@ -155,39 +153,34 @@ public class ControladorPrincipal {
         Label lblDescripcion = new Label(descripcion);
         lblDescripcion.setStyle("-fx-font-size: 14;");
         lblDescripcion.setWrapText(true);
-        lblDescripcion.setMaxWidth(300);  // Limitar ancho para mejor legibilidad
+        lblDescripcion.setMaxWidth(300);
 
         Button btnVer = new Button("VER");
-        btnVer.setStyle("-fx-background-color: #009475; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-font-size: 14; " +
-                "-fx-padding: 8 20; " +
-                "-fx-background-radius: 5; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
 
-        // Efecto hover
+        DropShadow sombraNormal = new DropShadow(5, Color.rgb(0, 0, 0, 0.1));
+        sombraNormal.setOffsetY(2);
+        DropShadow sombraHover = new DropShadow(8, Color.rgb(0, 0, 0, 0.2));
+        sombraHover.setOffsetY(3);
+
+        btnVer.setEffect(sombraNormal);
+
         btnVer.setOnMouseEntered(e -> {
-            btnVer.setStyle("-fx-background-color: #27ae60; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
-            btnVer.setCursor(javafx.scene.Cursor.HAND);
+            btnVer.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
+            btnVer.setEffect(sombraHover);
+            btnVer.setCursor(Cursor.HAND);
         });
 
         btnVer.setOnMouseExited(e -> {
-            btnVer.setStyle("-fx-background-color: #009475; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+            btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
+            btnVer.setEffect(sombraNormal);
         });
 
         btnVer.setOnAction(e -> {
             switch (titulo) {
-                case "Usuarios" -> vista.getRaiz().setCenter(new VistaUsuarios(() ->
-                        mostrarDashboardInicio()).getVista());
-                case "Solicitudes" -> vista.getRaiz().setCenter(new VistaSolicitudes(() ->
-                        mostrarDashboardInicio()).getVista());
-                case "Estadísticas" -> vista.getRaiz().setCenter(new VistaEstadisticas(() ->
-                        mostrarDashboardInicio()).getVista());
+                case "Usuarios" -> vista.getRaiz().setCenter(new VistaUsuarios(() -> mostrarDashboardInicio()).getVista());
+                case "Solicitudes" -> vista.getRaiz().setCenter(new VistaSolicitudes(() -> mostrarDashboardInicio()).getVista());
+                case "Estadísticas" -> vista.getRaiz().setCenter(new VistaEstadisticas(() -> mostrarDashboardInicio()).getVista());
             }
         });
 
@@ -196,7 +189,6 @@ public class ControladorPrincipal {
 
         return card;
     }
-
 
     private VBox crearCarrusel(String titulo) {
         imagenesCarrusel = List.of(
@@ -218,8 +210,8 @@ public class ControladorPrincipal {
         imagenCarruselView.setFitWidth(120);
         imagenCarruselView.setFitHeight(90);
 
-        Button btnIzquierda = new Button("◄");
-        Button btnDerecha = new Button("►");
+        Button btnIzquierda = new Button("\u25C4");
+        Button btnDerecha = new Button("\u25BA");
         btnIzquierda.setOnAction(e -> mostrarImagenAnterior());
         btnDerecha.setOnAction(e -> mostrarImagenSiguiente());
 
@@ -232,33 +224,27 @@ public class ControladorPrincipal {
         descripcionCarrusel.setAlignment(Pos.CENTER);
 
         Button btnVer = new Button("VER");
-        btnVer.setStyle("-fx-background-color: #009475; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-font-size: 14; " +
-                "-fx-padding: 10 20; " +
-                "-fx-background-radius: 5; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
 
-// Efecto hover
+        DropShadow sombraNormal = new DropShadow(5, Color.rgb(0, 0, 0, 0.1));
+        sombraNormal.setOffsetY(2);
+        DropShadow sombraHover = new DropShadow(8, Color.rgb(0, 0, 0, 0.2));
+        sombraHover.setOffsetY(3);
+
+        btnVer.setEffect(sombraNormal);
+
         btnVer.setOnMouseEntered(e -> {
-            btnVer.setStyle("-fx-background-color: #27ae60; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);");
-            btnVer.setCursor(javafx.scene.Cursor.HAND);
+            btnVer.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
+            btnVer.setEffect(sombraHover);
+            btnVer.setCursor(Cursor.HAND);
         });
 
         btnVer.setOnMouseExited(e -> {
-            btnVer.setStyle("-fx-background-color: #009475; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+            btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
+            btnVer.setEffect(sombraNormal);
         });
 
-        btnVer.setOnAction(e -> {
-            vista.getRaiz().setCenter(new VistaInventario(() -> {
-                mostrarDashboardInicio(); // Acción para regresar al menú principal
-            }).getVista());
-        });
+        btnVer.setOnAction(e -> vista.getRaiz().setCenter(new VistaInventario(() -> mostrarDashboardInicio()).getVista()));
 
         contenedor.getChildren().addAll(lblTitulo, imagenCarruselView, navegacion, descripcionCarrusel, btnVer);
         return contenedor;
