@@ -22,6 +22,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class VistaLogin extends Application {
 
     @Override
@@ -126,9 +128,9 @@ public class VistaLogin extends Application {
         ventanaPrincipal.show();
     }
 
-    public static void main(String[] args) {
-        /*ConnectionBD con = new ConnectionBD();
-        con.conectar();*/
+    public static void main(String[] args) throws SQLException {
+        ConnectionBD con = new ConnectionBD();
+        con.getConnection();
         launch(args);
     }
 }

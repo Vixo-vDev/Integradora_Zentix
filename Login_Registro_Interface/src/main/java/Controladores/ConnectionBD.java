@@ -10,20 +10,21 @@ public class ConnectionBD {
     private static String PASSWORD = "v1x0DeV1506!";
 
     // Obtiene una conexión nueva
-    public static Connection getConnection() throws SQLException {
-        // 1. Apunta al directorio donde descomprimiste el wallet
-        System.setProperty("oracle.net.tns_admin", "C:\\Users\\mapi1\\Downloads\\Wallet_ICE4GE175S4Y5VMW");
-        // 2. (Opcional) fuerza la validación de nombre de servidor en el certificado
-        System.setProperty("oracle.net.ssl_server_dn_match", "true");
-        // 3. Obtiene la conexión usando alias, user y pass
-        return DriverManager.getConnection(URL, USER, PASSWORD);
-    }
-
-    public static void main(String[] args) throws SQLException {
-        try (Connection conn = getConnection()) {
-            System.out.println("¡Conexión exitosa!");
-        } catch (SQLException e) {
+    public void getConnection() throws SQLException {
+        try {
+            // 1. Apunta al directorio donde descomprimiste el wallet
+            System.setProperty("oracle.net.tns_admin", "C:\\Users\\mapi1\\Downloads\\Wallet_ICE4GE175S4Y5VMW");
+            // 2. (Opcional) fuerza la validación de nombre de servidor en el certificado
+            System.setProperty("oracle.net.ssl_server_dn_match", "true");
+            // 3. Obtiene la conexión usando alias, user y pass
+            DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexión a la base de datos exitosa");
+        }
+        catch(SQLException e){
             e.printStackTrace();
         }
+
     }
+
+
 }
