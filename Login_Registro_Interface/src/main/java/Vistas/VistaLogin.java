@@ -29,7 +29,6 @@ public class VistaLogin extends Application {
         ventanaPrincipal.setWidth(1000);
         ventanaPrincipal.setHeight(600);
 
-
         HBox contenedorPrincipal = new HBox();
 
         StackPane panelIzquierdo = new StackPane();
@@ -84,7 +83,7 @@ public class VistaLogin extends Application {
 
         Button botonContinuar = new Button("Continuar");
         botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        botonContinuar.setStyle("-fx-background-color: #0078d7; -fx-text-fill: white;");
+        botonContinuar.setStyle("-fx-background-color: #009475;; -fx-text-fill: white;");
         botonContinuar.setPrefWidth(250);
         botonContinuar.setPrefHeight(40);
 
@@ -128,8 +127,8 @@ public class VistaLogin extends Application {
     }
 
     public static void main(String[] args) {
-        ConnectionBD con = new ConnectionBD();
-        con.conectar();
+        /*ConnectionBD con = new ConnectionBD();
+        con.conectar();*/
         launch(args);
     }
 }
