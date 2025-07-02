@@ -1,16 +1,31 @@
 package com.example.panelnormal.Vistas;
 
-import javafx.application.Application;
+import com.example.panelnormal.Controladores.ControladorPrincipal;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class VistaPrincipal extends Application {
+public class VistaPrincipal {
+    private BorderPane raiz;
+    private ControladorPrincipal controlador;
 
-    public static void main(String[] args) {
-        launch(args);
+    public VistaPrincipal() {
+        raiz = new BorderPane();
+        raiz.setStyle("-fx-background-color: #f5f7fa;");
+        this.controlador = new ControladorPrincipal(this);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void mostrar(Stage escenario) {
+        Scene escena = new Scene(raiz);
+        escenario.setTitle("Panel de Administración");
+        escenario.setScene(escena);
+        escenario.setMaximized(true); // Esta línea hace que ocupe toda la pantalla
+        raiz.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        controlador.mostrarDashboardInicio();
+        escenario.show();
+    }
 
+    public BorderPane getRaiz() {
+        return raiz;
     }
 }

@@ -1,16 +1,12 @@
 package com.example.panelnormal.Controladores;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 
-public class ControladorHistorial extends Application {
+import com.example.panelnormal.Vistas.VistaFormulario;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class ControladorHistorial {
+    private VistaFormulario vista;
 
-    @Override
-    public void start(Stage primaryStage) {
-
+    public ControladorHistorial(VistaFormulario vista) {
+        this.vista = vista;
     }
 }

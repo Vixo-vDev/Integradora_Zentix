@@ -1,16 +1,14 @@
 package com.example.panelnormal.Controladores;
 
+import com.example.panelnormal.Vistas.VistaPerfil;
 import javafx.application.Application;
-import javafx.stage.Stage;
 
-public class ControladorPerfil extends Application {
+public class ControladorPerfil {
 
-    public static void main(String[] args) {
-        launch(args);
+    private VistaPerfil vista;
+
+    public ControladorPerfil(VistaPerfil vista) {
+        this.vista = vista;
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-
-    }
 }

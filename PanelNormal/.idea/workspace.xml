@@ -1,4 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3064b8f2-f2db-446f-9a8c-3d12accb4851" name="Changes" comment="Se agregaron los Archivos Controladores">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorConfiguracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorConfiguracion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorFormulario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorFormulario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorHistorial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorHistorial.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorInventario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorInventario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorPerfil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorPerfil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Controladores/ControladorPrincipal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaConfiguracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaConfiguracion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaFormulario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaFormulario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaHistorial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaHistorial.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaInventario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaInventario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaPerfil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaPerfil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/panelnormal/Vistas/VistaPrincipal.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaFXApplication" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "DevTonyCZ"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Vixo-vDev/Integradora_Zentix.git",
+    "accountId": "4de47198-ed5e-4bbd-85b8-894a3bea5ae0"
+  }
+}]]></component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
   <component name="ProjectId" id="2zITiOY01RWeHCiI2U3j8i0W8ZX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "TTS03",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3064b8f2-f2db-446f-9a8c-3d12accb4851" name="Changes" comment="" />
+      <created>1751417716034</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751417716034</updated>
+      <workItem from="1751417717235" duration="10572000" />
+    </task>
+    <task id="LOCAL-00001" summary="Iniciando nueva restructura del proyecto">
+      <option name="closed" value="true" />
+      <created>1751417769885</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1751417769885</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Imagenes agregadas para el proyecto">
+      <option name="closed" value="true" />
+      <created>1751419667850</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1751419667850</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Se agregaron los Archivos Vistas">
+      <option name="closed" value="true" />
+      <created>1751420814461</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751420814461</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Se agregaron los Archivos Controladores">
+      <option name="closed" value="true" />
+      <created>1751421969863</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1751421969863</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Iniciando nueva restructura del proyecto" />
+    <MESSAGE value="Imagenes agregadas para el proyecto" />
+    <MESSAGE value="Se agregaron los Archivos Vistas" />
+    <MESSAGE value="Se agregaron los Archivos Controladores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Se agregaron los Archivos Controladores" />
+  </component>
 </project>

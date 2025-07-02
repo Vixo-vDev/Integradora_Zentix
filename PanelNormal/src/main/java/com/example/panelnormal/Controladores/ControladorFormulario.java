@@ -1,16 +1,15 @@
 package com.example.panelnormal.Controladores;
 
+import com.example.panelnormal.Vistas.VistaFormulario;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class ControladorFormulario extends Application {
+public class ControladorFormulario {
+        private VistaFormulario vista;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+        public ControladorFormulario(VistaFormulario vista) {
+            this.vista = vista;
 
-    @Override
-    public void start(Stage primaryStage) {
+        }
 
-    }
-}
+        }

@@ -1,16 +1,11 @@
 package com.example.panelnormal.Controladores;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import com.example.panelnormal.Vistas.VistaInventario;
 
-public class ControladorInventario extends Application {
+public class ControladorInventario {
+    private VistaInventario vista;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-
+    public ControladorInventario(VistaInventario vista) {
+        this.vista = vista;
     }
 }
