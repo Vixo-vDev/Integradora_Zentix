@@ -1,4 +1,4 @@
-package interfaz.demo;
+package Interfaz;
 
 import javafx.application.Application;
 import javafx.collections.*;

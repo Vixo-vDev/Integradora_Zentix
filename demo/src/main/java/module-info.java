@@ -8,4 +8,6 @@ module interfaz.demo {
 
     opens interfaz.demo to javafx.fxml;
     exports interfaz.demo;
+    exports Interfaz;
+    opens Interfaz to javafx.fxml;
 }
