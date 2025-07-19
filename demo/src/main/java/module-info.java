@@ -1,4 +1,4 @@
-module interfaz.demo {
+module Interfaz {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -6,8 +6,6 @@ module interfaz.demo {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens interfaz.demo to javafx.fxml;
-    exports interfaz.demo;
-    exports Interfaz;
     opens Interfaz to javafx.fxml;
+    exports Interfaz;
 }
