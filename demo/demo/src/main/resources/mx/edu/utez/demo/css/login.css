@@ -1,0 +1,42 @@
+/* login.css */
+
+/* Fondo gris claro */
+.root {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Caja blanca centrada */
+#box {
+    -fx-background-color: white;
+    -fx-padding: 40;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+}
+
+/* TextFields */
+.text-field, .password-field {
+    -fx-pref-width: 300;
+    -fx-pref-height: 40;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #ddd;
+    -fx-padding: 0 10 0 35; /* espacio para icono futuro */
+    -fx-font-size: 14;
+}
+
+/* Botón */
+.button {
+    -fx-pref-width: 300;
+    -fx-pref-height: 40;
+    -fx-background-color: linear-gradient(to right, #5b8def, #6f9fff);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* Hover efecto */
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #4a7cd1, #5e8be3);
+}

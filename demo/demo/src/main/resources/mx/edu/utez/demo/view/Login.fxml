@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="mx.edu.utez.demo.controller.UsuarioController"
+            stylesheets="@../css/login.css"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <HBox spacing="20">
+        <TextField fx:id="txtcorreo" text="Ingresa correo"/>
+        <TextField fx:id="txtPass" text="Ingresa pass"/>
+        <Button fx:id="btnLogin" onAction="#onLogin" text="Login"></Button>
+    </HBox>
+
+</AnchorPane>
