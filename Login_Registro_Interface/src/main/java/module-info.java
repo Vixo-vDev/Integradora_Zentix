@@ -7,6 +7,7 @@ module com.example.netrixapp {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires java.desktop;
+    requires jdk.jdi;
 
     opens com.example.netrixapp.Vistas to javafx.fxml, javafx.graphics;
     opens com.example.netrixapp.Controladores to javafx.fxml;

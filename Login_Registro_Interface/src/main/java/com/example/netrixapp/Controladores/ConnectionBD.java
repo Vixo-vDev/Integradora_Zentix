@@ -1,29 +1,33 @@
 package com.example.netrixapp.Controladores;
+
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionBD {
 
-    private static String URL      = "jdbc:oracle:thin:@zentixdb_high";
-    private static String USER     = "ADMIN";
-    private static String PASSWORD = "Eliaquimzentix1";
+    private static final String URL      = "jdbc:oracle:thin:@zentixdb_high";
+    private static final String USER     = "ADMIN";
+    private static final String PASSWORD = "Eliaquimzentix1";
 
     // Obtiene una conexión nueva
-    public void getConnection() throws SQLException {
-        try {
+    public static Connection getConnection() throws SQLException {
+
             // 1. Apunta al directorio donde descomprimiste el wallet
             System.setProperty("oracle.net.tns_admin", "C:\\Users\\mapi1\\Downloads\\netrix\\Wallet_zentixdb");
             // 2. (Opcional) fuerza la validación de nombre de servidor en el certificado
             System.setProperty("oracle.net.ssl_server_dn_match", "true");
             // 3. Obtiene la conexión usando alias, user y pass
-            DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Conexión a la base de datos exitosa");
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
 
+            System.out.println("Conexión a la base de datos exitosa");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-
+    public static void main(String[] args) throws SQLException {
+        try (Connection conn = getConnection()) {
+            System.out.println("¡Conexión exitosa!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
