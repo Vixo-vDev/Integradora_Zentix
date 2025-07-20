@@ -12,6 +12,7 @@ public class HelloApplication extends Application {
         vistaPrincipal.mostrar(escenario);
     }
 
+
     public static void main(String[] args) {
         launch(args);
     }
