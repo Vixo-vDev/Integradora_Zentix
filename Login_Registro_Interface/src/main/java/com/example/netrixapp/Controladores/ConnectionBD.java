@@ -1,5 +1,4 @@
-package Controladores;
-import java.sql.Connection;
+package com.example.netrixapp.Controladores;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 

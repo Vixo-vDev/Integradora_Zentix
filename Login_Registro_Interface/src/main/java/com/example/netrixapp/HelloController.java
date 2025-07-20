@@ -1,4 +1,4 @@
-package Controladores;
+package com.example.netrixapp;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

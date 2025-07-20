@@ -1,13 +1,12 @@
-module com.example.netrixapp {
+module com.example.paneladmin {
     requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
-    requires java.sql;
     requires java.desktop;
 
-    opens com.example.netrixapp to javafx.fxml;
-    exports com.example.netrixapp;
+    opens com.example.paneladmin to javafx.fxml;
+    exports com.example.paneladmin;
 }

@@ -1,6 +1,6 @@
-package Controladores;
+package com.example.netrixapp.Controladores;
 
-import Modelos.Usuario;
+import com.example.netrixapp.Modelos.Usuario;
 
 public class ControladorRegistro {
 

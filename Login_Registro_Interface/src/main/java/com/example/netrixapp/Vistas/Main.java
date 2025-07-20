@@ -1,4 +1,4 @@
-package Vistas;
+package com.example.netrixapp.Vistas;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;

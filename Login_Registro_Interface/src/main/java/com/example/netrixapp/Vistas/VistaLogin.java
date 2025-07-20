@@ -1,6 +1,7 @@
-package Vistas;
+package com.example.netrixapp.Vistas;
 
-import Controladores.*;
+
+import com.example.netrixapp.Controladores.ConnectionBD;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

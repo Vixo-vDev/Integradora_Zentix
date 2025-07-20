@@ -1,7 +1,7 @@
-package Vistas;
+package com.example.netrixapp.Vistas;
 
-import Controladores.*;
-import Modelos.Usuario;
+import com.example.netrixapp.Controladores.ControladorRegistro;
+import com.example.netrixapp.Modelos.Usuario;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

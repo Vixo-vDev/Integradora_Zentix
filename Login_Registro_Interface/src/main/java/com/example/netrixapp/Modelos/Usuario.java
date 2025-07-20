@@ -1,4 +1,4 @@
-package Modelos;
+package com.example.netrixapp.Modelos;
 
 import java.time.LocalDate;
 

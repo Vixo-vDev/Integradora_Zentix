@@ -1,7 +1,6 @@
-package Controladores;
+package com.example.netrixapp.Controladores;
 
 
-import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class ControladorLogin {
