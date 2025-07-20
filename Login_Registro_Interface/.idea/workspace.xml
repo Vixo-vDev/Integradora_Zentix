@@ -4,7 +4,43 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="" />
+    <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Login_Registro_Interface.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/ojdbc11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorConfiguracion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorEstadisticas.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorFormularios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorInventario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorPrincipal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorSolicitudes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Controladores/ControladorUsuarios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/HelloApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Formulario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Producto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Solicitud.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Modelos/Usuario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaConfiguracion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaEstadisticas.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaFormularios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaInventario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaPrincipal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaSolicitudes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/com/example/paneladmin/Vistas/VistaUsuarios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PanelAdmin/src/main/resources/com/example/paneladmin/hello-view.fxml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
