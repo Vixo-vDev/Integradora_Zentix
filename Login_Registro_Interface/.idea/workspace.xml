@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54661716-2935-446f-bab6-fa73014455c6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Controladores/ConnectionBD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controladores/ConnectionBD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java" afterDir="false" />
@@ -56,6 +57,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mapi1\Desktop\Integradora_Zentix\Login_Registro_Interface\src\main\resources\img" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="mvnw" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="" />
@@ -96,6 +102,14 @@
       <workItem from="1751344412921" duration="178000" />
       <workItem from="1751344604189" duration="1108000" />
       <workItem from="1751348202046" duration="64000" />
+      <workItem from="1752392572554" duration="21000" />
+      <workItem from="1752392774468" duration="114000" />
+      <workItem from="1752392904238" duration="331000" />
+      <workItem from="1752499082901" duration="6000" />
+      <workItem from="1752638413732" duration="1730000" />
+      <workItem from="1752671966254" duration="9000" />
+      <workItem from="1752714952088" duration="610000" />
+      <workItem from="1752721664205" duration="19000" />
     </task>
     <servers />
   </component>
@@ -106,5 +120,16 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/../.." />
     </ignored-roots>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Vistas/VistaLogin.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

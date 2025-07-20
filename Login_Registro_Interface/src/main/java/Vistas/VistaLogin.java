@@ -73,7 +73,7 @@ public class VistaLogin extends Application {
         campoUsuario.setPrefWidth(250);
         campoUsuario.setPrefHeight(35);
 
-        Label etiquetaContrasena = new Label("Contrasena:");
+        Label etiquetaContrasena = new Label("Contraseña:");
         etiquetaContrasena.setFont(Font.font("Arial", 16));
         PasswordField campoContrasena = new PasswordField();
         campoContrasena.setPrefWidth(250);

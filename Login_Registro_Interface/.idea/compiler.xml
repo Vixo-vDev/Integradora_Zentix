@@ -9,8 +9,5 @@
         <module name="VRPruebaInterfaz" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="VRPruebaInterfaz" target="21" />
-    </bytecodeTargetLevel>
   </component>
 </project>
