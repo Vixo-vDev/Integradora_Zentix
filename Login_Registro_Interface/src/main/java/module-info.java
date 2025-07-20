@@ -8,6 +8,10 @@ module com.example.netrixapp {
     requires java.sql;
     requires java.desktop;
 
+    opens com.example.netrixapp.Vistas to javafx.fxml, javafx.graphics;
+    opens com.example.netrixapp.Controladores to javafx.fxml;
+    opens com.example.netrixapp.Modelos to javafx.base;
+
     opens com.example.netrixapp to javafx.fxml;
     exports com.example.netrixapp;
 }

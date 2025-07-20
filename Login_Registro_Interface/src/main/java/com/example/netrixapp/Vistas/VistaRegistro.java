@@ -32,7 +32,7 @@ public class VistaRegistro {
         StackPane panelIzquierdo = new StackPane();
         panelIzquierdo.setPrefWidth(300);
 
-        Image logoUtez = new Image(getClass().getResourceAsStream("/img/logo_utez.png"));
+        Image logoUtez = new Image(getClass().getResourceAsStream("/imagenes/logo_utez.png"));
         ImageView logoUtezV = new ImageView(logoUtez);
         logoUtezV.setFitHeight(100);
         logoUtezV.setFitWidth(200);
