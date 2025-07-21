@@ -10,7 +10,7 @@ public class Usuario {
     private String nombre;
     private String apellidos;
     private String correo;
-    private String calle;
+    private String direccion;
     private String lada;
     private String telefono;
     private LocalDate date;
@@ -23,11 +23,11 @@ public class Usuario {
     public Usuario(){}
 
     //Constructor con parámetros
-    public Usuario(String nombre, String apellidos, String correo, String calle, String lada, String telefono, LocalDate date, int edad, String rol, String password) {
+    public Usuario(String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
-        this.calle = calle;
+        this.direccion = direccion;
         this.lada = lada;
         this.telefono = telefono;
         this.date = date;
@@ -65,12 +65,12 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getCalle() {
-        return calle;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setCalle(String calle) {
-        this.calle = calle;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getLada() {
@@ -113,7 +113,7 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public String matricula() {return matricula;}
+    public String getMatricula() {return matricula;}
     public void setMatricula(String matricula) {this.matricula = matricula;}
 
     public String getPassword() {

@@ -102,6 +102,9 @@ public class VistaLogin extends Application {
                     HelloApplication main = new HelloApplication();
                     main.start(ventanaPrincipal);
 
+                }else if(correo.isEmpty() || pass.isEmpty()){
+                    showAlert("Error", "Ingresa todo lo que se te pide");
+
                 }else{
                     showAlert("Error","Credenciales incorrectas");
                     System.out.println("Credenciales incorrectas!");

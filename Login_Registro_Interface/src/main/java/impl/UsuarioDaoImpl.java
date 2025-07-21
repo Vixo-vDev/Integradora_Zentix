@@ -41,7 +41,28 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 
     @Override
     public void create(Usuario user) throws Exception {
+        String sql="INSERT INTO USUARIO (NOMBRE, APELLIDOS, CORREO_INSTITUCIONAL, DOMICILIO," +
+                "LADA, TELEFONO, FECHA_NACIMIENTO, EDAD, ROL, MATRICULA, PASSWORD) " +
+                "VALUES (?, ?, ?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, ?, ?)";
+        try {
+            Connection con= ConnectionBD.getConnection(); //Se establece la conexion
+            PreparedStatement ps=con.prepareStatement(sql); // se prepara la consulta para evitar inyeccion sql
 
+            ps.setString(1,user.getNombre());
+            ps.setString(2,user.getApellidos());
+            ps.setString(3,user.getCorreo());
+            ps.setString(4,user.getDireccion());
+            ps.setString(5,user.getLada());
+            ps.setString(6,user.getTelefono());
+            ps.setString(7,user.getDate().toString());
+            ps.setInt(8,user.getEdad());
+            ps.setString(9,user.getRol());
+            ps.setString(10, user.getMatricula());
+            ps.setString(11,user.getPassword());
+            ps.executeQuery();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

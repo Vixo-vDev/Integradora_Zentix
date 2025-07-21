@@ -111,7 +111,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.vrpruebainterfaz/com.example.netrixapp.HelloApplication</mainClass>
+                            <mainClass>com.example.vrpruebainterfaz/com.example.netrixapp.Vistas.VistaLogin</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

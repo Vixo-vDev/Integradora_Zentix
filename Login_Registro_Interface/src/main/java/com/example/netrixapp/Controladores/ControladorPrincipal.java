@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+
 public class ControladorPrincipal {
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
@@ -40,6 +41,7 @@ public class ControladorPrincipal {
         vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
         mostrarDashboard();
     }
+
 
     public void mostrarDashboard() {
         VBox contenedorPrincipal = new VBox(20);
@@ -158,7 +160,8 @@ public class ControladorPrincipal {
         alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
 
         if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-            System.exit(0);
+            /*VistaLogin login = new VistaLogin();
+            login.start();*/
         }
     }
 }

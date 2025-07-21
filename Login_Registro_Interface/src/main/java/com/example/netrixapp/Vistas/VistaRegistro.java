@@ -19,6 +19,32 @@ import java.time.LocalDate;
 import java.time.Period;
 
 public class VistaRegistro {
+    private TextField campoNombre;
+    private TextField campoApellidos;
+    private TextField campoCorreo;
+    private TextField campoCalle;
+    private TextField campoLada;
+    private TextField campoTelefono;
+    private DatePicker campoFecha;
+    private TextField campoEdad;
+    private ComboBox<String> comboRol;
+    private TextField matricula;
+    private PasswordField campoContrasena;
+    private PasswordField campoConfirmar;
+    private Button botonContinuar;
+
+    public String getNombre() { return campoNombre.getText().trim(); }
+    public String getApellidos() { return campoApellidos.getText().trim(); }
+    public String getCorreo() { return campoCorreo.getText().trim(); }
+    public String getCalle() { return campoCalle.getText().trim(); }
+    public String getLada() { return campoLada.getText().trim(); }
+    public String getTelefono() { return campoTelefono.getText().trim(); }
+    public LocalDate getFecha() { return campoFecha.getValue(); }
+    public int getEdad() { return Integer.parseInt(campoEdad.getText().trim()); }
+    public String getRol() { return comboRol.getSelectionModel().getSelectedItem(); }
+    public String getmatricula() { return matricula.getText().trim(); }
+    public String getPassword() { return campoContrasena.getText().trim(); }
+    public String getConfirmarPassword() { return campoConfirmar.getText().trim(); }
 
     public void start(Stage ventanaRegistro) {
 
@@ -91,51 +117,51 @@ public class VistaRegistro {
 
         // Línea 1: Nombre, Apellidos, Correo institucional
         Label lblNombre = new Label("Nombre:");
-        TextField campoNombre = new TextField();
+        campoNombre = new TextField();
         GridPane.setHgrow(campoNombre, Priority.ALWAYS);
         gridCampos.add(lblNombre, 0, 1);
         gridCampos.add(campoNombre, 0, 2);
 
         Label lblApellidos = new Label("Apellidos:");
-        TextField campoApellidos = new TextField();
+        campoApellidos = new TextField();
         GridPane.setHgrow(campoApellidos, Priority.ALWAYS);
         gridCampos.add(lblApellidos, 1, 1, 2 ,1);
         gridCampos.add(campoApellidos, 1, 2, 2 ,1);
 
         Label lblCorreo = new Label("Correo institucional:");
         lblCorreo.setWrapText(true);
-        TextField campoCorreo = new TextField();
+        campoCorreo = new TextField();
         GridPane.setHgrow(campoCorreo, Priority.ALWAYS);
         gridCampos.add(lblCorreo, 3, 1, 2, 1);
         gridCampos.add(campoCorreo, 3, 2, 2, 1);
 
         // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
         Label lblCalle = new Label("Calle:");
-        TextField campoCalle = new TextField();
+        campoCalle = new TextField();
         GridPane.setHgrow(campoCalle, Priority.ALWAYS);
         gridCampos.add(lblCalle, 0, 3);
         gridCampos.add(campoCalle, 0, 4);
 
         Label lblLada = new Label("Lada:");
-        TextField campoLada = new TextField();
+        campoLada = new TextField();
         campoLada.setPrefWidth(60);
         gridCampos.add(lblLada, 1, 3);
         gridCampos.add(campoLada, 1, 4);
 
         Label lblTelefono = new Label("Teléfono:");
-        TextField campoTelefono = new TextField();
+        campoTelefono = new TextField();
         GridPane.setHgrow(campoTelefono, Priority.ALWAYS);
         gridCampos.add(lblTelefono, 2, 3);
         gridCampos.add(campoTelefono, 2, 4);
 
         Label lblFecha = new Label("Fecha de nacimiento:");
-        DatePicker campoFecha = new DatePicker();
+        campoFecha = new DatePicker();
         GridPane.setHgrow(campoTelefono, Priority.ALWAYS);
         gridCampos.add(lblFecha, 3, 3, 2, 1);
         gridCampos.add(campoFecha, 3, 4);
 
         Label lblEdad = new Label("Edad:");
-        TextField campoEdad = new TextField();
+        campoEdad = new TextField();
         campoEdad.setPrefWidth(60);
         campoEdad.setEditable(false);
         gridCampos.add(lblEdad, 4, 3);
@@ -156,12 +182,19 @@ public class VistaRegistro {
 
         // Línea 3: ComboBox debajo del label
         Label lblRol = new Label("Selecciona tu Rol:");
-        ComboBox<String> comboRol = new ComboBox<>();
+        comboRol = new ComboBox<>();
         comboRol.getItems().addAll("Alumno", "Docente");
         comboRol.setPromptText("Selecciona tu Rol");
         GridPane.setHgrow(comboRol, Priority.ALWAYS);
         gridCampos.add(lblRol, 0, 6, 5, 1);
         gridCampos.add(comboRol, 0, 7, 3, 1);
+
+        Label lblMatricula = new Label("Matricula:");
+        matricula = new TextField();
+        GridPane.setHgrow(matricula, Priority.ALWAYS);
+        gridCampos.add(lblMatricula, 1, 6, 5, 1);
+        gridCampos.add(matricula, 1, 7, 3, 1);
+
 
         Label infoCredenciales = new Label("Credenciales");
         infoCredenciales.setFont(Font.font("Arial", FontWeight.BOLD, 18));
@@ -169,7 +202,7 @@ public class VistaRegistro {
 
 
         Label lblContrasena = new Label("Contraseña:");
-        PasswordField campoContrasena = new PasswordField();
+        campoContrasena = new PasswordField();
         campoContrasena.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(campoContrasena, Priority.ALWAYS);
         gridCampos.add(lblContrasena, 0, 9);
@@ -177,13 +210,13 @@ public class VistaRegistro {
 
         Label lblConfirmar = new Label("Confirmar contraseña:");
         lblConfirmar.setWrapText(true);
-        PasswordField campoConfirmar = new PasswordField();
+        campoConfirmar = new PasswordField();
         campoConfirmar.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(campoConfirmar, Priority.ALWAYS);
         gridCampos.add(lblConfirmar, 2, 9, 2, 1);
         gridCampos.add(campoConfirmar, 2, 10, 2, 1);
 
-        Button botonContinuar = new Button("Continuar");
+        botonContinuar = new Button("Continuar");
         botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         botonContinuar.setStyle("-fx-background-color: #009475; -fx-text-fill: white;");
         botonContinuar.setPrefWidth(200);
@@ -195,46 +228,7 @@ public class VistaRegistro {
         botonCancelar.setPrefWidth(200);
         botonCancelar.setPrefHeight(30);
 
-        botonContinuar.setOnAction(e -> {
-            try {
-                String nombre = campoNombre.getText();
-                String apellidos = campoApellidos.getText();
-                String correo = campoCorreo.getText();
-                String calle = campoCalle.getText();
-                String lada = campoLada.getText();
-                String telefono = campoTelefono.getText();
-                LocalDate date = campoFecha.getValue();
-                int edad = Integer.parseInt(campoEdad.getText());
-                String rol = comboRol.getSelectionModel().getSelectedItem();
-                String password = campoContrasena.getText();
-                String passwordConfirmar = campoConfirmar.getText();
 
-                //Instancia de usuario
-                Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, password);
-                //Instancia de controladorRegistro
-                ControladorRegistro controladorRegistro = new ControladorRegistro();
-                boolean bandera = controladorRegistro.registro(usuario, passwordConfirmar);
-
-                if (bandera) {
-                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                    alerta.setHeaderText("Registro exitoso");
-                    alerta.setContentText("Tu cuenta ha sido registrada.");
-                    alerta.showAndWait();
-                } else {
-                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                    alerta.setHeaderText("Error en registro");
-                    alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
-                    alerta.showAndWait();
-                }
-            }
-                catch(NumberFormatException ex){
-                    Alert alerta = new Alert(Alert.AlertType.ERROR);
-                    alerta.setHeaderText("Edad inválida");
-                    alerta.setContentText("Por favor ingresa un número válido en el campo de edad.");
-                    alerta.showAndWait();
-                }
-
-        });
 
         botonCancelar.setOnAction(e -> {
            VistaLogin regresar = new VistaLogin();
@@ -270,6 +264,8 @@ public class VistaRegistro {
         gridCampos.add(campoEdad,4,3);*/
 
 
+
+
         panelIzquierdo.getChildren().add(contenedorVertical);
         panelDerecho.getChildren().addAll(titulo, gridCampos,buttons);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
@@ -278,6 +274,10 @@ public class VistaRegistro {
         ventanaRegistro.setScene(escena);
         ventanaRegistro.setTitle("Registrarse");
         ventanaRegistro.show();
+    }
+
+    public Button getBotonContinuar() {
+        return botonContinuar;
     }
 
 }
