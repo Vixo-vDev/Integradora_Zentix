@@ -12,7 +12,7 @@ public class Equipo {
     private String numero_serie;
     private int disponible;
     private int tipo_equipo;
-    private List<Equipo> equipos;
+    //private List<Equipo> equipos;
 
     public int getId_equipo() {
         return id_equipo;
@@ -78,11 +78,11 @@ public class Equipo {
         this.tipo_equipo = tipo_equipo;
     }
 
-    public List<Equipo> getEquipos() {
+   /* public List<Equipo> getEquipos() {
         return equipos;
     }
 
     public void setEquipos(List<Equipo> equipos) {
         this.equipos = equipos;
-    }
+    }*/
 }

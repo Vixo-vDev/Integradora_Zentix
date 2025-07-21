@@ -24,18 +24,21 @@ public class EquipoDaoImpl implements IEquipoDao {
             while(rs.next()){
                 Equipo equipo =new Equipo();
 
-                equipo.setId_equipo(rs.getInt("id_equipo"));
-                equipo.setCodigo_bien(rs.getString("codigo_bien"));
-                equipo.setDescripcion(rs.getString("descripcion"));
-                equipo.setMarca(rs.getString("marca"));
-                equipo.setModelo(rs.getString("modelo"));
-                equipo.setNumero_serie(rs.getString("numero_serie"));
-                equipo.setDisponible(rs.getInt("disponible"));
-                equipo.setTipo_equipo(rs.getInt("tipo_equipo"));
+                equipo.setId_equipo(rs.getInt("ID_EQUIPO"));
+                equipo.setCodigo_bien(rs.getString("CODIGO_BIEN"));
+                equipo.setDescripcion(rs.getString("DESCRIPCION"));
+                equipo.setMarca(rs.getString("MARCA"));
+                equipo.setModelo(rs.getString("MODELO"));
+                equipo.setNumero_serie(rs.getString("NUMERO_SERIE"));
+                equipo.setDisponible(rs.getInt("DISPONIBLE"));
+                equipo.setTipo_equipo(rs.getInt("ID_TIPO_EQUIPO"));
 
                 equipos.add(equipo);
+                System.out.println("Equipos encontrados: " + equipos.size());
+
             }
             return equipos;
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -80,6 +80,9 @@ public class VistaInventario {
     }
 
     private void configurarColumnasTabla() {
+        TableColumn<Equipo, String> colidEquipo = new TableColumn<>("Código Bien");
+        colidEquipo.setCellValueFactory(new PropertyValueFactory<>("Id_equipo"));
+
         TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código Bien");
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
 
@@ -98,7 +101,10 @@ public class VistaInventario {
         TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
         colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
 
-        tablaEquipos.getColumns().addAll(colCodigo, colDescripcion, colMarca, colModelo, colNumeroSerie, colDisponible);
+        TableColumn<Equipo, Integer> coltipoEquipo = new TableColumn<>("Disponible");
+        coltipoEquipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
+
+        tablaEquipos.getColumns().addAll(colidEquipo, colDescripcion, colMarca, colModelo, colNumeroSerie, colDisponible, coltipoEquipo);
     }
 
     // Método para actualizar la tabla desde el controlador
