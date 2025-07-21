@@ -76,15 +76,33 @@ public class VistaInventario {
         tablaCodigo.setVgap(10);
 
         // Encabezados
-        tablaCodigo.add(crearLabelEncabezado("Nombre"), 0, 0);
-        tablaCodigo.add(crearLabelEncabezado("Disponibles"), 1, 0);
+        tablaCodigo.add(crearLabelEncabezado("Codigo"), 0, 0);
+        tablaCodigo.add(crearLabelEncabezado("Descripción"), 1, 0);
+        tablaCodigo.add(crearLabelEncabezado("Marca"), 2, 0);
+        tablaCodigo.add(crearLabelEncabezado("Modelo"), 3, 0);
+        tablaCodigo.add(crearLabelEncabezado("Número serie"), 4, 0);
+        tablaCodigo.add(crearLabelEncabezado("Disponible"), 5, 0);
 
         // Configuración de columnas
-        ColumnConstraints colNombre = new ColumnConstraints();
-        colNombre.setHgrow(Priority.ALWAYS);
-        ColumnConstraints colDisponibles = new ColumnConstraints();
-        colDisponibles.setHgrow(Priority.SOMETIMES);
-        tablaCodigo.getColumnConstraints().addAll(colNombre, colDisponibles);
+        ColumnConstraints colCodigo_Bien = new ColumnConstraints();
+        colCodigo_Bien.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints colDescripcion = new ColumnConstraints();
+        colDescripcion.setHgrow(Priority.SOMETIMES);
+
+        ColumnConstraints colMarca = new ColumnConstraints();
+        colMarca.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints colModelo = new ColumnConstraints();
+        colModelo.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints colNumero = new ColumnConstraints();
+        colNumero.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints colDisponible = new ColumnConstraints();
+        colDisponible.setHgrow(Priority.ALWAYS);
+
+        tablaCodigo.getColumnConstraints().addAll(colCodigo_Bien, colDescripcion, colMarca, colModelo, colNumero, colDisponible);
 
         cardCodigo.getChildren().addAll(lblTituloCodigo, tablaCodigo);
         contenido.getChildren().add(cardCodigo);
