@@ -109,7 +109,7 @@ public class VistaSolicitudes {
                 columnaNota, columnaTiempoUso);
 
         // Añadir datos de ejemplo con estilo
-        tablaArticulos.setRowFactory(tv -> new TableRow<ArticuloSolicitud>() {
+        tablaArticulos.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(ArticuloSolicitud item, boolean empty) {
                 super.updateItem(item, empty);
