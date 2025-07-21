@@ -1,0 +1,89 @@
+package com.example.netrixapp.Modelos;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class Solicitud {
+
+    private int id_solitictud;
+    private int id_usuario;
+    private LocalDate fecha_solicitud;
+    private String articulo;
+    private int cantidad;
+    private LocalDate fecha_recibo;
+    private String tiempo_uso;
+    private String razon;
+    private String estado;
+
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public int getId_solitictud() {
+        return id_solitictud;
+    }
+
+    public void setId_solitictud(int id_solitictud) {
+        this.id_solitictud = id_solitictud;
+    }
+
+    public LocalDate getFecha_solicitud() {
+        return fecha_solicitud;
+    }
+
+    public void setFecha_solicitud(LocalDate fecha_solicitud) {
+        this.fecha_solicitud = fecha_solicitud;
+    }
+
+    public String getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(String articulo) {
+        this.articulo = articulo;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public LocalDate getFecha_recibo() {
+        return fecha_recibo;
+    }
+
+    public void setFecha_recibo(LocalDate fecha_recibo) {
+        this.fecha_recibo = fecha_recibo;
+    }
+
+    public String getTiempo_uso() {
+        return tiempo_uso;
+    }
+
+    public void setTiempo_uso(String tiempo_uso) {
+        this.tiempo_uso = tiempo_uso;
+    }
+
+    public String getRazon() {
+        return razon;
+    }
+
+    public void setRazon(String razon) {
+        this.razon = razon;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
