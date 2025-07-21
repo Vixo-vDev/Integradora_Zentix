@@ -19,6 +19,7 @@ public class ControladorRegistro {
     }
 
     public void registrarUsuario() {
+        System.out.println("ola");
         try {
             String nombre = vista.getNombre();
             String apellidos = vista.getApellidos();
@@ -29,14 +30,15 @@ public class ControladorRegistro {
             LocalDate date = vista.getFecha();
             int edad = vista.getEdad();
             String rol = vista.getRol();
+            String matricula = vista.getmatricula();
             String password = vista.getPassword();
             String passwordConfirmar = vista.getConfirmarPassword();
 
-            Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, password);
+            Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, matricula, password);
 
 
             if (nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || calle.isEmpty() || lada.isEmpty()
-                    || telefono.isEmpty() || date == null || rol.isEmpty() || password.isEmpty() || passwordConfirmar.isEmpty()) {
+                    || telefono.isEmpty() || date == null || rol.isEmpty() || matricula.isEmpty() || password.isEmpty() || passwordConfirmar.isEmpty()) {
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                 alerta.setHeaderText("Error en registro");
                 alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
@@ -56,30 +58,12 @@ public class ControladorRegistro {
             alerta.setHeaderText("Edad inválida");
             alerta.setContentText("Por favor ingresa un número válido en el campo de edad.");
             alerta.showAndWait();
+            
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException();
         }
 
-    }
-
-    public boolean registro(Usuario usuario, String confirmPassword) {
-        if(usuario.getNombre().isEmpty() ||
-                usuario.getApellidos().isEmpty() ||
-                usuario.getCorreo().isEmpty() ||
-                usuario.getLada().isEmpty() ||
-                usuario.getTelefono().isEmpty() ||
-                usuario.getDate() == null ||
-                usuario.getRol().isEmpty() ||
-                usuario.getPassword().isEmpty() ||
-                confirmPassword.isEmpty()){
-
-            return false;
-        }
-
-        if(!usuario.getPassword().equals(confirmPassword)){
-            return false;
-        }
-        return true;
     }
 
 }

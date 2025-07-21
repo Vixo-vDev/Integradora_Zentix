@@ -23,7 +23,7 @@ public class Usuario {
     public Usuario(){}
 
     //Constructor con parámetros
-    public Usuario(String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String password) {
+    public Usuario(String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
@@ -33,6 +33,7 @@ public class Usuario {
         this.date = date;
         this.edad = edad;
         this.rol = rol;
+        this.matricula = matricula;
         this.password = password;
     }
 

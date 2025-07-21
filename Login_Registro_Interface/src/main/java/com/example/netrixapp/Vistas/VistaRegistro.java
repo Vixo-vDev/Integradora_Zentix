@@ -41,10 +41,13 @@ public class VistaRegistro {
     public String getTelefono() { return campoTelefono.getText().trim(); }
     public LocalDate getFecha() { return campoFecha.getValue(); }
     public int getEdad() { return Integer.parseInt(campoEdad.getText().trim()); }
-    public String getRol() { return comboRol.getSelectionModel().getSelectedItem(); }
+    public String getRol() { return comboRol.getSelectionModel().getSelectedItem().trim().toUpperCase();  }
     public String getmatricula() { return matricula.getText().trim(); }
     public String getPassword() { return campoContrasena.getText().trim(); }
     public String getConfirmarPassword() { return campoConfirmar.getText().trim(); }
+    public Button getBotonContinuar() {
+        return botonContinuar;
+    }
 
     public void start(Stage ventanaRegistro) {
 
@@ -192,8 +195,8 @@ public class VistaRegistro {
         Label lblMatricula = new Label("Matricula:");
         matricula = new TextField();
         GridPane.setHgrow(matricula, Priority.ALWAYS);
-        gridCampos.add(lblMatricula, 1, 6, 5, 1);
-        gridCampos.add(matricula, 1, 7, 3, 1);
+        gridCampos.add(lblMatricula, 3, 6, 5, 1);
+        gridCampos.add(matricula, 3, 7, 3, 1);
 
 
         Label infoCredenciales = new Label("Credenciales");
@@ -221,6 +224,7 @@ public class VistaRegistro {
         botonContinuar.setStyle("-fx-background-color: #009475; -fx-text-fill: white;");
         botonContinuar.setPrefWidth(200);
         botonContinuar.setPrefHeight(30);
+        new ControladorRegistro(this);
 
         Button botonCancelar = new Button("Regresar");
         botonCancelar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -276,8 +280,6 @@ public class VistaRegistro {
         ventanaRegistro.show();
     }
 
-    public Button getBotonContinuar() {
-        return botonContinuar;
-    }
+
 
 }
