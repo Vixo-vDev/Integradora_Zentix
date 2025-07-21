@@ -18,8 +18,6 @@ public class ConnectionBD {
             // 2. (Opcional) fuerza la validación de nombre de servidor en el certificado
             System.setProperty("oracle.net.ssl_server_dn_match", "true");
             // 3. Obtiene la conexión usando alias, user y pass
-
-            System.out.println("Conexión a la base de datos exitosa");
             return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 

@@ -6,6 +6,7 @@ public class Usuario {
     //Aplicando la abtración y encapsulamiento
 
     //Atributos
+    private int id_usuario;
     private String nombre;
     private String apellidos;
     private String correo;
@@ -15,6 +16,7 @@ public class Usuario {
     private LocalDate date;
     private int edad;
     private String rol;
+    private String matricula;
     private String password;
 
     //Constructor vacío
@@ -33,6 +35,10 @@ public class Usuario {
         this.rol = rol;
         this.password = password;
     }
+
+    public int getId_usuario() {return id_usuario;}
+
+    public void setId_usuario(int id_usuario) {this.id_usuario = id_usuario;}
 
     //Getters & Setters
     public String getNombre() {
@@ -106,6 +112,9 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
+    public String matricula() {return matricula;}
+    public void setMatricula(String matricula) {this.matricula = matricula;}
 
     public String getPassword() {
         return password;

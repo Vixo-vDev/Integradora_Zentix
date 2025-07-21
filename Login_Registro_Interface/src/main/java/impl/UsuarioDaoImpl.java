@@ -13,7 +13,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 
     @Override
     public boolean login(String correo, String pass) throws Exception {
-        String sql= "SELECT ID,CORREO,PASSWORD FROM USUARIO WHERE CORREO=? and PASSWORD=?";
+        String sql= "SELECT ID_USUARIO,CORREO_INSTITUCIONAL,PASSWORD FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
         try {
             Connection con = ConnectionBD.getConnection(); // se estable la conexion
             PreparedStatement ps =  con.prepareStatement(sql); //se prepara la consulta para evitar la inyecion de SQL
