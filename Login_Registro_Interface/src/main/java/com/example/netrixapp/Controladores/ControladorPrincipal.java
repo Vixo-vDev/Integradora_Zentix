@@ -1,5 +1,6 @@
 package com.example.netrixapp.Controladores;
 
+import com.example.netrixapp.HelloApplication;
 import com.example.netrixapp.Vistas.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 
 public class ControladorPrincipal {
@@ -160,8 +162,13 @@ public class ControladorPrincipal {
         alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
 
         if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-            /*VistaLogin login = new VistaLogin();
-            login.start();*/
+            if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+                // Obtener el Stage desde el root de la vista
+                Stage stage = (Stage) vista.getRaiz().getScene().getWindow();
+
+                VistaLogin login = new VistaLogin();
+                login.start(stage);
+            }
         }
     }
 }
