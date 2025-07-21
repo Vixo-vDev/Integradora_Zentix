@@ -14,11 +14,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import oracle.jdbc.internal.XSCacheOutput;
 
 
 public class ControladorPrincipal {
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
+
 
     public ControladorPrincipal(VistaPrincipal vista) {
         this.vista = vista;
@@ -43,6 +45,8 @@ public class ControladorPrincipal {
         vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
         mostrarDashboard();
     }
+
+
 
 
     public void mostrarDashboard() {
@@ -163,9 +167,9 @@ public class ControladorPrincipal {
 
         if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
             if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-                // Obtener el Stage desde el root de la vista
-                Stage stage = (Stage) vista.getRaiz().getScene().getWindow();
 
+                SesionUsuario.cerrarSesion();
+                Stage stage = (Stage) vista.getRaiz().getScene().getWindow();
                 VistaLogin login = new VistaLogin();
                 login.start(stage);
             }

@@ -15,7 +15,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     @Override
     public Usuario login(String correo, String pass) throws Exception {
         String sql= "SELECT ID_USUARIO,NOMBRE, " +
-                "APELLIDOS, CORREO_INSTITUCIONAL,DOMICILIO, LADA, TELEFONO, FECHA_NACIMIENTO" +
+                "APELLIDOS, CORREO_INSTITUCIONAL,DOMICILIO, LADA, TELEFONO, FECHA_NACIMIENTO," +
                 "EDAD, ROL, MATRICULA, PASSWORD FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
         try {
             Connection con = ConnectionBD.getConnection(); // se estable la conexion
@@ -25,6 +25,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             ResultSet resultSet=ps.executeQuery(); //se ejecuta la consulta
             if(resultSet.next()){
                 Usuario usuario = new Usuario();//validacion que la consulta arroje un resultado
+                usuario.setId_usuario(resultSet.getInt("ID_USUARIO"));
                 usuario.setNombre(resultSet.getString("NOMBRE"));
                 usuario.setApellidos(resultSet.getString("APELLIDOS"));
                 usuario.setCorreo(resultSet.getString("CORREO_INSTITUCIONAL"));

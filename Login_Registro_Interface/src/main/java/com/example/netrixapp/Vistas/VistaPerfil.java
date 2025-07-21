@@ -1,6 +1,8 @@
 package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.SesionUsuario;
+import com.example.netrixapp.Modelos.Usuario;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -12,7 +14,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 public class VistaPerfil {
-
+    Usuario usuario = SesionUsuario.getUsuarioActual();
     private final BorderPane vista;  // Cambiado a BorderPane para mejor organización
     private final ControladorBarraNavegacion controladorBarra;
 
@@ -124,20 +126,22 @@ public class VistaPerfil {
         GridPane formularioPerfil = new GridPane();
         formularioPerfil.setHgap(20);
         formularioPerfil.setVgap(15);
-        formularioPerfil.setPadding(new Insets(10, 0, 20, 0));
+        formularioPerfil.setPadding(new Insets(5, 0, 20, 0));
 
         // Configurar columnas con porcentajes
         ColumnConstraints col1 = new ColumnConstraints();
-        col1.setPercentWidth(30);
+        col1.setPercentWidth(20);
         ColumnConstraints col2 = new ColumnConstraints();
-        col2.setPercentWidth(70);
+        col2.setPercentWidth(20);
         formularioPerfil.getColumnConstraints().addAll(col1, col2);
 
         // Campos del formulario
-        agregarCampoFormulario(formularioPerfil, "Nombre:", new TextField("Administrador"), 0);
-        agregarCampoFormulario(formularioPerfil, "Correo:", new TextField("admin@utez.edu.mx"), 1);
-        agregarCampoFormulario(formularioPerfil, "División Académica:", new TextField("Sistemas"), 2);
-        agregarCampoFormulario(formularioPerfil, "Teléfono:", new TextField("7771234567"), 3);
+        agregarCampoFormulario(formularioPerfil, "Nombre:", new TextField(usuario.getNombre()), 0);
+        agregarCampoFormulario(formularioPerfil, "Apellidos:", new TextField(usuario.getApellidos()), 1);
+        agregarCampoFormulario(formularioPerfil, "Correo:", new TextField(usuario.getCorreo()), 2);
+        agregarCampoFormulario(formularioPerfil, "Domicilio:", new TextField(usuario.getDireccion()), 3);
+        agregarCampoFormulario(formularioPerfil, "Lada:", new TextField(usuario.getLada()), 4);
+        agregarCampoFormulario(formularioPerfil, "Teléfono:", new TextField(usuario.getTelefono()), 5);
 
         // Botón cambiar contraseña
         Button btnCambiarContrasena = new Button("Cambiar Contraseña");
@@ -147,7 +151,7 @@ public class VistaPerfil {
                 "-fx-border-width: 1; " +
                 "-fx-border-radius: 3; " +
                 "-fx-padding: 5 10;");
-        formularioPerfil.add(btnCambiarContrasena, 1, 4);
+        formularioPerfil.add(btnCambiarContrasena, 1, 6);
 
         return formularioPerfil;
     }
