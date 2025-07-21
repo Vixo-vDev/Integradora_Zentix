@@ -32,6 +32,7 @@ public class ControladorRegistro {
             String rol = vista.getRol();
             String matricula = vista.getmatricula();
             String password = vista.getPassword();
+            String confirmarPassword = vista.getConfirmarPassword();
             String passwordConfirmar = vista.getConfirmarPassword();
 
             Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, matricula, password);
@@ -44,12 +45,18 @@ public class ControladorRegistro {
                 alerta.setContentText("Por favor revisa los campos e intenta nuevamente");
                 alerta.showAndWait();
             }
-            else{
 
+            else if(password.equals(confirmarPassword)){
                 usuarioDao.create(usuario);
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                 alerta.setHeaderText("Registro exitoso");
                 alerta.setContentText("Tu cuenta ha sido registrada.");
+                alerta.showAndWait();
+            }
+            else{
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setHeaderText("Contraseñas incorrectas");
+                alerta.setContentText("Las contraseñas deben ser iguales");
                 alerta.showAndWait();
             }
 
@@ -58,7 +65,7 @@ public class ControladorRegistro {
             alerta.setHeaderText("Edad inválida");
             alerta.setContentText("Por favor ingresa un número válido en el campo de edad.");
             alerta.showAndWait();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
