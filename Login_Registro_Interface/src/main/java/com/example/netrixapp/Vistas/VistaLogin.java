@@ -2,6 +2,8 @@ package com.example.netrixapp.Vistas;
 
 
 import com.example.netrixapp.Controladores.ConnectionBD;
+import com.example.netrixapp.Controladores.ControladorLogin;
+import com.example.netrixapp.Controladores.ControladorRegistro;
 import com.example.netrixapp.HelloApplication;
 import impl.UsuarioDaoImpl;
 import javafx.application.Application;
@@ -26,6 +28,22 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 
 public class VistaLogin extends Application {
+
+    private TextField campoUsuario;
+    private PasswordField campoPassword;
+    private Button btnConfirmar;
+
+    public String getCampoUsuario() {
+        return campoUsuario.getText().trim();
+    }
+
+    public String getCampoPassword() {
+        return campoPassword.getText().trim();
+    }
+
+    public Button  getBtnConfirmar() {
+        return btnConfirmar;
+    }
 
     @Override
     public void start(Stage ventanaPrincipal) {
@@ -71,51 +89,26 @@ public class VistaLogin extends Application {
 
         Label etiquetaUsuario = new Label("Usuario:");
         etiquetaUsuario.setFont(Font.font("Arial", 16));
-        TextField campoUsuario = new TextField();
+        campoUsuario = new TextField();
         campoUsuario.setPrefWidth(250);
         campoUsuario.setPrefHeight(35);
 
         Label etiquetaContrasena = new Label("Contraseña:");
         etiquetaContrasena.setFont(Font.font("Arial", 16));
-        PasswordField campoContrasena = new PasswordField();
-        campoContrasena.setPrefWidth(250);
-        campoContrasena.setPrefHeight(35);
+        campoPassword = new PasswordField();
+        campoPassword.setPrefWidth(250);
+        campoPassword.setPrefHeight(35);
 
         Hyperlink enlaceContrasenaOlvidada = new Hyperlink("Se te olvido la contrasena?");
         enlaceContrasenaOlvidada.setFont(Font.font("Arial", 14));
         enlaceContrasenaOlvidada.setTextFill(Color.BLUE);
 
-        Button botonContinuar = new Button("Continuar");
-        botonContinuar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        botonContinuar.setStyle("-fx-background-color: #009475;; -fx-text-fill: white;");
-        botonContinuar.setPrefWidth(250);
-        botonContinuar.setPrefHeight(40);
-
-        botonContinuar.setOnAction(e -> {
-            // Crear una nueva raíz vacía para la nueva escena
-            String correo= campoUsuario.getText().trim();
-            String pass= campoContrasena.getText().trim();
-
-            UsuarioDaoImpl dao=new UsuarioDaoImpl();
-            try {
-                if(dao.login(correo,pass)){
-                    System.out.println("Se pudo logear con Exito!");
-                    HelloApplication main = new HelloApplication();
-                    main.start(ventanaPrincipal);
-
-                }else if(correo.isEmpty() || pass.isEmpty()){
-                    showAlert("Error", "Ingresa todo lo que se te pide");
-
-                }else{
-                    showAlert("Error","Credenciales incorrectas");
-                    System.out.println("Credenciales incorrectas!");
-                }
-
-            }catch (Exception err){
-                showAlert("Error", "Hubo un error en la aplicación");
-                System.out.println(err.getMessage());
-            }
-        });
+        btnConfirmar = new Button("Continuar");
+        btnConfirmar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        btnConfirmar.setStyle("-fx-background-color: #009475;; -fx-text-fill: white;");
+        btnConfirmar.setPrefWidth(250);
+        btnConfirmar.setPrefHeight(40);
+        new ControladorLogin(this);
 
 
         HBox panelInferior = new HBox(5);
@@ -134,11 +127,11 @@ public class VistaLogin extends Application {
         gridCampos.add(etiquetaUsuario, 0, 0);
         gridCampos.add(campoUsuario, 0, 1);
         gridCampos.add(etiquetaContrasena, 0, 2);
-        gridCampos.add(campoContrasena, 0, 3);
+        gridCampos.add(campoPassword, 0, 3);
         gridCampos.add(enlaceContrasenaOlvidada, 0, 4);
 
         panelIzquierdo.getChildren().addAll(contenedorVertical);
-        panelDerecho.getChildren().addAll(titulo, gridCampos, botonContinuar, panelInferior);
+        panelDerecho.getChildren().addAll(titulo, gridCampos, btnConfirmar, panelInferior);
         contenedorPrincipal.getChildren().addAll(panelIzquierdo, panelDerecho);
 
         Scene escena = new Scene(contenedorPrincipal);

@@ -48,7 +48,7 @@ public class ControladorRegistro {
 
             else if(password.equals(confirmarPassword)){
                 usuarioDao.create(usuario);
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
                 alerta.setHeaderText("Registro exitoso");
                 alerta.setContentText("Tu cuenta ha sido registrada.");
                 alerta.showAndWait();
