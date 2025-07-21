@@ -25,7 +25,14 @@ public class ControladorLogin {
             String pass = vista.getCampoPassword();
             boolean loginexitoso = usuarioDao.login(user, pass);
 
-            if(loginexitoso){
+            if(user.isEmpty() || pass.isEmpty()){
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setHeaderText("ERROR");
+                alerta.setContentText("Ingresa todo lo que se te pide");
+                alerta.showAndWait();
+            }
+
+            else if(loginexitoso){
                 Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
                 HelloApplication siguienteVentana = new HelloApplication();
                 siguienteVentana.start(stage);
@@ -38,10 +45,7 @@ public class ControladorLogin {
             }
 
         }catch(Exception e){
-
+            e.printStackTrace();
         }
-
-
-
     }
 }
