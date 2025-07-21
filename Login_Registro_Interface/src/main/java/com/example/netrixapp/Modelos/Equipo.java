@@ -1,5 +1,8 @@
 package com.example.netrixapp.Modelos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Equipo {
     private int id_equipo;
     private String codigo_bien;
@@ -9,6 +12,7 @@ public class Equipo {
     private String numero_serie;
     private int disponible;
     private int tipo_equipo;
+    private List<Equipo> equipos;
 
     public int getId_equipo() {
         return id_equipo;
@@ -72,5 +76,13 @@ public class Equipo {
 
     public void setTipo_equipo(int tipo_equipo) {
         this.tipo_equipo = tipo_equipo;
+    }
+
+    public List<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(List<Equipo> equipos) {
+        this.equipos = equipos;
     }
 }
