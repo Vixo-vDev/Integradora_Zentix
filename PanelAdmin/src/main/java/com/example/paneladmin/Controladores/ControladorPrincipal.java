@@ -3,277 +3,157 @@ package com.example.paneladmin.Controladores;
 import com.example.paneladmin.Vistas.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import java.util.List;
 
 public class ControladorPrincipal {
-
-    private VistaPrincipal vista;
-
-    // Carrusel
-    private List<Image> imagenesCarrusel;
-    private int indiceCarrusel = 0;
-    private ImageView imagenCarruselView;
-    private Label descripcionCarrusel;
+    private final VistaPrincipal vista;
+    private final ControladorBarraNavegacion controladorBarra;
 
     public ControladorPrincipal(VistaPrincipal vista) {
         this.vista = vista;
+        this.controladorBarra = new ControladorBarraNavegacion();
+        configurarEventos();
         inicializarUI();
     }
 
+    private void configurarEventos() {
+        controladorBarra.getBtnDashboard().setOnAction(e -> mostrarDashboard());
+        controladorBarra.getBtnInventario().setOnAction(e -> mostrarInventario());
+        controladorBarra.getBtnHistorial().setOnAction(e -> mostrarHistorial());
+        controladorBarra.getBtnSolicitudes().setOnAction(e -> mostrarSolicitudes());
+        controladorBarra.getBtnPerfil().setOnAction(e -> mostrarPerfil());
+        controladorBarra.getBtnNotificaciones().setOnAction(e -> mostrarNotificaciones());
+        controladorBarra.getBtnSalir().setOnAction(e -> confirmarCierreSesion());
+    }
+
     private void inicializarUI() {
-        VBox barraLateral = crearBarraLateral();
-        vista.getRaiz().setLeft(barraLateral);
-        mostrarDashboardInicio();
+        vista.getRaiz().setStyle("-fx-background-color: #F9FAFB;");
+        vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
+        vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
+        mostrarDashboard();
     }
 
-    private VBox crearBarraLateral() {
-        VBox barra = new VBox();
-        barra.setStyle("-fx-background-color: #D9D9D9; -fx-padding: 20;");
-        barra.setAlignment(Pos.TOP_CENTER);
-        barra.setSpacing(20);
-        barra.setMinWidth(200);
+    public void mostrarDashboard() {
+        VBox contenedorPrincipal = new VBox(20);
+        contenedorPrincipal.setStyle("-fx-background-color: #F5F7FA; -fx-padding: 20;");
+        contenedorPrincipal.setAlignment(Pos.TOP_LEFT);
 
-        ImageView imagenPerfil = new ImageView(new Image("file:src/main/resources/imagenes/Utez-Logo.png"));
-        imagenPerfil.setFitWidth(180);
-        imagenPerfil.setFitHeight(180);
-        imagenPerfil.setPreserveRatio(true);
+        // 1. Fila horizontal con las 4 cards
+        HBox filaCards = new HBox(15);
+        filaCards.setAlignment(Pos.TOP_LEFT);
 
-        Label iconoUsuario = new Label("\uD83D\uDC64");
-        iconoUsuario.setStyle("-fx-font-size: 36;");
+        // Card de Artículos
+        VBox cardArticulos = crearCardMetrica("Artículos", "200");
+        filaCards.getChildren().add(cardArticulos);
 
-        Label lblNombre = new Label("[Name]");
-        lblNombre.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+        // Card de Solicitudes
+        VBox cardSolicitudes = crearCardMetrica("Solicitudes", "200");
+        filaCards.getChildren().add(cardSolicitudes);
 
-        Label lblRol = new Label("[Rol]");
-        lblRol.setStyle("-fx-font-size: 14;");
+        // Card de Pendientes
+        VBox cardPendientes = crearCardMetrica("Pendientes", "200");
+        filaCards.getChildren().add(cardPendientes);
 
-        VBox infoUsuario = new VBox(5, imagenPerfil, iconoUsuario, lblNombre, lblRol);
-        infoUsuario.setAlignment(Pos.CENTER);
+        // Card de Rechazados
+        VBox cardRechazados = crearCardMetrica("Rechazados", "200");
+        filaCards.getChildren().add(cardRechazados);
 
-        Button btnConfiguracion = crearBotonLateral("Configuración", "#009475");
-        btnConfiguracion.setOnAction(e -> vista.getRaiz().setCenter(new VistaConfiguracion(() -> {
-            mostrarDashboardInicio();
-        }).getVista()));
-
-        Button btnCerrarSesion = crearBotonLateral("Cerrar Sesión", "#e74c3c");
-        btnCerrarSesion.setOnAction(e -> mostrarConfirmacionCerrarSesion());
-
-        Pane espaciador = new Pane();
-        VBox.setVgrow(espaciador, Priority.ALWAYS);
-
-        barra.getChildren().addAll(infoUsuario, espaciador, btnConfiguracion, btnCerrarSesion);
-        return barra;
-    }
-
-    private Button crearBotonLateral(String texto, String color) {
-        Button btn = new Button(texto);
-        btn.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 10; -fx-min-width: 160; -fx-min-height: 40;");
-        return btn;
-    }
-
-    public void mostrarDashboardInicio() {
-        GridPane grid = new GridPane();
-        grid.setStyle("-fx-background-color: white; -fx-padding: 30;");
-        grid.setHgap(20);
-        grid.setVgap(20);
-
-        ColumnConstraints colCentro = new ColumnConstraints();
-        colCentro.setPercentWidth(80);
-        colCentro.setHgrow(Priority.ALWAYS);
-
-        ColumnConstraints colDerecha = new ColumnConstraints();
-        colDerecha.setPercentWidth(20);
-        colDerecha.setHgrow(Priority.ALWAYS);
-
-        grid.getColumnConstraints().addAll(colCentro, colDerecha);
-
-        for (int i = 0; i < 3; i++) {
-            RowConstraints fila = new RowConstraints();
-            fila.setPercentHeight(33.33);
-            fila.setVgrow(Priority.ALWAYS);
-            grid.getRowConstraints().add(fila);
+        // Ajustar el crecimiento horizontal de las cards
+        for (Node card : filaCards.getChildren()) {
+            HBox.setHgrow(card, Priority.ALWAYS);
+            ((VBox) card).setMaxWidth(Double.MAX_VALUE);
         }
 
-        HBox cardUsuarios = crearCardSeccion("Usuarios", "file:src/main/resources/imagenes/usuarios.png", "[Descripción]");
-        HBox cardSolicitudes = crearCardSeccion("Solicitudes", "file:src/main/resources/imagenes/solicitudes.png", "[Descripción]");
-        HBox cardEstadisticas = crearCardSeccion("Estadísticas", "file:src/main/resources/imagenes/estadisticas.png", "[Descripción]");
+        contenedorPrincipal.getChildren().add(filaCards);
 
-        VBox carrusel = crearCarrusel("Inventario");
+        // 2. Card de Últimos Pedidos (ocupa todo el ancho)
+        VBox cardPedidos = crearCardPedidos("Tus últimos pedidos");
+        contenedorPrincipal.getChildren().add(cardPedidos);
 
-        GridPane.setHgrow(cardUsuarios, Priority.ALWAYS);
-        GridPane.setVgrow(cardUsuarios, Priority.ALWAYS);
+        if (vista.getRaiz().getTop() == null) {
+            vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
+        }
+        if (vista.getRaiz().getLeft() == null) {
+            vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
+        }
 
-        GridPane.setHgrow(cardSolicitudes, Priority.ALWAYS);
-        GridPane.setVgrow(cardSolicitudes, Priority.ALWAYS);
-
-        GridPane.setHgrow(cardEstadisticas, Priority.ALWAYS);
-        GridPane.setVgrow(cardEstadisticas, Priority.ALWAYS);
-
-        grid.add(cardUsuarios, 0, 0);
-        grid.add(cardSolicitudes, 0, 1);
-        grid.add(cardEstadisticas, 0, 2);
-        grid.add(carrusel, 1, 0, 1, 3);
-
-        vista.getRaiz().setCenter(grid);
+        vista.getRaiz().setCenter(contenedorPrincipal);
     }
 
-    private HBox crearCardSeccion(String titulo, String rutaIcono, String descripcion) {
-        HBox card = new HBox(15);
-        card.setStyle("-fx-background-color: #D9D9D9; -fx-background-radius: 15;");
-        card.setPadding(new Insets(20));
-        card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        card.setAlignment(Pos.CENTER_LEFT);
-
-        VBox contenedorImagen = new VBox();
-        contenedorImagen.setAlignment(Pos.CENTER);
-        contenedorImagen.setMinWidth(100);
-
-        ImageView icono = new ImageView(new Image(rutaIcono));
-        icono.setFitWidth(80);
-        icono.setFitHeight(80);
-        icono.setPreserveRatio(true);
-        contenedorImagen.getChildren().add(icono);
-
-        VBox contenedorTexto = new VBox(10);
-        contenedorTexto.setAlignment(Pos.CENTER_LEFT);
-        contenedorTexto.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(contenedorTexto, Priority.ALWAYS);
+    private VBox crearCardMetrica(String titulo, String valor) {
+        VBox card = new VBox(10);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
+        card.setAlignment(Pos.TOP_LEFT);
+        card.setMinWidth(200);
 
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+        lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
 
-        Label lblDescripcion = new Label(descripcion);
-        lblDescripcion.setStyle("-fx-font-size: 14;");
-        lblDescripcion.setWrapText(true);
-        lblDescripcion.setMaxWidth(300);
+        Label lblValor = new Label(valor);
+        lblValor.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #005994;");
 
-        Button btnVer = new Button("VER");
-        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-
-        DropShadow sombraNormal = new DropShadow(5, Color.rgb(0, 0, 0, 0.1));
-        sombraNormal.setOffsetY(2);
-        DropShadow sombraHover = new DropShadow(8, Color.rgb(0, 0, 0, 0.2));
-        sombraHover.setOffsetY(3);
-
-        btnVer.setEffect(sombraNormal);
-
-        btnVer.setOnMouseEntered(e -> {
-            btnVer.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-            btnVer.setEffect(sombraHover);
-            btnVer.setCursor(Cursor.HAND);
-        });
-
-        btnVer.setOnMouseExited(e -> {
-            btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-            btnVer.setEffect(sombraNormal);
-        });
-
-        btnVer.setOnAction(e -> {
-            switch (titulo) {
-                case "Usuarios" -> vista.getRaiz().setCenter(new VistaUsuarios(() -> mostrarDashboardInicio()).getVista());
-                case "Solicitudes" -> vista.getRaiz().setCenter(new VistaSolicitudes(() -> mostrarDashboardInicio()).getVista());
-                case "Estadísticas" -> vista.getRaiz().setCenter(new VistaEstadisticas(() -> mostrarDashboardInicio()).getVista());
-            }
-        });
-
-        contenedorTexto.getChildren().addAll(lblTitulo, lblDescripcion, btnVer);
-        card.getChildren().addAll(contenedorImagen, contenedorTexto);
-
+        card.getChildren().addAll(lblTitulo, lblValor);
         return card;
     }
 
-    private VBox crearCarrusel(String titulo) {
-        imagenesCarrusel = List.of(
-                new Image("file:src/main/resources/imagenes/inventario1.png"),
-                new Image("file:src/main/resources/imagenes/inventario2.png"),
-                new Image("file:src/main/resources/imagenes/inventario3.png")
-        );
-
-        VBox contenedor = new VBox(10);
-        contenedor.setStyle("-fx-background-color: #D9D9D9; -fx-background-radius: 15;");
-        contenedor.setPadding(new Insets(20));
-        contenedor.setAlignment(Pos.CENTER);
-        contenedor.setMinWidth(250);
+    private VBox crearCardPedidos(String titulo) {
+        VBox card = new VBox(10);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
+        card.setAlignment(Pos.TOP_LEFT);
 
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        lblTitulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
 
-        imagenCarruselView = new ImageView(imagenesCarrusel.get(indiceCarrusel));
-        imagenCarruselView.setFitWidth(120);
-        imagenCarruselView.setFitHeight(90);
+        GridPane tabla = new GridPane();
+        tabla.setHgap(30);
+        tabla.setVgap(10);
+        tabla.setPadding(new Insets(8, 0, 0, 0));
 
-        Button btnIzquierda = new Button("\u25C4");
-        Button btnDerecha = new Button("\u25BA");
-        btnIzquierda.setOnAction(e -> mostrarImagenAnterior());
-        btnDerecha.setOnAction(e -> mostrarImagenSiguiente());
-
-        HBox navegacion = new HBox(10, btnIzquierda, btnDerecha);
-        navegacion.setAlignment(Pos.CENTER);
-
-        descripcionCarrusel = new Label("Descripción del inventario 1");
-        descripcionCarrusel.setStyle("-fx-font-size: 12;");
-        descripcionCarrusel.setWrapText(true);
-        descripcionCarrusel.setAlignment(Pos.CENTER);
-
-        Button btnVer = new Button("VER");
-        btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-
-        DropShadow sombraNormal = new DropShadow(5, Color.rgb(0, 0, 0, 0.1));
-        sombraNormal.setOffsetY(2);
-        DropShadow sombraHover = new DropShadow(8, Color.rgb(0, 0, 0, 0.2));
-        sombraHover.setOffsetY(3);
-
-        btnVer.setEffect(sombraNormal);
-
-        btnVer.setOnMouseEntered(e -> {
-            btnVer.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-            btnVer.setEffect(sombraHover);
-            btnVer.setCursor(Cursor.HAND);
-        });
-
-        btnVer.setOnMouseExited(e -> {
-            btnVer.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 20; -fx-background-radius: 5;");
-            btnVer.setEffect(sombraNormal);
-        });
-
-        btnVer.setOnAction(e -> vista.getRaiz().setCenter(new VistaInventario(() -> mostrarDashboardInicio()).getVista()));
-
-        contenedor.getChildren().addAll(lblTitulo, imagenCarruselView, navegacion, descripcionCarrusel, btnVer);
-        return contenedor;
-    }
-
-    private void mostrarImagenAnterior() {
-        if (indiceCarrusel > 0) {
-            indiceCarrusel--;
-        } else {
-            indiceCarrusel = imagenesCarrusel.size() - 1;
+        String[] encabezados = {"Artículo", "Fecha de solicitud", "Estado"};
+        for (int i = 0; i < encabezados.length; i++) {
+            Label lbl = new Label(encabezados[i]);
+            lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+            tabla.add(lbl, i, 0);
         }
-        actualizarCarrusel();
+
+        card.getChildren().addAll(lblTitulo, tabla);
+        return card;
     }
 
-    private void mostrarImagenSiguiente() {
-        if (indiceCarrusel < imagenesCarrusel.size() - 1) {
-            indiceCarrusel++;
-        } else {
-            indiceCarrusel = 0;
+    public void mostrarInventario() {
+        vista.getRaiz().setCenter(new VistaInventario(controladorBarra).getVista());
+    }
+
+    public void mostrarHistorial() {
+        vista.getRaiz().setCenter(new VistaHistorial(controladorBarra).getVista());
+    }
+
+    public void mostrarSolicitudes() {
+        vista.getRaiz().setCenter(new VistaSolicitudes(controladorBarra).getVista());
+    }
+
+    public void mostrarPerfil() {
+        vista.getRaiz().setCenter(new VistaPerfil(controladorBarra).getVista());
+    }
+
+    public void mostrarNotificaciones() {
+        vista.getRaiz().setCenter(new VistaNotificaciones(controladorBarra).getVista());
+    }
+
+    private void confirmarCierreSesion() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cerrar sesión");
+        alert.setHeaderText("¿Está seguro de que desea salir?");
+
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType btnConfirmar = new ButtonType("Cerrar sesión", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
+
+        if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+            System.exit(0);
         }
-        actualizarCarrusel();
-    }
-
-    private void actualizarCarrusel() {
-        imagenCarruselView.setImage(imagenesCarrusel.get(indiceCarrusel));
-        descripcionCarrusel.setText("Descripción del inventario " + (indiceCarrusel + 1));
-    }
-
-    private void mostrarConfirmacionCerrarSesion() {
-        System.out.println("Cerrando sesión");
     }
 }

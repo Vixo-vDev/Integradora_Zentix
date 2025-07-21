@@ -1,112 +1,235 @@
 package com.example.paneladmin.Vistas;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import com.example.paneladmin.Controladores.ControladorBarraNavegacion;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+
+import java.util.function.Function;
 
 public class VistaSolicitudes {
-    private StackPane vista;
 
-    public VistaSolicitudes(Runnable onBackAction) {
-        // Contenedor principal que cubre toda la pantalla
-        StackPane contenedorPrincipal = new StackPane();
-        contenedorPrincipal.setStyle("-fx-background-color: white;");
+    private final BorderPane vista;
+    private final ControladorBarraNavegacion controladorBarra;
 
-        // Botón de flecha SVG para regresar
-        Button btnRegresar = crearBotonRegreso(onBackAction);
-        StackPane.setAlignment(btnRegresar, Pos.TOP_LEFT);
-        StackPane.setMargin(btnRegresar, new Insets(20, 0, 0, 20));
+    // Colores mejorados para mejor contraste
+    private final String COLOR_ACCION_PRINCIPAL = "#2980B9";
+    private final String COLOR_PELIGRO = "#C0392B";
+    private final String COLOR_FONDO = "#F5F5F5";
+    private final String COLOR_TEXTO = "#2C3E50";
+    private final String COLOR_FONDO_TABLA = "#FFFFFF";
+    private final String COLOR_TEXTO_TABLA = "#000000";
 
-        // Contenido central
-        VBox contenedorMensaje = new VBox(20);
-        contenedorMensaje.setAlignment(Pos.CENTER);
-        contenedorMensaje.setMaxWidth(600);
-
-        // Icono de solicitudes
-        Label icono = new Label("✉️");
-        icono.setStyle("-fx-font-size: 60; -fx-text-fill: #bdc3c7;");
-
-        // Mensaje principal
-        Label titulo = new Label("No hay solicitudes registradas");
-        titulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        titulo.setTextFill(Color.web("#7f8c8d"));
-
-        // Mensaje secundario
-        Label subtitulo = new Label("No se encontraron solicitudes pendientes o procesadas");
-        subtitulo.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
-        subtitulo.setTextFill(Color.web("#95a5a6"));
-        subtitulo.setWrapText(true);
-        subtitulo.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-
-        // Botón de ayuda
-        Button btnInfo = crearBotonAyuda();
-
-        contenedorMensaje.getChildren().addAll(icono, titulo, subtitulo, btnInfo);
-        contenedorPrincipal.getChildren().addAll(btnRegresar, contenedorMensaje);
-
-        vista = new StackPane(contenedorPrincipal);
+    public VistaSolicitudes(ControladorBarraNavegacion controladorBarra) {
+        this.controladorBarra = controladorBarra;
+        this.vista = new BorderPane();
+        inicializarUI();
     }
 
-    private Button crearBotonRegreso(Runnable onBackAction) {
-        Button btnRegresar = new Button();
-        btnRegresar.setStyle("-fx-background-color: transparent; -fx-padding: 5;");
+    private void inicializarUI() {
+        vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
 
-        // Icono SVG de flecha
-        SVGPath flecha = new SVGPath();
-        flecha.setContent("M10 0 L0 10 L10 20");
-        flecha.setStroke(Color.web("#3498db"));
-        flecha.setStrokeWidth(2);
-        flecha.setFill(null);
+        // Panel de contenido principal con mejor contraste
+        VBox panelContenido = new VBox();
+        panelContenido.setStyle("-fx-background-color: " + COLOR_FONDO_TABLA + "; -fx-background-radius: 10;");
+        panelContenido.setPadding(new Insets(20));
 
-        btnRegresar.setGraphic(flecha);
-        btnRegresar.setOnAction(e -> onBackAction.run());
+        // Título de la sección con mejor visibilidad
+        Label lblTituloSeccion = new Label("Artículos a solicitar");
+        lblTituloSeccion.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO + ";");
 
-        // Efecto hover
-        btnRegresar.setOnMouseEntered(e -> {
-            flecha.setStroke(Color.web("#2980b9"));
-            btnRegresar.setCursor(javafx.scene.Cursor.HAND);
-        });
-        btnRegresar.setOnMouseExited(e -> {
-            flecha.setStroke(Color.web("#3498db"));
-        });
+        // Tabla de artículos con texto visible
+        TableView<ArticuloSolicitud> tablaArticulos = crearTablaArticulos();
 
-        return btnRegresar;
+        // Formulario con texto visible
+        GridPane formulario = crearFormularioCampos();
+
+        // Configuración del layout principal
+        VBox contenidoPrincipal = new VBox(20, lblTituloSeccion, tablaArticulos, formulario);
+        contenidoPrincipal.setStyle("-fx-text-fill: " + COLOR_TEXTO + ";");
+        VBox.setVgrow(tablaArticulos, Priority.ALWAYS);
+
+        ScrollPane scrollPrincipal = new ScrollPane(contenidoPrincipal);
+        scrollPrincipal.setFitToWidth(true);
+        scrollPrincipal.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPrincipal.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+        panelContenido.getChildren().add(scrollPrincipal);
+        VBox.setVgrow(scrollPrincipal, Priority.ALWAYS);
+
+        // Construir vista completa
+        vista.setTop(controladorBarra.getBarraSuperior());
+        vista.setLeft(controladorBarra.getBarraLateral());
+        vista.setCenter(panelContenido);
+
+        BorderPane.setMargin(panelContenido, new Insets(20));
+        BorderPane.setMargin(controladorBarra.getBarraLateral(), new Insets(0, 20, 0, 0));
     }
 
-    private Button crearBotonAyuda() {
-        Button btnInfo = new Button("¿Problemas con las solicitudes?");
-        btnInfo.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: #3498db; " +
-                "-fx-font-size: 14; " +
-                "-fx-underline: true; " +
-                "-fx-border-width: 0;");
+    private TableView<ArticuloSolicitud> crearTablaArticulos() {
+        TableView<ArticuloSolicitud> tablaArticulos = new TableView<>();
+        tablaArticulos.setStyle("-fx-background-color: " + COLOR_FONDO_TABLA + "; -fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
 
-        // Efecto hover
-        btnInfo.setOnMouseEntered(e -> {
-            btnInfo.setStyle("-fx-background-color: transparent; " +
-                    "-fx-text-fill: #2980b9; " +
-                    "-fx-font-size: 14; " +
-                    "-fx-underline: true;");
-            btnInfo.setCursor(javafx.scene.Cursor.HAND);
+        // Configurar política de redimensionamiento
+        tablaArticulos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Crear columnas con estilo legible
+        Function<TableColumn<ArticuloSolicitud, String>, TableColumn<ArticuloSolicitud, String>> estiloColumna = col -> {
+            col.setStyle("-fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
+            return col;
+        };
+
+        TableColumn<ArticuloSolicitud, String> columnaArticulo = estiloColumna.apply(
+                new TableColumn<>("Artículo"));
+        columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<ArticuloSolicitud, String> columnaFecha = estiloColumna.apply(
+                new TableColumn<>("Fecha"));
+        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+
+        TableColumn<ArticuloSolicitud, String> columnaCantidad = estiloColumna.apply(
+                new TableColumn<>("Cantidad"));
+        columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        TableColumn<ArticuloSolicitud, String> columnaNota = estiloColumna.apply(
+                new TableColumn<>("Nota"));
+        columnaNota.setCellValueFactory(new PropertyValueFactory<>("nota"));
+
+        TableColumn<ArticuloSolicitud, String> columnaTiempoUso = estiloColumna.apply(
+                new TableColumn<>("Tiempo de Uso"));
+        columnaTiempoUso.setCellValueFactory(new PropertyValueFactory<>("tiempoUso"));
+
+        tablaArticulos.getColumns().addAll(columnaArticulo, columnaFecha, columnaCantidad,
+                columnaNota, columnaTiempoUso);
+
+        // Añadir datos de ejemplo con estilo
+        tablaArticulos.setRowFactory(tv -> new TableRow<ArticuloSolicitud>() {
+            @Override
+            protected void updateItem(ArticuloSolicitud item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setStyle("");
+                } else {
+                    setStyle("-fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
+                }
+            }
         });
 
-        btnInfo.setOnMouseExited(e -> {
-            btnInfo.setStyle("-fx-background-color: transparent; " +
-                    "-fx-text-fill: #3498db; " +
-                    "-fx-font-size: 14; " +
-                    "-fx-underline: true;");
-        });
+        tablaArticulos.getItems().addAll(
+                new ArticuloSolicitud("Laptop HP", "2023-10-15", "1", "Para nuevo empleado", "8"),
+                new ArticuloSolicitud("Monitor 24\"", "2023-10-16", "2", "Reemplazo equipos antiguos", "4"),
+                new ArticuloSolicitud("Teclado inalámbrico", "2023-10-17", "1", "", "8")
+        );
 
-        return btnInfo;
+        return tablaArticulos;
     }
 
-    public StackPane getVista() {
+    private GridPane crearFormularioCampos() {
+        GridPane formulario = new GridPane();
+        formulario.setHgap(20);
+        formulario.setVgap(15);
+        formulario.setPadding(new Insets(10, 0, 10, 0));
+        formulario.setStyle("-fx-text-fill: " + COLOR_TEXTO + ";");
+
+        // Configurar columnas
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(50);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(50);
+        formulario.getColumnConstraints().addAll(col1, col2);
+
+        // Función para aplicar estilo común a los controles
+        Function<Control, Control> aplicarEstilo = control -> {
+            control.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-size: 14;");
+            return control;
+        };
+
+        // Artículo (ComboBox)
+        Label lblArticulo = new Label("Artículo:");
+        lblArticulo.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        ComboBox<String> cbArticulo = (ComboBox<String>) aplicarEstilo.apply(new ComboBox<>());
+        cbArticulo.getItems().addAll("Laptop HP", "Monitor 24\"", "Teclado inalámbrico", "Mouse óptico");
+        HBox.setHgrow(cbArticulo, Priority.ALWAYS);
+        formulario.add(lblArticulo, 0, 0);
+        formulario.add(cbArticulo, 0, 1);
+
+        // Fecha (DatePicker)
+        Label lblFecha = new Label("Fecha:");
+        lblFecha.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        DatePicker dpFecha = (DatePicker) aplicarEstilo.apply(new DatePicker());
+        HBox.setHgrow(dpFecha, Priority.ALWAYS);
+        formulario.add(lblFecha, 1, 0);
+        formulario.add(dpFecha, 1, 1);
+
+        // Cantidad (TextField)
+        Label lblCantidad = new Label("Cantidad:");
+        lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        TextField tfCantidad = (TextField) aplicarEstilo.apply(new TextField());
+        HBox.setHgrow(tfCantidad, Priority.ALWAYS);
+        formulario.add(lblCantidad, 0, 2);
+        formulario.add(tfCantidad, 0, 3);
+
+        // Nota (TextField)
+        Label lblNota = new Label("Nota:");
+        lblNota.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        TextField tfNota = (TextField) aplicarEstilo.apply(new TextField());
+        HBox.setHgrow(tfNota, Priority.ALWAYS);
+        formulario.add(lblNota, 1, 2);
+        formulario.add(tfNota, 1, 3);
+
+        // Tiempo de uso (Spinner)
+        Label lblTiempoUso = new Label("Tiempo de Uso (horas):");
+        lblTiempoUso.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        Spinner<Integer> spTiempoUso = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
+        spTiempoUso.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8));
+        HBox.setHgrow(spTiempoUso, Priority.ALWAYS);
+        formulario.add(lblTiempoUso, 0, 4);
+        formulario.add(spTiempoUso, 0, 5);
+
+        // Botones con mejor contraste
+        Button btnCancelar = new Button("Cancelar");
+        btnCancelar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
+
+        Button btnEnviar = new Button("Enviar");
+        btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
+
+        HBox contenedorBotones = new HBox(15, btnCancelar, btnEnviar);
+        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
+        formulario.add(contenedorBotones, 1, 5);
+
+        return formulario;
+    }
+
+    public BorderPane getVista() {
         return vista;
+    }
+
+    // Clase para representar los artículos en solicitud
+    public static class ArticuloSolicitud {
+        private final String nombre;
+        private final String fecha;
+        private final String cantidad;
+        private final String nota;
+        private final String tiempoUso;
+
+        public ArticuloSolicitud(String nombre, String fecha, String cantidad, String nota, String tiempoUso) {
+            this.nombre = nombre;
+            this.fecha = fecha;
+            this.cantidad = cantidad;
+            this.nota = nota;
+            this.tiempoUso = tiempoUso;
+        }
+
+        public String getNombre() { return nombre; }
+        public String getFecha() { return fecha; }
+        public String getCantidad() { return cantidad; }
+        public String getNota() { return nota; }
+        public String getTiempoUso() { return tiempoUso; }
     }
 }
