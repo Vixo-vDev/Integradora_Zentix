@@ -16,7 +16,7 @@ public class EquipoDaoImpl implements IEquipoDao {
 
         String sql="SELECT * FROM EQUIPO";
         List<Equipo> equipos= new ArrayList<>();
-        
+
         try {
             Connection con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);

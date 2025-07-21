@@ -1,18 +1,21 @@
 package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
+import com.example.netrixapp.Modelos.Equipo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+
+import java.util.List;
 
 public class VistaInventario {
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
+    private TableView<Equipo> tablaEquipos;
 
-    // Colores minimalistas
     private final String COLOR_TEXTO_OSCURO = "#2C3E50";
     private final String COLOR_TEXTO_NORMAL = "#4B5563";
     private final String COLOR_ADVERTENCIA = "#F59E0B";
@@ -24,96 +27,44 @@ public class VistaInventario {
     }
 
     private void inicializarUI() {
-        // Eliminamos todos los fondos extras
         vista.setStyle("-fx-background-color: transparent;");
-
-        // Barra superior minimalista
         vista.setTop(controladorBarra.getBarraSuperior());
-
-        // Barra lateral minimalista
         vista.setLeft(controladorBarra.getBarraLateral());
 
-        // Contenido principal sin fondos extras
         VBox contenido = new VBox(20);
         contenido.setPadding(new Insets(20));
         contenido.setStyle("-fx-background-color: transparent;");
+        contenido.setAlignment(Pos.TOP_CENTER);
 
-        // 1. Fila horizontal con cards minimalistas
         HBox filaMetricas = new HBox(15);
         filaMetricas.setAlignment(Pos.TOP_CENTER);
 
-        // Cards sin fondo, solo bordes
         VBox cardArticulos = crearCardMetrica("Artículos", "200", COLOR_TEXTO_OSCURO);
         VBox cardStockBajo = crearCardMetrica("Stock bajo", "12", COLOR_ADVERTENCIA);
         VBox cardDisponibles = crearCardMetrica("Disponibles", "188", COLOR_TEXTO_OSCURO);
 
         filaMetricas.getChildren().addAll(cardArticulos, cardStockBajo, cardDisponibles);
-
-        // Configuración de crecimiento
         for (Node card : filaMetricas.getChildren()) {
             HBox.setHgrow(card, Priority.ALWAYS);
             ((VBox) card).setMaxWidth(Double.MAX_VALUE);
         }
 
-        contenido.getChildren().add(filaMetricas);
-
-        // Separador minimalista
         Separator separator = new Separator();
         separator.setPadding(new Insets(15, 0, 15, 0));
-        contenido.getChildren().add(separator);
 
-        // 2. Sección Código minimalista
-        VBox cardCodigo = new VBox(10);
-        cardCodigo.setStyle("-fx-background-color: transparent; -fx-padding: 16;");
-        cardCodigo.setMaxWidth(Double.MAX_VALUE);
+        Label lblTituloTabla = new Label("Inventario de Equipos");
+        lblTituloTabla.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        Label lblTituloCodigo = new Label("Código");
-        lblTituloCodigo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+        tablaEquipos = new TableView<>();
+        tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        configurarColumnasTabla();
 
-        // Tabla de código minimalista
-        GridPane tablaCodigo = new GridPane();
-        tablaCodigo.setHgap(30);
-        tablaCodigo.setVgap(10);
-
-        // Encabezados
-        tablaCodigo.add(crearLabelEncabezado("Codigo"), 0, 0);
-        tablaCodigo.add(crearLabelEncabezado("Descripción"), 1, 0);
-        tablaCodigo.add(crearLabelEncabezado("Marca"), 2, 0);
-        tablaCodigo.add(crearLabelEncabezado("Modelo"), 3, 0);
-        tablaCodigo.add(crearLabelEncabezado("Número serie"), 4, 0);
-        tablaCodigo.add(crearLabelEncabezado("Disponible"), 5, 0);
-
-        // Configuración de columnas
-        ColumnConstraints colCodigo_Bien = new ColumnConstraints();
-        colCodigo_Bien.setHgrow(Priority.ALWAYS);
-
-        ColumnConstraints colDescripcion = new ColumnConstraints();
-        colDescripcion.setHgrow(Priority.SOMETIMES);
-
-        ColumnConstraints colMarca = new ColumnConstraints();
-        colMarca.setHgrow(Priority.ALWAYS);
-
-        ColumnConstraints colModelo = new ColumnConstraints();
-        colModelo.setHgrow(Priority.ALWAYS);
-
-        ColumnConstraints colNumero = new ColumnConstraints();
-        colNumero.setHgrow(Priority.ALWAYS);
-
-        ColumnConstraints colDisponible = new ColumnConstraints();
-        colDisponible.setHgrow(Priority.ALWAYS);
-
-        tablaCodigo.getColumnConstraints().addAll(colCodigo_Bien, colDescripcion, colMarca, colModelo, colNumero, colDisponible);
-
-        cardCodigo.getChildren().addAll(lblTituloCodigo, tablaCodigo);
-        contenido.getChildren().add(cardCodigo);
-
-        // Configuración final
+        contenido.getChildren().addAll(filaMetricas, separator, lblTituloTabla, tablaEquipos);
         vista.setCenter(contenido);
     }
 
     private VBox crearCardMetrica(String titulo, String valor, String colorTexto) {
         VBox card = new VBox(8);
-        // Card sin fondo, solo contenido
         card.setStyle("-fx-background-color: transparent; -fx-padding: 20;");
         card.setAlignment(Pos.CENTER);
         card.setMinWidth(200);
@@ -128,10 +79,32 @@ public class VistaInventario {
         return card;
     }
 
-    private Label crearLabelEncabezado(String texto) {
-        Label lbl = new Label(texto);
-        lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
-        return lbl;
+    private void configurarColumnasTabla() {
+        TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código Bien");
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
+
+        TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+
+        TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
+        colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+
+        TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
+        colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+
+        TableColumn<Equipo, String> colNumeroSerie = new TableColumn<>("Número Serie");
+        colNumeroSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
+
+        TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
+        colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+
+        tablaEquipos.getColumns().addAll(colCodigo, colDescripcion, colMarca, colModelo, colNumeroSerie, colDisponible);
+    }
+
+    // Método para actualizar la tabla desde el controlador
+    public void mostrarEquipos(List<Equipo> equipos) {
+        tablaEquipos.getItems().clear();
+        tablaEquipos.getItems().addAll(equipos);
     }
 
     public BorderPane getVista() {
