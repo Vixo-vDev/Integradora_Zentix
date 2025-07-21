@@ -2,6 +2,7 @@ package com.example.netrixapp.Controladores;
 
 
 import com.example.netrixapp.HelloApplication;
+import com.example.netrixapp.Modelos.Usuario;
 import com.example.netrixapp.Vistas.VistaLogin;
 import impl.UsuarioDaoImpl;
 import javafx.scene.control.Alert;
@@ -23,7 +24,7 @@ public class ControladorLogin {
 
             String user = vista.getCampoUsuario();
             String pass = vista.getCampoPassword();
-            boolean loginexitoso = usuarioDao.login(user, pass);
+            Usuario usuario = usuarioDao.login(user, pass);
 
             if(user.isEmpty() || pass.isEmpty()){
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -32,7 +33,8 @@ public class ControladorLogin {
                 alerta.showAndWait();
             }
 
-            else if(loginexitoso){
+            else if(usuario != null){
+                SesionUsuario.setUsuarioActual(usuario);
                 Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
                 HelloApplication siguienteVentana = new HelloApplication();
                 siguienteVentana.start(stage);

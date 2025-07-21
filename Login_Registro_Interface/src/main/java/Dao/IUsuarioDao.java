@@ -7,7 +7,7 @@ import java.util.List;
 public interface IUsuarioDao {
 
     //Método para login
-    public boolean login(String correo, String pass) throws Exception;
+    Usuario login(String correo, String pass) throws Exception;
 
     List<Usuario> findAll() throws Exception;
     Usuario getById(int id) throws Exception;

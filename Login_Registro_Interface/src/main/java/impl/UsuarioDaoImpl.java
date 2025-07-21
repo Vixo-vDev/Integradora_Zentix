@@ -7,23 +7,39 @@ import com.example.netrixapp.Modelos.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UsuarioDaoImpl implements IUsuarioDao {
 
     @Override
-    public boolean login(String correo, String pass) throws Exception {
-        String sql= "SELECT ID_USUARIO,CORREO_INSTITUCIONAL,PASSWORD FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
+    public Usuario login(String correo, String pass) throws Exception {
+        String sql= "SELECT ID_USUARIO,NOMBRE, " +
+                "APELLIDOS, CORREO_INSTITUCIONAL,DOMICILIO, LADA, TELEFONO, FECHA_NACIMIENTO" +
+                "EDAD, ROL, MATRICULA, PASSWORD FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
         try {
             Connection con = ConnectionBD.getConnection(); // se estable la conexion
             PreparedStatement ps =  con.prepareStatement(sql); //se prepara la consulta para evitar la inyecion de SQL
             ps.setString(1,correo); //se sustituye "?" por el correo
             ps.setString(2, pass); // se sustituye "?" por la pass
             ResultSet resultSet=ps.executeQuery(); //se ejecuta la consulta
-            if(resultSet.next()){ //validacion que la consulta arroje un resultado
-                return true;
+            if(resultSet.next()){
+                Usuario usuario = new Usuario();//validacion que la consulta arroje un resultado
+                usuario.setNombre(resultSet.getString("NOMBRE"));
+                usuario.setApellidos(resultSet.getString("APELLIDOS"));
+                usuario.setCorreo(resultSet.getString("CORREO_INSTITUCIONAL"));
+                usuario.setDireccion(resultSet.getString("DOMICILIO"));
+                usuario.setLada(resultSet.getString("LADA"));
+                usuario.setTelefono(resultSet.getString("TELEFONO"));
+                usuario.setDate(LocalDate.parse(resultSet.getDate("FECHA_NACIMIENTO").toString()));
+                usuario.setEdad(resultSet.getInt("EDAD"));
+                usuario.setRol(resultSet.getString("ROL"));
+                usuario.setMatricula(resultSet.getString("MATRICULA"));
+                usuario.setPassword(resultSet.getString("PASSWORD"));
+
+                return usuario;
             }
-            return false;
+            return null;
         }catch (Exception e){
             throw new Exception(e);
         }
