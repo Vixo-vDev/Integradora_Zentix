@@ -7,24 +7,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-
-import java.util.function.Function;
 
 public class VistaSolicitudes {
-
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
 
-    // Colores mejorados para mejor contraste
-    private final String COLOR_ACCION_PRINCIPAL = "#2980B9";
-    private final String COLOR_PELIGRO = "#C0392B";
-    private final String COLOR_FONDO = "#F5F5F5";
-    private final String COLOR_TEXTO = "#2C3E50";
-    private final String COLOR_FONDO_TABLA = "#FFFFFF";
-    private final String COLOR_TEXTO_TABLA = "#000000";
+    // Colores
+    private final String COLOR_EXITO = "#2ECC71";
+    private final String COLOR_PELIGRO = "#E74C3C";
+    private final String COLOR_ADVERTENCIA = "#F39C12";
+    private final String COLOR_FONDO = "#F5F7FA";
+    private final String COLOR_TEXTO_OSCURO = "#2C3E50";
 
     public VistaSolicitudes(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
@@ -35,201 +28,176 @@ public class VistaSolicitudes {
     private void inicializarUI() {
         vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
 
-        // Panel de contenido principal con mejor contraste
-        VBox panelContenido = new VBox();
-        panelContenido.setStyle("-fx-background-color: " + COLOR_FONDO_TABLA + "; -fx-background-radius: 10;");
-        panelContenido.setPadding(new Insets(20));
-
-        // Título de la sección con mejor visibilidad
-        Label lblTituloSeccion = new Label("Artículos a solicitar");
-        lblTituloSeccion.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO + ";");
-
-        // Tabla de artículos con texto visible
-        TableView<ArticuloSolicitud> tablaArticulos = crearTablaArticulos();
-
-        // Formulario con texto visible
-        GridPane formulario = crearFormularioCampos();
-
-        // Configuración del layout principal
-        VBox contenidoPrincipal = new VBox(20, lblTituloSeccion, tablaArticulos, formulario);
-        contenidoPrincipal.setStyle("-fx-text-fill: " + COLOR_TEXTO + ";");
-        VBox.setVgrow(tablaArticulos, Priority.ALWAYS);
-
-        ScrollPane scrollPrincipal = new ScrollPane(contenidoPrincipal);
-        scrollPrincipal.setFitToWidth(true);
-        scrollPrincipal.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPrincipal.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-
-        panelContenido.getChildren().add(scrollPrincipal);
-        VBox.setVgrow(scrollPrincipal, Priority.ALWAYS);
-
-        // Construir vista completa
+        // Barras de navegación
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
-        vista.setCenter(panelContenido);
 
-        BorderPane.setMargin(panelContenido, new Insets(20));
-        BorderPane.setMargin(controladorBarra.getBarraLateral(), new Insets(0, 20, 0, 0));
-    }
+        // Contenido principal
+        VBox contenido = new VBox(20);
+        contenido.setPadding(new Insets(20));
 
-    private TableView<ArticuloSolicitud> crearTablaArticulos() {
-        TableView<ArticuloSolicitud> tablaArticulos = new TableView<>();
-        tablaArticulos.setStyle("-fx-background-color: " + COLOR_FONDO_TABLA + "; -fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
+        // Título
+        Label lblTitulo = new Label("Solicitudes de Usuarios");
+        lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+        contenido.getChildren().add(lblTitulo);
 
-        // Configurar política de redimensionamiento
-        tablaArticulos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // Filtros
+        HBox filtros = new HBox(15);
+        filtros.setAlignment(Pos.CENTER_LEFT);
 
-        // Crear columnas con estilo legible
-        Function<TableColumn<ArticuloSolicitud, String>, TableColumn<ArticuloSolicitud, String>> estiloColumna = col -> {
-            col.setStyle("-fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
-            return col;
-        };
+        ComboBox<String> cbFiltroEstado = new ComboBox<>();
+        cbFiltroEstado.getItems().addAll("Todas", "Pendientes", "Aprobadas", "Rechazadas");
+        cbFiltroEstado.setValue("Todas");
+        cbFiltroEstado.setPromptText("Filtrar por estado");
 
-        TableColumn<ArticuloSolicitud, String> columnaArticulo = estiloColumna.apply(
-                new TableColumn<>("Artículo"));
-        columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        ComboBox<String> cbFiltroUsuario = new ComboBox<>();
+        cbFiltroUsuario.getItems().addAll("Todos los usuarios", "jperez", "mgarcia", "lrodriguez");
+        cbFiltroUsuario.setValue("Todos los usuarios");
+        cbFiltroUsuario.setPromptText("Filtrar por usuario");
 
-        TableColumn<ArticuloSolicitud, String> columnaFecha = estiloColumna.apply(
-                new TableColumn<>("Fecha"));
-        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        filtros.getChildren().addAll(
+                new Label("Filtros:"),
+                cbFiltroEstado,
+                cbFiltroUsuario
+        );
+        contenido.getChildren().add(filtros);
 
-        TableColumn<ArticuloSolicitud, String> columnaCantidad = estiloColumna.apply(
-                new TableColumn<>("Cantidad"));
-        columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        // Tabla de solicitudes
+        TableView<Solicitud> tablaSolicitudes = new TableView<>();
+        tablaSolicitudes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaSolicitudes.setStyle("-fx-font-size: 14px;");
 
-        TableColumn<ArticuloSolicitud, String> columnaNota = estiloColumna.apply(
-                new TableColumn<>("Nota"));
-        columnaNota.setCellValueFactory(new PropertyValueFactory<>("nota"));
+        // Columnas
+        TableColumn<Solicitud, String> colUsuario = new TableColumn<>("Usuario");
+        colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
 
-        TableColumn<ArticuloSolicitud, String> columnaTiempoUso = estiloColumna.apply(
-                new TableColumn<>("Tiempo de Uso"));
-        columnaTiempoUso.setCellValueFactory(new PropertyValueFactory<>("tiempoUso"));
+        TableColumn<Solicitud, String> colFecha = new TableColumn<>("Fecha");
+        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
-        tablaArticulos.getColumns().addAll(columnaArticulo, columnaFecha, columnaCantidad,
-                columnaNota, columnaTiempoUso);
+        TableColumn<Solicitud, String> colArticulo = new TableColumn<>("Artículo");
+        colArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
 
-        // Añadir datos de ejemplo con estilo
-        tablaArticulos.setRowFactory(tv -> new TableRow<>() {
+        TableColumn<Solicitud, String> colCantidad = new TableColumn<>("Cantidad");
+        colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        TableColumn<Solicitud, String> colEstado = new TableColumn<>("Estado");
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colEstado.setCellFactory(column -> new TableCell<Solicitud, String>() {
             @Override
-            protected void updateItem(ArticuloSolicitud item, boolean empty) {
+            protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
+                    setText(null);
                     setStyle("");
                 } else {
-                    setStyle("-fx-text-fill: " + COLOR_TEXTO_TABLA + ";");
+                    setText(item);
+                    switch (item) {
+                        case "Aprobada":
+                            setStyle("-fx-text-fill: " + COLOR_EXITO + "; -fx-font-weight: bold;");
+                            break;
+                        case "Rechazada":
+                            setStyle("-fx-text-fill: " + COLOR_PELIGRO + "; -fx-font-weight: bold;");
+                            break;
+                        default:
+                            setStyle("-fx-text-fill: " + COLOR_ADVERTENCIA + "; -fx-font-weight: bold;");
+                    }
                 }
             }
         });
 
-        tablaArticulos.getItems().addAll(
-                new ArticuloSolicitud("Laptop HP", "2023-10-15", "1", "Para nuevo empleado", "8"),
-                new ArticuloSolicitud("Monitor 24\"", "2023-10-16", "2", "Reemplazo equipos antiguos", "4"),
-                new ArticuloSolicitud("Teclado inalámbrico", "2023-10-17", "1", "", "8")
+        TableColumn<Solicitud, String> colAcciones = new TableColumn<>("Acciones");
+        colAcciones.setCellFactory(col -> new TableCell<Solicitud, String>() {
+            private final Button btnAprobar = new Button("Aprobar");
+            private final Button btnRechazar = new Button("Rechazar");
+            private final Button btnPendiente = new Button("Pendiente");
+            private final HBox cajaBotones = new HBox(5, btnAprobar, btnRechazar, btnPendiente);
+
+            {
+                btnAprobar.setStyle("-fx-background-color: " + COLOR_EXITO + "; -fx-text-fill: white;");
+                btnRechazar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white;");
+                btnPendiente.setStyle("-fx-background-color: " + COLOR_ADVERTENCIA + "; -fx-text-fill: white;");
+
+                btnAprobar.setOnAction(e -> {
+                    Solicitud solicitud = getTableView().getItems().get(getIndex());
+                    cambiarEstadoSolicitud(solicitud, "Aprobada");
+                });
+
+                btnRechazar.setOnAction(e -> {
+                    Solicitud solicitud = getTableView().getItems().get(getIndex());
+                    cambiarEstadoSolicitud(solicitud, "Rechazada");
+                });
+
+                btnPendiente.setOnAction(e -> {
+                    Solicitud solicitud = getTableView().getItems().get(getIndex());
+                    cambiarEstadoSolicitud(solicitud, "Pendiente");
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : cajaBotones);
+            }
+        });
+
+        tablaSolicitudes.getColumns().addAll(colUsuario, colFecha, colArticulo, colCantidad, colEstado, colAcciones);
+
+        // Datos de ejemplo
+        tablaSolicitudes.getItems().addAll(
+                new Solicitud("Tony", "2023-11-15", "Laptop HP", "1", "Pendiente"),
+                new Solicitud("David", "2023-11-14", "Monitor 24\"", "2", "Aprobada"),
+                new Solicitud("Eliaquim", "2023-11-13", "Teclado inalámbrico", "1", "Rechazada"),
+                new Solicitud("Vega", "2023-11-12", "Mouse óptico", "1", "Pendiente")
         );
 
-        return tablaArticulos;
+        contenido.getChildren().add(tablaSolicitudes);
+        vista.setCenter(contenido);
     }
 
-    private GridPane crearFormularioCampos() {
-        GridPane formulario = new GridPane();
-        formulario.setHgap(20);
-        formulario.setVgap(15);
-        formulario.setPadding(new Insets(10, 0, 10, 0));
-        formulario.setStyle("-fx-text-fill: " + COLOR_TEXTO + ";");
+    private void cambiarEstadoSolicitud(Solicitud solicitud, String nuevoEstado) {
+        // Aquí iría la lógica para actualizar el estado en la base de datos
+        System.out.println("Cambiando estado de solicitud de " + solicitud.getUsuario() +
+                " a " + nuevoEstado);
 
-        // Configurar columnas
-        ColumnConstraints col1 = new ColumnConstraints();
-        col1.setPercentWidth(50);
-        ColumnConstraints col2 = new ColumnConstraints();
-        col2.setPercentWidth(50);
-        formulario.getColumnConstraints().addAll(col1, col2);
+        // Actualizar el estado en la tabla
+        solicitud.setEstado(nuevoEstado);
 
-        // Función para aplicar estilo común a los controles
-        Function<Control, Control> aplicarEstilo = control -> {
-            control.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-size: 14;");
-            return control;
-        };
-
-        // Artículo (ComboBox)
-        Label lblArticulo = new Label("Artículo:");
-        lblArticulo.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        ComboBox<String> cbArticulo = (ComboBox<String>) aplicarEstilo.apply(new ComboBox<>());
-        cbArticulo.getItems().addAll("Laptop HP", "Monitor 24\"", "Teclado inalámbrico", "Mouse óptico");
-        HBox.setHgrow(cbArticulo, Priority.ALWAYS);
-        formulario.add(lblArticulo, 0, 0);
-        formulario.add(cbArticulo, 0, 1);
-
-        // Fecha (DatePicker)
-        Label lblFecha = new Label("Fecha:");
-        lblFecha.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        DatePicker dpFecha = (DatePicker) aplicarEstilo.apply(new DatePicker());
-        HBox.setHgrow(dpFecha, Priority.ALWAYS);
-        formulario.add(lblFecha, 1, 0);
-        formulario.add(dpFecha, 1, 1);
-
-        // Cantidad (TextField)
-        Label lblCantidad = new Label("Cantidad:");
-        lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        TextField tfCantidad = (TextField) aplicarEstilo.apply(new TextField());
-        HBox.setHgrow(tfCantidad, Priority.ALWAYS);
-        formulario.add(lblCantidad, 0, 2);
-        formulario.add(tfCantidad, 0, 3);
-
-        // Nota (TextField)
-        Label lblNota = new Label("Nota:");
-        lblNota.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        TextField tfNota = (TextField) aplicarEstilo.apply(new TextField());
-        HBox.setHgrow(tfNota, Priority.ALWAYS);
-        formulario.add(lblNota, 1, 2);
-        formulario.add(tfNota, 1, 3);
-
-        // Tiempo de uso (Spinner)
-        Label lblTiempoUso = new Label("Tiempo de Uso (horas):");
-        lblTiempoUso.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        Spinner<Integer> spTiempoUso = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
-        spTiempoUso.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8));
-        HBox.setHgrow(spTiempoUso, Priority.ALWAYS);
-        formulario.add(lblTiempoUso, 0, 4);
-        formulario.add(spTiempoUso, 0, 5);
-
-        // Botones con mejor contraste
-        Button btnCancelar = new Button("Cancelar");
-        btnCancelar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-
-        Button btnEnviar = new Button("Enviar");
-        btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-
-        HBox contenedorBotones = new HBox(15, btnCancelar, btnEnviar);
-        contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
-        formulario.add(contenedorBotones, 1, 5);
-
-        return formulario;
+        // Mostrar confirmación
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Estado actualizado");
+        alert.setHeaderText("La solicitud ha sido actualizada");
+        alert.setContentText("Nuevo estado: " + nuevoEstado);
+        alert.show();
     }
 
     public BorderPane getVista() {
         return vista;
     }
 
-    // Clase para representar los artículos en solicitud
-    public static class ArticuloSolicitud {
-        private final String nombre;
+    // Clase modelo para solicitudes
+    public static class Solicitud {
+        private final String usuario;
         private final String fecha;
+        private final String articulo;
         private final String cantidad;
-        private final String nota;
-        private final String tiempoUso;
+        private String estado;
 
-        public ArticuloSolicitud(String nombre, String fecha, String cantidad, String nota, String tiempoUso) {
-            this.nombre = nombre;
+        public Solicitud(String usuario, String fecha, String articulo, String cantidad, String estado) {
+            this.usuario = usuario;
             this.fecha = fecha;
+            this.articulo = articulo;
             this.cantidad = cantidad;
-            this.nota = nota;
-            this.tiempoUso = tiempoUso;
+            this.estado = estado;
         }
 
-        public String getNombre() { return nombre; }
+        // Getters
+        public String getUsuario() { return usuario; }
         public String getFecha() { return fecha; }
+        public String getArticulo() { return articulo; }
         public String getCantidad() { return cantidad; }
-        public String getNota() { return nota; }
-        public String getTiempoUso() { return tiempoUso; }
+        public String getEstado() { return estado; }
+
+        // Setter para estado
+        public void setEstado(String estado) { this.estado = estado; }
     }
 }

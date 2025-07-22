@@ -20,19 +20,18 @@ public class ControladorBarraNavegacion {
     private final VBox barraLateral;
     private final HBox barraSuperior;
 
-    // Botones de navegación
+    // Botones de navegación (actualizados para administrador)
     private Button btnDashboard;
     private Button btnInventario;
-    private Button btnHistorial;
+    private Button btnEstadisticas;
+    private Button btnUsuarios;
     private Button btnSolicitudes;
     private Button btnNotificaciones;
-    private Button btnPerfil;
     private Button btnSalir;
 
     public ControladorBarraNavegacion() {
         this.barraSuperior = crearBarraSuperior();
         this.barraLateral = crearBarraLateral();
-
     }
 
     private HBox crearBarraSuperior() {
@@ -69,12 +68,12 @@ public class ControladorBarraNavegacion {
         Label lblMenu = new Label("Menú");
         lblMenu.setStyle("-fx-text-fill: " + COLOR_TEXTO_CLARO + "; -fx-font-weight: bold; -fx-font-size: 18px;");
 
-        // Botones de navegación
+        // Botones de navegación (actualizados para administrador)
         btnDashboard = crearBotonLateral("Dashboard", "📊");
         btnInventario = crearBotonLateral("Inventario", "📦");
-        btnHistorial = crearBotonLateral("Historial", "🕒");
+        btnEstadisticas = crearBotonLateral("Estadísticas", "📈");  // Reemplaza a Historial
+        btnUsuarios = crearBotonLateral("Usuarios", "👥");         // Reemplaza a Perfil
         btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
-        btnPerfil = crearBotonLateral("Perfil","📝");
         btnNotificaciones = crearBotonLateral("Notificaciones", "🔔");
 
         Pane espaciador = new Pane();
@@ -84,8 +83,8 @@ public class ControladorBarraNavegacion {
         btnSalir.setStyle("-fx-background-color: " + COLOR_SALIR + "; -fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
                 "-fx-font-weight: bold; -fx-background-radius: 8px;");
 
-        barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnHistorial,
-                btnSolicitudes, btnPerfil ,btnNotificaciones, espaciador, btnSalir);
+        barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnEstadisticas,
+                btnUsuarios, btnSolicitudes, btnNotificaciones, espaciador, btnSalir);
         return barra;
     }
 
@@ -111,13 +110,13 @@ public class ControladorBarraNavegacion {
         return btn;
     }
 
-    // Getters para los botones
+    // Getters para los botones (actualizados)
     public Button getBtnDashboard() { return btnDashboard; }
     public Button getBtnInventario() { return btnInventario; }
-    public Button getBtnHistorial() { return btnHistorial; }
+    public Button getBtnEstadisticas() { return btnEstadisticas; }
+    public Button getBtnUsuarios() { return btnUsuarios; }
     public Button getBtnSolicitudes() { return btnSolicitudes; }
     public Button getBtnNotificaciones() { return btnNotificaciones; }
-    public Button getBtnPerfil() { return btnPerfil; }
     public Button getBtnSalir() { return btnSalir; }
 
     // Getters para las barras
