@@ -3,6 +3,7 @@ package impl;
 import Dao.IEquipoDao;
 import com.example.netrixapp.Controladores.ConnectionBD;
 import com.example.netrixapp.Modelos.Equipo;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,31 +69,57 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public int totalEquipos()  {
+        int total_equipos;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO";
         try{
             Connection con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
-            int total_equipos = rs.getInt("COUNT(ID_EQUIPO)");
+            total_equipos = rs.getInt("COUNT(ID_EQUIPO)");
         }
         catch(Exception e){
             throw new RuntimeException(e);
         }
-        return totalEquipos();
+        return total_equipos;
     }
 
     @Override
     public int equiposDisponibles()  {
+        int equiposDispo;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO WHERE DISPONIBLE = 1";
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            int equiposDiponibles = rs.getInt("COUNT(ID_EQUIPO)");
+            equiposDispo = rs.getInt("COUNT(ID_EQUIPO)");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
+        return equiposDispo;
     }
+
+    @Override
+    public int totalStockBajo()  {
+        int totalStock;
+        String sql = "SELECT COUNT(*) AS total_tipos_bajo_stock\n" +
+                "FROM (\n" +
+                "  SELECT id_tipo_equipo\n" +
+                "  FROM EQUIPO\n" +
+                "  GROUP BY id_tipo_equipo\n" +
+                "  HAVING COUNT(*) < 10\n" +
+                ") sub;";
+
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            totalStock = rs.getInt("total_tipos_bajo_stock");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalStock;
+    }
+
 }

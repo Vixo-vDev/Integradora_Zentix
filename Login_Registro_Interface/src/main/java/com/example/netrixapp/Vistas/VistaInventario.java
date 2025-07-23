@@ -44,8 +44,8 @@ public class VistaInventario {
         filaMetricas.setAlignment(Pos.TOP_CENTER);
 
         VBox cardArticulos = crearCardMetrica("Artículos", String.valueOf(equipoDao.totalEquipos()), COLOR_TEXTO_OSCURO);
-        VBox cardStockBajo = crearCardMetrica("Stock bajo", "12", COLOR_ADVERTENCIA);
-        VBox cardDisponibles = crearCardMetrica("Disponibles", "188", COLOR_TEXTO_OSCURO);
+        VBox cardStockBajo = crearCardMetrica("Stock bajo", String.valueOf(equipoDao.totalStockBajo()), COLOR_ADVERTENCIA);
+        VBox cardDisponibles = crearCardMetrica("Disponibles", String.valueOf(equipoDao.equiposDisponibles()), COLOR_TEXTO_OSCURO);
 
         filaMetricas.getChildren().addAll(cardArticulos, cardStockBajo, cardDisponibles);
         for (Node card : filaMetricas.getChildren()) {
