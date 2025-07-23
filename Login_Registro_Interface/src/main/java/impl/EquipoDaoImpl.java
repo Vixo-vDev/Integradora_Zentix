@@ -69,13 +69,16 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public int totalEquipos()  {
-        int total_equipos;
+        int total_equipos = 0;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO";
         try{
             Connection con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
-            total_equipos = rs.getInt("COUNT(ID_EQUIPO)");
+            if(rs.next()){
+                total_equipos = rs.getInt("COUNT(ID_EQUIPO)");
+            }
+
         }
         catch(Exception e){
             throw new RuntimeException(e);
@@ -85,13 +88,15 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public int equiposDisponibles()  {
-        int equiposDispo;
+        int equiposDispo = 0;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO WHERE DISPONIBLE = 1";
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            equiposDispo = rs.getInt("COUNT(ID_EQUIPO)");
+            if(rs.next()) {
+                equiposDispo = rs.getInt("COUNT(ID_EQUIPO)");
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -101,21 +106,22 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public int totalStockBajo()  {
-        int totalStock;
+        int totalStock = 0;
         String sql = "SELECT COUNT(*) AS total_tipos_bajo_stock\n" +
                 "FROM (\n" +
                 "  SELECT id_tipo_equipo\n" +
                 "  FROM EQUIPO\n" +
                 "  GROUP BY id_tipo_equipo\n" +
                 "  HAVING COUNT(*) < 10\n" +
-                ") sub;";
+                ") sub";
 
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            totalStock = rs.getInt("total_tipos_bajo_stock");
-
+            if(rs.next()) {
+                totalStock = rs.getInt("total_tipos_bajo_stock");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

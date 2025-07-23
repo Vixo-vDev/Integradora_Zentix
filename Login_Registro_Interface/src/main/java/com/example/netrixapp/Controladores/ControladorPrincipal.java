@@ -2,6 +2,7 @@ package com.example.netrixapp.Controladores;
 
 import com.example.netrixapp.HelloApplication;
 import com.example.netrixapp.Vistas.*;
+import impl.EquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -18,6 +19,7 @@ import oracle.jdbc.internal.XSCacheOutput;
 
 
 public class ControladorPrincipal {
+    EquipoDaoImpl equipoDao = new EquipoDaoImpl();
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
 
@@ -59,7 +61,7 @@ public class ControladorPrincipal {
         filaCards.setAlignment(Pos.TOP_LEFT);
 
         // Card de Artículos
-        VBox cardArticulos = crearCardMetrica("Artículos", "200");
+        VBox cardArticulos = crearCardMetrica("Artículos", String.valueOf(equipoDao.totalEquipos()) );
         filaCards.getChildren().add(cardArticulos);
 
         // Card de Solicitudes
