@@ -2,6 +2,7 @@ package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
 import com.example.netrixapp.Modelos.Equipo;
+import impl.EquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,6 +13,9 @@ import javafx.scene.layout.*;
 import java.util.List;
 
 public class VistaInventario {
+    EquipoDaoImpl equipoDao = new EquipoDaoImpl();
+
+
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
     private TableView<Equipo> tablaEquipos;
@@ -30,6 +34,7 @@ public class VistaInventario {
         vista.setStyle("-fx-background-color: transparent;");
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
+        int totalEqui = equipoDao.totalEquipos();
 
         VBox contenido = new VBox(20);
         contenido.setPadding(new Insets(20));
@@ -39,7 +44,7 @@ public class VistaInventario {
         HBox filaMetricas = new HBox(15);
         filaMetricas.setAlignment(Pos.TOP_CENTER);
 
-        VBox cardArticulos = crearCardMetrica("Artículos", "200", COLOR_TEXTO_OSCURO);
+        VBox cardArticulos = crearCardMetrica("Artículos", String.valueOf(totalEqui), COLOR_TEXTO_OSCURO);
         VBox cardStockBajo = crearCardMetrica("Stock bajo", "12", COLOR_ADVERTENCIA);
         VBox cardDisponibles = crearCardMetrica("Disponibles", "188", COLOR_TEXTO_OSCURO);
 

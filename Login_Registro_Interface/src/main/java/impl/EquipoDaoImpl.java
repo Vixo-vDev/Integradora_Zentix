@@ -64,4 +64,19 @@ public class EquipoDaoImpl implements IEquipoDao {
     public void delete(Equipo equipo) throws Exception {
 
     }
+
+    @Override
+    public int totalEquipos()  {
+        String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO";
+        try{
+            Connection con= ConnectionBD.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            int total_equipos = rs.getInt("COUNT(ID_EQUIPO)");
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        return totalEquipos();
+    }
 }

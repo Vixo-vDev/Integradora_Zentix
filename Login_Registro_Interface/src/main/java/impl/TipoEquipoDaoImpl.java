@@ -2,12 +2,13 @@ package impl;
 
 import Dao.ITipoEquipoDao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 
-public class TipoEquipoDaoImpl implements ITipoEquipoDao {
-    
-    @Override
-    public List<String> buscarProductos(String texto) {
-        return List.of();
-    }
+public class TipoEquipoDaoImpl{
+
+
 }
