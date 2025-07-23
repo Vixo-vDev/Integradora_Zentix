@@ -26,7 +26,7 @@ public class VistaSolicitudes {
     private final String COLOR_AGREGAR = "#009475";
     private final String COLOR_TEXTO = "#2C3E50";
     private final String COLOR_FONDO_TABLA = "#FFFFFF";
-    private final String COLOR_TEXTO_TABLA = "#000000";
+    private final String COLOR_TEXTO_TABLA = "#2C3E50";
 
     public Button getBtnAgregar() {
         return btnAgregar;
@@ -100,7 +100,7 @@ public class VistaSolicitudes {
         columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
         TableColumn<ArticuloSolicitud, String> columnaFecha = estiloColumna.apply(
-                new TableColumn<>("Fecha"));
+                new TableColumn<>("Fecha de Solicitud"));
         columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
         TableColumn<ArticuloSolicitud, String> columnaCantidad = estiloColumna.apply(
@@ -207,13 +207,13 @@ public class VistaSolicitudes {
         btnCancelar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
 
         btnAgregar = new Button("Agregar");
-        btnAgregar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
+        btnAgregar.setStyle("-fx-background-color: " + COLOR_AGREGAR + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
         new ControladorSolicitudes(this);
 
         btnEnviar = new Button("Enviar");
         btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
 
-        HBox contenedorBotones = new HBox(15, btnCancelar, btnEnviar);
+        HBox contenedorBotones = new HBox(15, btnAgregar, btnCancelar, btnEnviar);
         contenedorBotones.setAlignment(Pos.CENTER_RIGHT);
         formulario.add(contenedorBotones, 1, 5);
 
