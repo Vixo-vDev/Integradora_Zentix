@@ -34,7 +34,6 @@ public class VistaInventario {
         vista.setStyle("-fx-background-color: transparent;");
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
-        int totalEqui = equipoDao.totalEquipos();
 
         VBox contenido = new VBox(20);
         contenido.setPadding(new Insets(20));
@@ -44,7 +43,7 @@ public class VistaInventario {
         HBox filaMetricas = new HBox(15);
         filaMetricas.setAlignment(Pos.TOP_CENTER);
 
-        VBox cardArticulos = crearCardMetrica("Artículos", String.valueOf(totalEqui), COLOR_TEXTO_OSCURO);
+        VBox cardArticulos = crearCardMetrica("Artículos", String.valueOf(equipoDao.totalEquipos()), COLOR_TEXTO_OSCURO);
         VBox cardStockBajo = crearCardMetrica("Stock bajo", "12", COLOR_ADVERTENCIA);
         VBox cardDisponibles = crearCardMetrica("Disponibles", "188", COLOR_TEXTO_OSCURO);
 

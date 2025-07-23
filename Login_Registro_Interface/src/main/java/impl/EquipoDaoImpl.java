@@ -7,6 +7,7 @@ import com.example.netrixapp.Modelos.Equipo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,5 +79,20 @@ public class EquipoDaoImpl implements IEquipoDao {
             throw new RuntimeException(e);
         }
         return totalEquipos();
+    }
+
+    @Override
+    public int equiposDisponibles()  {
+        String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO WHERE DISPONIBLE = 1";
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            int equiposDiponibles = rs.getInt("COUNT(ID_EQUIPO)");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 }
