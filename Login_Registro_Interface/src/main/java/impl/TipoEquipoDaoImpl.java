@@ -22,8 +22,8 @@ public class TipoEquipoDaoImpl implements ITipoEquipoDao {
             if(rs.next()){
                 TipoEquipo tipoEquipo = new TipoEquipo();
 
-                tipoEquipo.setId_tipo_equipo(rs.getInt("id_tipo"));
-                tipoEquipo.setNombre(rs.getString("nombre"));
+                tipoEquipo.setId_tipo_equipo(rs.getInt("ID_TIPO_EQUIPO"));
+                tipoEquipo.setNombre(rs.getString("NOMBRE"));
                 lista.add(tipoEquipo);
             }
         }catch(SQLException e){

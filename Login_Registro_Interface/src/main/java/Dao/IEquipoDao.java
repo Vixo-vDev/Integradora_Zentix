@@ -6,6 +6,7 @@ import java.util.List;
 public interface IEquipoDao {
 
     List<Equipo> findAll() throws Exception;
+    List<Equipo> tipoEquipo(int idTipoEquipo) throws Exception;
     int totalEquipos();
     int equiposDisponibles();
     int totalStockBajo();

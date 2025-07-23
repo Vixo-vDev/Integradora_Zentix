@@ -48,6 +48,28 @@ public class EquipoDaoImpl implements IEquipoDao {
     }
 
     @Override
+    public List<Equipo> tipoEquipo(int idTipoEquipo) throws Exception {
+        List<Equipo> equipos= new ArrayList<>();
+
+        String sql = "SELECT DISTINCT DESCRIPCION FROM EQUIPO WHERE ID_TIPO_EQUIPO = ?;";
+
+        Connection con= ConnectionBD.getConnection();
+        PreparedStatement ps=con.prepareStatement(sql);
+        ps.setInt(1, idTipoEquipo);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Equipo equipo = new Equipo();
+            equipo.setDescripcion(rs.getString("DESCRIPCION"));
+            equipos.add(equipo);
+        }
+
+
+        return equipos;
+    }
+
+
+    @Override
     public Equipo getById(int id) throws Exception {
         return null;
     }
