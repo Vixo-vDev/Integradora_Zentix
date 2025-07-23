@@ -1,6 +1,8 @@
 package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.ControladorLogin;
+import com.example.netrixapp.Controladores.ControladorSolicitudes;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -11,16 +13,28 @@ import java.util.function.Function;
 
 public class VistaSolicitudes {
 
+    private Button btnAgregar;
+    private Button btnEnviar;
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
+
 
     // Colores mejorados para mejor contraste
     private final String COLOR_ACCION_PRINCIPAL = "#2980B9";
     private final String COLOR_PELIGRO = "#C0392B";
     private final String COLOR_FONDO = "#F5F5F5";
+    private final String COLOR_AGREGAR = "#009475";
     private final String COLOR_TEXTO = "#2C3E50";
     private final String COLOR_FONDO_TABLA = "#FFFFFF";
     private final String COLOR_TEXTO_TABLA = "#000000";
+
+    public Button getBtnAgregar() {
+        return btnAgregar;
+    }
+
+    public Button getBtnEnviar() {
+        return btnEnviar;
+    }
 
     public VistaSolicitudes(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
@@ -47,7 +61,7 @@ public class VistaSolicitudes {
         GridPane formulario = crearFormularioCampos();
 
         // Configuración del layout principal
-        VBox contenidoPrincipal = new VBox(20, lblTituloSeccion, tablaArticulos, formulario);
+        VBox contenidoPrincipal = new VBox(20, lblTituloSeccion, formulario, tablaArticulos);
         contenidoPrincipal.setStyle("-fx-text-fill: " + COLOR_TEXTO + ";");
         VBox.setVgrow(tablaArticulos, Priority.ALWAYS);
 
@@ -192,7 +206,11 @@ public class VistaSolicitudes {
         Button btnCancelar = new Button("Cancelar");
         btnCancelar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
 
-        Button btnEnviar = new Button("Enviar");
+        btnAgregar = new Button("Agregar");
+        btnAgregar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
+        new ControladorSolicitudes(this);
+
+        btnEnviar = new Button("Enviar");
         btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
 
         HBox contenedorBotones = new HBox(15, btnCancelar, btnEnviar);
