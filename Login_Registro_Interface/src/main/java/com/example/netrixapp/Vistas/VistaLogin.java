@@ -4,6 +4,7 @@ package com.example.netrixapp.Vistas;
 import com.example.netrixapp.Controladores.ConnectionBD;
 import com.example.netrixapp.Controladores.ControladorLogin;
 import com.example.netrixapp.Controladores.ControladorRegistro;
+import com.example.netrixapp.Controladores.ControladorSolicitudes;
 import com.example.netrixapp.HelloApplication;
 import impl.UsuarioDaoImpl;
 import javafx.application.Application;
@@ -109,6 +110,7 @@ public class VistaLogin extends Application {
         btnConfirmar.setPrefWidth(250);
         btnConfirmar.setPrefHeight(40);
         new ControladorLogin(this);
+
 
 
         HBox panelInferior = new HBox(5);

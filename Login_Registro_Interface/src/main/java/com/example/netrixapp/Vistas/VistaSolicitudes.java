@@ -3,12 +3,19 @@ package com.example.netrixapp.Vistas;
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
 import com.example.netrixapp.Controladores.ControladorLogin;
 import com.example.netrixapp.Controladores.ControladorSolicitudes;
+import com.example.netrixapp.Modelos.Equipo;
+import com.example.netrixapp.Modelos.TipoEquipo;
+import impl.EquipoDaoImpl;
+import impl.TipoEquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class VistaSolicitudes {
@@ -161,13 +168,13 @@ public class VistaSolicitudes {
         };
 
         // Artículo (ComboBox)
-        Label lblArticulo = new Label("Artículo:");
+        /*Label lblArticulo = new Label("Artículo:");
         lblArticulo.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
         ComboBox<String> cbArticulo = (ComboBox<String>) aplicarEstilo.apply(new ComboBox<>());
         cbArticulo.getItems().addAll("Laptop HP", "Monitor 24\"", "Teclado inalámbrico", "Mouse óptico");
         HBox.setHgrow(cbArticulo, Priority.ALWAYS);
         formulario.add(lblArticulo, 0, 0);
-        formulario.add(cbArticulo, 0, 1);
+        formulario.add(cbArticulo, 0, 1);*/
 
         // Fecha (DatePicker)
         Label lblFecha = new Label("Fecha:");
@@ -177,13 +184,22 @@ public class VistaSolicitudes {
         formulario.add(lblFecha, 1, 0);
         formulario.add(dpFecha, 1, 1);
 
-        // Cantidad (TextField)
+
         Label lblCantidad = new Label("Cantidad:");
+        lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        Spinner<Integer> spCantidad = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
+        spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 1));
+        HBox.setHgrow(spCantidad, Priority.ALWAYS);
+        formulario.add(lblCantidad, 0, 2);
+        formulario.add(spCantidad, 0, 3);
+
+        // Cantidad (TextField)
+        /*Label lblCantidad = new Label("Cantidad:");
         lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
         TextField tfCantidad = (TextField) aplicarEstilo.apply(new TextField());
         HBox.setHgrow(tfCantidad, Priority.ALWAYS);
         formulario.add(lblCantidad, 0, 2);
-        formulario.add(tfCantidad, 0, 3);
+        formulario.add(tfCantidad, 0, 3);*/
 
         // Nota (TextField)
         Label lblNota = new Label("Nota:");
@@ -201,6 +217,74 @@ public class VistaSolicitudes {
         HBox.setHgrow(spTiempoUso, Priority.ALWAYS);
         formulario.add(lblTiempoUso, 0, 4);
         formulario.add(spTiempoUso, 0, 5);
+
+        // Label y ComboBox para tipo de equipo
+        Label lblTipoEquipo = new Label("Tipo de equipo:");
+        lblTipoEquipo.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        ComboBox<String> cbTipoEquipo = new ComboBox<>();
+        cbTipoEquipo.setEditable(true); // permite escritura para búsqueda predictiva
+        HBox.setHgrow(cbTipoEquipo, Priority.ALWAYS);
+        formulario.add(lblTipoEquipo, 0, 0);
+        formulario.add(cbTipoEquipo, 0, 1);
+
+        // Label dinámico con el nombre seleccionado
+        Label lblNombreTipoSeleccionado = new Label();
+        lblNombreTipoSeleccionado.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-size: 14px; -fx-font-weight: bold;");
+        formulario.add(lblNombreTipoSeleccionado, 0, 8);
+
+        // ComboBox de equipos filtrado
+        Label lblEquipos = new Label("Equipos disponibles:");
+        lblEquipos.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        ComboBox<String> cbEquipos = new ComboBox<>();
+        HBox.setHgrow(cbEquipos, Priority.ALWAYS);
+        formulario.add(lblEquipos, 0, 9);
+        formulario.add(cbEquipos, 0, 10);
+
+        cbEquipos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                System.out.println("El usuario seleccionó: " + newValue);
+            }
+        });
+
+
+        // DAO para obtener los tipos de equipo y equipos
+        TipoEquipoDaoImpl tipoEquipoDao = new TipoEquipoDaoImpl();
+        EquipoDaoImpl equipoDao = new EquipoDaoImpl();
+
+        // Map para vincular nombre ↔ ID de tipo equipo
+        Map<String, Integer> tipoNombreToId = new HashMap<>();
+        Map<Integer, String> tipoIdToNombre = new HashMap<>();
+
+        // Llenar ComboBox con tipos de equipo
+        for (TipoEquipo tipo : tipoEquipoDao.obtenerTodos()) {
+            cbTipoEquipo.getItems().add(tipo.getNombre());
+            tipoNombreToId.put(tipo.getNombre(), tipo.getId_tipo_equipo());
+            tipoIdToNombre.put(tipo.getId_tipo_equipo(), tipo.getNombre());
+        }
+
+        // Evento: cuando el usuario selecciona un tipo de equipo
+        cbTipoEquipo.setOnAction(event -> {
+            String seleccionado = cbTipoEquipo.getValue();
+            if (seleccionado != null && tipoNombreToId.containsKey(seleccionado)) {
+                int idTipo = tipoNombreToId.get(seleccionado);
+
+                // Actualizar el label
+                lblNombreTipoSeleccionado.setText("Seleccionaste: " + seleccionado);
+
+                // Limpiar ComboBox de equipos
+                cbEquipos.getItems().clear();
+
+                try {
+                    // Cargar equipos correspondientes
+                    List<Equipo> equipos = equipoDao.tipoEquipo(idTipo);
+                    for (Equipo eq : equipos) {
+                        cbEquipos.getItems().add(eq.getDescripcion());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // Botones con mejor contraste
         Button btnCancelar = new Button("Cancelar");
@@ -224,7 +308,7 @@ public class VistaSolicitudes {
         return vista;
     }
 
-    // Clase para representar los artículos en solicitud
+    //Clase para representar los artículos en solicitud
     public static class ArticuloSolicitud {
         private final String nombre;
         private final String fecha;
@@ -246,4 +330,6 @@ public class VistaSolicitudes {
         public String getNota() { return nota; }
         public String getTiempoUso() { return tiempoUso; }
     }
+
+
 }

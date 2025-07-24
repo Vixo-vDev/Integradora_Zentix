@@ -19,9 +19,8 @@ public class TipoEquipoDaoImpl implements ITipoEquipoDao {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            while (rs.next()){
                 TipoEquipo tipoEquipo = new TipoEquipo();
-
                 tipoEquipo.setId_tipo_equipo(rs.getInt("ID_TIPO_EQUIPO"));
                 tipoEquipo.setNombre(rs.getString("NOMBRE"));
                 lista.add(tipoEquipo);

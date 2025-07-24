@@ -10,6 +10,7 @@ public interface IEquipoDao {
     int totalEquipos();
     int equiposDisponibles();
     int totalStockBajo();
+    int calcularCantidad(String descripcion);
     Equipo getById(int id) throws Exception;
     void create(Equipo equipo) throws Exception;
     void update(Equipo equipo) throws Exception;

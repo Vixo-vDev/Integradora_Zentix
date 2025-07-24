@@ -51,7 +51,7 @@ public class EquipoDaoImpl implements IEquipoDao {
     public List<Equipo> tipoEquipo(int idTipoEquipo) throws Exception {
         List<Equipo> equipos= new ArrayList<>();
 
-        String sql = "SELECT DISTINCT DESCRIPCION FROM EQUIPO WHERE ID_TIPO_EQUIPO = ?;";
+        String sql = "SELECT DISTINCT DESCRIPCION FROM EQUIPO WHERE ID_TIPO_EQUIPO = ?";
 
         Connection con= ConnectionBD.getConnection();
         PreparedStatement ps=con.prepareStatement(sql);
@@ -148,6 +148,22 @@ public class EquipoDaoImpl implements IEquipoDao {
             throw new RuntimeException(e);
         }
         return totalStock;
+    }
+
+    @Override
+    public int calcularCantidad(String descripcion) {
+        int cantidad = 0;
+        String sql = "SELECT COUNT(id_equipo) FROM EQUIPO WHERE DESCRIPCION = ?";
+
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return 0;
     }
 
 }
