@@ -111,8 +111,6 @@ public class VistaLogin extends Application {
         btnConfirmar.setPrefHeight(40);
         new ControladorLogin(this);
 
-
-
         HBox panelInferior = new HBox(5);
         panelInferior.setAlignment(Pos.CENTER);
         Label etiquetaSinCuenta = new Label("No tienes una cuenta?");

@@ -115,6 +115,7 @@ public class EquipoDaoImpl implements IEquipoDao {
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
+
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
                 equiposDispo = rs.getInt("COUNT(ID_EQUIPO)");
@@ -158,12 +159,16 @@ public class EquipoDaoImpl implements IEquipoDao {
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
-            
+            ps.setString(1, descripcion);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                cantidad = rs.getInt("COUNT(ID_EQUIPO)");
+            }
         }catch(SQLException e){
             throw new RuntimeException(e);
         }
 
-        return 0;
+        return cantidad;
     }
 
 }

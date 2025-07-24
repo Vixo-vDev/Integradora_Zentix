@@ -20,10 +20,14 @@ import java.util.function.Function;
 
 public class VistaSolicitudes {
 
+    String descripcion = "";
+    int cantidad = 0;
     private Button btnAgregar;
     private Button btnEnviar;
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
+    TipoEquipoDaoImpl tipoEquipoDao = new TipoEquipoDaoImpl();
+    EquipoDaoImpl equipoDao = new EquipoDaoImpl();
 
 
     // Colores mejorados para mejor contraste
@@ -185,14 +189,6 @@ public class VistaSolicitudes {
         formulario.add(dpFecha, 1, 1);
 
 
-        Label lblCantidad = new Label("Cantidad:");
-        lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        Spinner<Integer> spCantidad = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
-        spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 1));
-        HBox.setHgrow(spCantidad, Priority.ALWAYS);
-        formulario.add(lblCantidad, 0, 2);
-        formulario.add(spCantidad, 0, 3);
-
         // Cantidad (TextField)
         /*Label lblCantidad = new Label("Cantidad:");
         lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
@@ -240,16 +236,25 @@ public class VistaSolicitudes {
         formulario.add(lblEquipos, 0, 9);
         formulario.add(cbEquipos, 0, 10);
 
+        Label lblCantidad = new Label("Cantidad:");
+        lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        Spinner<Integer> spCantidad = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
+        HBox.setHgrow(spCantidad, Priority.ALWAYS);
+        formulario.add(lblCantidad, 0, 2);
+        formulario.add(spCantidad, 0, 3);
+
         cbEquipos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
+                descripcion = newValue.toString();
+                cantidad = equipoDao.calcularCantidad(descripcion.trim());
+                spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, cantidad , 1));
                 System.out.println("El usuario seleccionó: " + newValue);
             }
         });
 
 
         // DAO para obtener los tipos de equipo y equipos
-        TipoEquipoDaoImpl tipoEquipoDao = new TipoEquipoDaoImpl();
-        EquipoDaoImpl equipoDao = new EquipoDaoImpl();
+
 
         // Map para vincular nombre ↔ ID de tipo equipo
         Map<String, Integer> tipoNombreToId = new HashMap<>();
@@ -285,6 +290,7 @@ public class VistaSolicitudes {
                 }
             }
         });
+
 
         // Botones con mejor contraste
         Button btnCancelar = new Button("Cancelar");
