@@ -26,6 +26,14 @@ public class Solicitud {
         this.estado = estado;
     }
 
+    public Solicitud(String articulo, LocalDate fecha_solicitud, int cantidad,  String razon, String tiempo_uso) {
+        this.articulo = articulo;
+        this.fecha_solicitud = fecha_solicitud;
+        this.cantidad = cantidad;
+        this.razon = razon;
+        this.tiempo_uso = tiempo_uso;
+    }
+
     public int getId_usuario() {
         return id_usuario;
     }

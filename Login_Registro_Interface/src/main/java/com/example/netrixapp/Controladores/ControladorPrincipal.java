@@ -48,9 +48,6 @@ public class ControladorPrincipal {
         mostrarDashboard();
     }
 
-
-
-
     public void mostrarDashboard() {
         VBox contenedorPrincipal = new VBox(20);
         contenedorPrincipal.setStyle("-fx-background-color: #F5F7FA; -fx-padding: 20;");

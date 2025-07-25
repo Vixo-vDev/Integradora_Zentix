@@ -28,7 +28,7 @@ public class VistaSolicitudes {
     private Button btnAgregar;
     private Button btnEnviar;
     private TextField tfNota;
-    private DatePicker dpFecha;
+    private DatePicker dpFecha_recibo;
     private Spinner<Integer> spTiempoUso;
     private ComboBox<String> cbTipoEquipo;
     private ComboBox<String> cbEquipos;
@@ -60,8 +60,8 @@ public class VistaSolicitudes {
         return tfNota.getText().trim();
     }
 
-    public LocalDate getFecha() {
-        return dpFecha.getValue();
+    public LocalDate getFecha_recibo() {
+        return dpFecha_recibo.getValue();
     }
 
     public String getTiempoUso() {
@@ -84,6 +84,7 @@ public class VistaSolicitudes {
         this.controladorBarra = controladorBarra;
         this.vista = new BorderPane();
         inicializarUI();
+        new ControladorSolicitudes(this);
     }
 
     private void inicializarUI() {
@@ -216,10 +217,10 @@ public class VistaSolicitudes {
         // Fecha (DatePicker)
         Label lblFecha = new Label("Fecha:");
         lblFecha.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        dpFecha = (DatePicker) aplicarEstilo.apply(new DatePicker());
-        HBox.setHgrow(dpFecha, Priority.ALWAYS);
+        dpFecha_recibo = (DatePicker) aplicarEstilo.apply(new DatePicker());
+        HBox.setHgrow(dpFecha_recibo, Priority.ALWAYS);
         formulario.add(lblFecha, 1, 0);
-        formulario.add(dpFecha, 1, 1);
+        formulario.add(dpFecha_recibo, 1, 1);
 
 
         // Cantidad (TextField)
@@ -329,7 +330,6 @@ public class VistaSolicitudes {
 
         btnAgregar = new Button("Agregar");
         btnAgregar.setStyle("-fx-background-color: " + COLOR_AGREGAR + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
-        new ControladorSolicitudes(this);
 
         btnEnviar = new Button("Enviar");
         btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");

@@ -17,11 +17,12 @@ public class ControladorSolicitudes {
     private VistaSolicitudes vista;
 
     //Declaracion de atributos
-    String razon = vista.getNota();
-    LocalDate fecha_solicitud = vista.getFecha();
-    String tiempoUso = vista.getTiempoUso();
-    String articulo = vista.getEquipos();
-    int cantidad = vista.getCantidad();
+    String razon;
+    LocalDate fecha_solicitud;
+    String tiempoUso;
+    String articulo;
+    int cantidad;
+    LocalDate fecha_registro;
 
     public ControladorSolicitudes(VistaSolicitudes vista) {
 
@@ -31,7 +32,16 @@ public class ControladorSolicitudes {
     }
 
     public boolean verificarCampos(){
-        if(razon.isEmpty() || fecha_solicitud == null || tiempoUso.isEmpty() || articulo.isEmpty() || cantidad == 0){
+
+        razon = vista.getNota();
+        fecha_solicitud = LocalDate.now();
+        tiempoUso = vista.getTiempoUso();
+        articulo = vista.getEquipos();
+        cantidad = vista.getCantidad();
+        fecha_registro = vista.getFecha_recibo();
+
+
+        if(razon.isEmpty() || fecha_registro == null || tiempoUso.isEmpty() || articulo.isEmpty() || cantidad == 0){
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("ERROR");
             alerta.setContentText("Hay campos sin completar");
@@ -47,14 +57,15 @@ public class ControladorSolicitudes {
 
     public void agregarArticulo() {
         if(verificarCampos()){
-
+            System.out.println("ola1");
         }
     }
 
     public void enviarSolicitud() {
+        System.out.println("ola");
         if(verificarCampos()){
             try{
-                Solicitud solicitud = new Solicitud(id_usuario,fecha_solicitud, articulo, cantidad, null, tiempoUso, razon, "Pendiente");
+                Solicitud solicitud = new Solicitud(id_usuario,fecha_solicitud, articulo, cantidad, fecha_registro, tiempoUso, razon, "pendiente");
                 solicitudDao.create(solicitud);
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                 alerta.setHeaderText("ÉXTIO");

@@ -11,7 +11,7 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
     @Override
     public void create(Solicitud solicitud) throws Exception {
-        String sql="INSERT INTO SOLITCITUD (ID_USUARIO, FECHA_SOLICITUD, ARTICULO, CANTIDAD," +
+        String sql="INSERT INTO SOLICITUD (ID_USUARIO, FECHA_SOLICITUD, ARTICULO, CANTIDAD," +
                 "FECHA_RECIBO, TIEMPO_USO, RAZON_USO, ESTADO) " +
                 "VALUES (?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, ?)";
         try {
