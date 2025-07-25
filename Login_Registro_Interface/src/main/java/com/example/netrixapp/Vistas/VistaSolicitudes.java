@@ -39,7 +39,6 @@ public class VistaSolicitudes {
     TipoEquipoDaoImpl tipoEquipoDao = new TipoEquipoDaoImpl();
     EquipoDaoImpl equipoDao = new EquipoDaoImpl();
 
-
     // Colores mejorados para mejor contraste
     private final String COLOR_ACCION_PRINCIPAL = "#2980B9";
     private final String COLOR_PELIGRO = "#C0392B";
@@ -69,16 +68,12 @@ public class VistaSolicitudes {
         return spTiempoUso.getValue().toString().trim();
     }
 
-    public String getTipoEquipo() {
-        return cbTipoEquipo.getSelectionModel().getSelectedItem().toString();
-    }
-
     public String getEquipos() {
         return cbEquipos.getSelectionModel().getSelectedItem().toString();
     }
 
-    public String getCantidad() {
-        return spCantidad.getValue().toString().trim();
+    public int getCantidad() {
+        return spCantidad.getValue().intValue();
     }
 
     public void setSpCantidad(Spinner<Integer> spCantidad) {
