@@ -5,8 +5,8 @@ import java.time.LocalTime;
 
 public class Solicitud {
 
-    private int id_solitictud;
     private int id_usuario;
+    private int id_solitictud;
     private LocalDate fecha_solicitud;
     private String articulo;
     private int cantidad;
@@ -14,6 +14,17 @@ public class Solicitud {
     private String tiempo_uso;
     private String razon;
     private String estado;
+
+    public Solicitud(int id_usuario, LocalDate fecha_solicitud, String articulo, int cantidad, LocalDate fecha_recibo, String tiempo_uso, String razon, String estado) {
+        this.id_usuario = id_usuario;
+        this.fecha_solicitud = fecha_solicitud;
+        this.articulo = articulo;
+        this.cantidad = cantidad;
+        this.fecha_recibo = fecha_recibo;
+        this.tiempo_uso = tiempo_uso;
+        this.razon = razon;
+        this.estado = estado;
+    }
 
     public int getId_usuario() {
         return id_usuario;

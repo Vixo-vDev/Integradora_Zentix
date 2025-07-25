@@ -19,7 +19,6 @@ public class ControladorRegistro {
     }
 
     public void registrarUsuario() {
-        System.out.println("ola");
         try {
             String nombre = vista.getNombre();
             String apellidos = vista.getApellidos();
