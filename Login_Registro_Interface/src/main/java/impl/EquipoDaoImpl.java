@@ -36,7 +36,6 @@ public class EquipoDaoImpl implements IEquipoDao {
                 equipo.setTipo_equipo(rs.getInt("ID_TIPO_EQUIPO"));
 
                 equipos.add(equipo);
-                System.out.println("Equipos encontrados: " + equipos.size());
 
             }
             return equipos;

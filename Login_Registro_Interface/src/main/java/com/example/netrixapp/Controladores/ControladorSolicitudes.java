@@ -41,7 +41,7 @@ public class ControladorSolicitudes {
         fecha_registro = vista.getFecha_recibo();
 
 
-        if(razon.isEmpty() || fecha_registro == null || tiempoUso.isEmpty() || articulo.isEmpty() || cantidad == 0){
+        if(razon.isEmpty() || fecha_registro == null || tiempoUso.isEmpty() || articulo.isEmpty() || articulo == "" || cantidad == 0 ){
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("ERROR");
             alerta.setContentText("Hay campos sin completar");

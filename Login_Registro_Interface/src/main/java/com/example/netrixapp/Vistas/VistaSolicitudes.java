@@ -69,11 +69,13 @@ public class VistaSolicitudes {
     }
 
     public String getEquipos() {
-        return cbEquipos.getSelectionModel().getSelectedItem().toString();
+        String seleccionado = cbEquipos.getSelectionModel().getSelectedItem();
+        return (seleccionado != null) ? seleccionado : "";
     }
 
     public int getCantidad() {
-        return spCantidad.getValue().intValue();
+        Integer valor = spCantidad.getValue();
+        return (valor != null) ? valor : 0;
     }
 
     public void setSpCantidad(Spinner<Integer> spCantidad) {
