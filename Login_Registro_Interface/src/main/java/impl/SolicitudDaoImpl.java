@@ -3,9 +3,12 @@ package impl;
 import Dao.ISolicitudDao;
 import com.example.netrixapp.Controladores.ConnectionBD;
 import com.example.netrixapp.Modelos.Solicitud;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class SolicitudDaoImpl implements ISolicitudDao {
 
@@ -33,9 +36,61 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     }
 
     @Override
-    public int totalSolicitudes() {
+    public int totalSolicitudes(int id_usuario) {
         int totalSolicitudes=0;
-        String sql = "SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE id_usuario = 28;";
+        String sql = "SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE id_usuario = ?";
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,id_usuario);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                totalSolicitudes = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return totalSolicitudes;
+    }
+
+    @Override
+    public int totalRechazados(int id_usuario) {
+        int totalRechazados=0;
+        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'rechazado'";
+
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                totalRechazados = rs.getInt(1);
+            }
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return totalRechazados;
+    }
+
+    @Override
+    public int total_pendientes(int id_usuario) {
+        int total_pendiente=0;
+        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'pendiente'";
+
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                total_pendiente = rs.getInt(1);
+            }
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return total_pendiente;
     }
 }
