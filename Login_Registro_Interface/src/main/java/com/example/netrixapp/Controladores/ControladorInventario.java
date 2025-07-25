@@ -8,8 +8,6 @@ import java.util.List;
 
 public class ControladorInventario {
     private VistaInventario vista;
-
-
     private final EquipoDaoImpl equipoDao;
 
     public ControladorInventario(VistaInventario vista) {

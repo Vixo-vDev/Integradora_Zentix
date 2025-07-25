@@ -13,12 +13,15 @@ import javafx.scene.layout.*;
 import java.util.List;
 
 public class VistaInventario {
-    EquipoDaoImpl equipoDao = new EquipoDaoImpl();
-
+    private EquipoDaoImpl equipoDao = new EquipoDaoImpl();
 
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
     private TableView<Equipo> tablaEquipos;
+    private Pagination paginador;
+    private List<Equipo> todosLosEquipos;
+
+    private static final int FILAS_POR_PAGINA = 50;
 
     private final String COLOR_TEXTO_OSCURO = "#2C3E50";
     private final String COLOR_TEXTO_NORMAL = "#4B5563";
@@ -63,7 +66,10 @@ public class VistaInventario {
         tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         configurarColumnasTabla();
 
-        contenido.getChildren().addAll(filaMetricas, separator, lblTituloTabla, tablaEquipos);
+        paginador = new Pagination();
+        paginador.setPageFactory(this::crearPagina);
+
+        contenido.getChildren().addAll(filaMetricas, separator, lblTituloTabla, paginador);
         vista.setCenter(contenido);
     }
 
@@ -84,8 +90,8 @@ public class VistaInventario {
     }
 
     private void configurarColumnasTabla() {
-        TableColumn<Equipo, String> colidEquipo = new TableColumn<>("Código Bien");
-        colidEquipo.setCellValueFactory(new PropertyValueFactory<>("Id_equipo"));
+        TableColumn<Equipo, Integer> colIdEquipo = new TableColumn<>("ID Equipo");
+        colIdEquipo.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
 
         TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código Bien");
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
@@ -105,16 +111,30 @@ public class VistaInventario {
         TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
         colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
 
-        TableColumn<Equipo, Integer> coltipoEquipo = new TableColumn<>("Disponible");
-        coltipoEquipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
+        TableColumn<Equipo, Integer> colTipoEquipo = new TableColumn<>("Tipo de Equipo");
+        colTipoEquipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
 
-        tablaEquipos.getColumns().addAll(colidEquipo, colDescripcion, colMarca, colModelo, colNumeroSerie, colDisponible, coltipoEquipo);
+        tablaEquipos.getColumns().addAll(colIdEquipo, colCodigo, colDescripcion, colMarca, colModelo, colNumeroSerie, colDisponible, colTipoEquipo);
     }
 
-    // Método para actualizar la tabla desde el controlador
+    public VBox crearPagina(int pageIndex) {
+        int fromIndex = pageIndex * FILAS_POR_PAGINA;
+        int toIndex = Math.min(fromIndex + FILAS_POR_PAGINA, todosLosEquipos.size());
+
+        tablaEquipos.getItems().setAll(todosLosEquipos.subList(fromIndex, toIndex));
+
+        VBox pagina = new VBox(tablaEquipos);
+        return pagina;
+    }
+
+    // Se llama desde el controlador para actualizar la vista
     public void mostrarEquipos(List<Equipo> equipos) {
-        tablaEquipos.getItems().clear();
-        tablaEquipos.getItems().addAll(equipos);
+        this.todosLosEquipos = equipos;
+
+        int totalPaginas = (int) Math.ceil((double) equipos.size() / FILAS_POR_PAGINA);
+        paginador.setPageCount(totalPaginas);
+        paginador.setCurrentPageIndex(0);
+        paginador.setPageFactory(this::crearPagina); // asegura refresco
     }
 
     public BorderPane getVista() {
