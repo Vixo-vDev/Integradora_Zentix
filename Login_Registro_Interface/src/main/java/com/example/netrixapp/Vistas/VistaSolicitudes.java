@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,17 @@ public class VistaSolicitudes {
 
     String descripcion = "";
     int cantidad = 0;
+
+    //Variables de formulario
     private Button btnAgregar;
     private Button btnEnviar;
+    private TextField tfNota;
+    private DatePicker dpFecha;
+    private Spinner<Integer> spTiempoUso;
+    private ComboBox<String> cbTipoEquipo;
+    private ComboBox<String> cbEquipos;
+    private Spinner<Integer> spCantidad;
+
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
     TipoEquipoDaoImpl tipoEquipoDao = new TipoEquipoDaoImpl();
@@ -45,6 +55,34 @@ public class VistaSolicitudes {
 
     public Button getBtnEnviar() {
         return btnEnviar;
+    }
+
+    public String getNota() {
+        return tfNota.getText().trim();
+    }
+
+    public LocalDate getFecha() {
+        return dpFecha.getValue();
+    }
+
+    public String getTiempoUso() {
+        return spTiempoUso.getValue().toString().trim();
+    }
+
+    public String getTipoEquipo() {
+        return cbTipoEquipo.getSelectionModel().getSelectedItem().toString();
+    }
+
+    public String getEquipos() {
+        return cbEquipos.getSelectionModel().getSelectedItem().toString();
+    }
+
+    public String getCantidad() {
+        return spCantidad.getValue().toString().trim();
+    }
+
+    public void setSpCantidad(Spinner<Integer> spCantidad) {
+        this.spCantidad = spCantidad;
     }
 
     public VistaSolicitudes(ControladorBarraNavegacion controladorBarra) {
@@ -183,7 +221,7 @@ public class VistaSolicitudes {
         // Fecha (DatePicker)
         Label lblFecha = new Label("Fecha:");
         lblFecha.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        DatePicker dpFecha = (DatePicker) aplicarEstilo.apply(new DatePicker());
+        dpFecha = (DatePicker) aplicarEstilo.apply(new DatePicker());
         HBox.setHgrow(dpFecha, Priority.ALWAYS);
         formulario.add(lblFecha, 1, 0);
         formulario.add(dpFecha, 1, 1);
@@ -200,7 +238,7 @@ public class VistaSolicitudes {
         // Nota (TextField)
         Label lblNota = new Label("Nota:");
         lblNota.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        TextField tfNota = (TextField) aplicarEstilo.apply(new TextField());
+        tfNota = (TextField) aplicarEstilo.apply(new TextField());
         HBox.setHgrow(tfNota, Priority.ALWAYS);
         formulario.add(lblNota, 1, 2);
         formulario.add(tfNota, 1, 3);
@@ -208,7 +246,7 @@ public class VistaSolicitudes {
         // Tiempo de uso (Spinner)
         Label lblTiempoUso = new Label("Tiempo de Uso (horas):");
         lblTiempoUso.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        Spinner<Integer> spTiempoUso = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
+        spTiempoUso = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
         spTiempoUso.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8));
         HBox.setHgrow(spTiempoUso, Priority.ALWAYS);
         formulario.add(lblTiempoUso, 0, 4);
@@ -217,7 +255,7 @@ public class VistaSolicitudes {
         // Label y ComboBox para tipo de equipo
         Label lblTipoEquipo = new Label("Tipo de equipo:");
         lblTipoEquipo.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        ComboBox<String> cbTipoEquipo = new ComboBox<>();
+        cbTipoEquipo = new ComboBox<>();
         cbTipoEquipo.setEditable(true); // permite escritura para búsqueda predictiva
         HBox.setHgrow(cbTipoEquipo, Priority.ALWAYS);
         formulario.add(lblTipoEquipo, 0, 0);
@@ -231,14 +269,14 @@ public class VistaSolicitudes {
         // ComboBox de equipos filtrado
         Label lblEquipos = new Label("Equipos disponibles:");
         lblEquipos.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        ComboBox<String> cbEquipos = new ComboBox<>();
+        cbEquipos = new ComboBox<>();
         HBox.setHgrow(cbEquipos, Priority.ALWAYS);
         formulario.add(lblEquipos, 0, 9);
         formulario.add(cbEquipos, 0, 10);
 
         Label lblCantidad = new Label("Cantidad:");
         lblCantidad.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
-        Spinner<Integer> spCantidad = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
+        spCantidad = (Spinner<Integer>) aplicarEstilo.apply(new Spinner<>());
         HBox.setHgrow(spCantidad, Priority.ALWAYS);
         formulario.add(lblCantidad, 0, 2);
         formulario.add(spCantidad, 0, 3);
@@ -254,8 +292,6 @@ public class VistaSolicitudes {
 
 
         // DAO para obtener los tipos de equipo y equipos
-
-
         // Map para vincular nombre ↔ ID de tipo equipo
         Map<String, Integer> tipoNombreToId = new HashMap<>();
         Map<Integer, String> tipoIdToNombre = new HashMap<>();
