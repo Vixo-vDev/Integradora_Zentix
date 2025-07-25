@@ -1,9 +1,14 @@
 package com.example.netrixapp.Controladores;
 
+import com.example.netrixapp.HelloApplication;
 import com.example.netrixapp.Modelos.Usuario;
+import com.example.netrixapp.Vistas.VistaLogin;
 import com.example.netrixapp.Vistas.VistaRegistro;
 import impl.UsuarioDaoImpl;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
@@ -47,10 +52,22 @@ public class ControladorRegistro {
 
             else if(password.equals(confirmarPassword)){
                 usuarioDao.create(usuario);
-                Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-                alerta.setHeaderText("Registro exitoso");
-                alerta.setContentText("Tu cuenta ha sido registrada.");
-                alerta.showAndWait();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Registro exitoso");
+
+                ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                ButtonType btnConfirmar = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+                alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
+
+                if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+                    if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+
+                        Stage stage = (Stage) vista.getBotonContinuar().getScene().getWindow();
+                        VistaLogin siguienteVentana = new VistaLogin();
+                        siguienteVentana.start(stage);
+                    }
+                }
             }
             else{
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);

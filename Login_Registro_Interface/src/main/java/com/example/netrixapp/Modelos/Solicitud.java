@@ -15,6 +15,9 @@ public class Solicitud {
     private String razon;
     private String estado;
 
+    public Solicitud() {
+
+    }
     public Solicitud(int id_usuario, LocalDate fecha_solicitud, String articulo, int cantidad, LocalDate fecha_recibo, String tiempo_uso, String razon, String estado) {
         this.id_usuario = id_usuario;
         this.fecha_solicitud = fecha_solicitud;

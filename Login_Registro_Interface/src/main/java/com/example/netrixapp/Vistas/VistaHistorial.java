@@ -8,6 +8,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 public class VistaHistorial {
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
@@ -86,7 +88,7 @@ public class VistaHistorial {
 
         // Columnas de la tabla
         TableColumn<Solicitud, String> columnaID = new TableColumn<>("ID");
-        columnaID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnaID.setCellValueFactory(new PropertyValueFactory<>("id_solicitud"));
         columnaID.setPrefWidth(80);
 
         TableColumn<Solicitud, String> columnaArticulo = new TableColumn<>("Artículo");
@@ -98,7 +100,7 @@ public class VistaHistorial {
         columnaCantidad.setPrefWidth(100);
 
         TableColumn<Solicitud, String> columnaFecha = new TableColumn<>("Fecha");
-        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha_solicitud"));
         columnaFecha.setPrefWidth(120);
 
         TableColumn<Solicitud, String> columnaEstado = new TableColumn<>("Estado");
@@ -110,15 +112,15 @@ public class VistaHistorial {
                 columnaCantidad, columnaFecha, columnaEstado);
 
         // Datos de ejemplo
-        tablaHistorial.getItems().addAll(
-                new Solicitud("001", "Laptop HP", 2, "2023-05-15", "Aprobado"),
-                new Solicitud("002", "Monitor 24\"", 1, "2023-05-10", "Pendiente"),
-                new Solicitud("003", "Teclado inalámbrico", 5, "2023-05-05", "Rechazado")
-        );
+
 
         // Construir vista completa
         contenido.getChildren().addAll(panelFiltros, tablaHistorial);
         vista.setCenter(contenido);
+    }
+
+    public void mostrarHistorial(List<Solicitud> solicitud) {
+        this.
     }
 
     public BorderPane getVista() {

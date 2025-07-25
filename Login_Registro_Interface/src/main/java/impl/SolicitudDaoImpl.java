@@ -2,6 +2,7 @@ package impl;
 
 import Dao.ISolicitudDao;
 import com.example.netrixapp.Controladores.ConnectionBD;
+import com.example.netrixapp.Modelos.Equipo;
 import com.example.netrixapp.Modelos.Solicitud;
 import oracle.jdbc.proxy.annotation.Pre;
 
@@ -9,8 +10,40 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SolicitudDaoImpl implements ISolicitudDao {
+
+
+    @Override
+    public List<Solicitud> findAll(int id_usuario){
+        String sql="SELECT * FROM SOLICITUD WHERE id_usuario = ? ORDER BY ID_SOLICITUD ASC";
+        List<Solicitud> solicitudes= new ArrayList<>();
+
+        try {
+            Connection con= ConnectionBD.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,id_usuario);
+            ResultSet rs= ps.executeQuery();
+            while(rs.next()){
+                Solicitud solicitud =new Solicitud();
+
+                solicitud.setId_solitictud(rs.getInt("ID_SOLICITUD"));
+                solicitud.setFecha_solicitud(LocalDate.parse(rs.getDate("FECHA_SOLICITUD").toString()));
+                solicitud.setArticulo(rs.getString("ARTICULO"));
+                solicitud.setCantidad(rs.getInt("CANTIDAD"));
+                solicitud.setEstado(rs.getString("ESTADO"));
+                solicitudes.add(solicitud);
+
+            }
+            return solicitudes;
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void create(Solicitud solicitud) throws Exception {
