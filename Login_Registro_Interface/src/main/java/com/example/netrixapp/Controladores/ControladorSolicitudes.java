@@ -40,7 +40,6 @@ public class ControladorSolicitudes {
         cantidad = vista.getCantidad();
         fecha_registro = vista.getFecha_recibo();
 
-
         if(razon.isEmpty() || fecha_registro == null || tiempoUso.isEmpty() || articulo.isEmpty() || articulo == "" || cantidad == 0 ){
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("ERROR");
@@ -57,11 +56,12 @@ public class ControladorSolicitudes {
 
     public void agregarArticulo() {
         if(verificarCampos()){
-            System.out.println("ola1");
+            Solicitud solicitud = new Solicitud(id_usuario,fecha_solicitud, articulo, cantidad, fecha_registro, tiempoUso, razon, "pendiente");
+
         }
     }
 
-    public void enviarSolicitud() {
+    public boolean enviarSolicitud() {
         System.out.println("ola");
         if(verificarCampos()){
             try{
@@ -71,9 +71,18 @@ public class ControladorSolicitudes {
                 alerta.setHeaderText("ÉXTIO");
                 alerta.setContentText("Solicitud enviada con éxito");
                 alerta.showAndWait();
+
+                vista.getTfNota().clear(); // si defines un método específico, o accedes directamente
+                vista.getDpFecha_recibo().setValue(null);
+                vista.getSpTiempoUso().getValueFactory().setValue(8); // o el valor por defecto que uses
+                vista.getCbTipoEquipo().getSelectionModel().clearSelection();
+                vista.getCbEquipos().getSelectionModel().clearSelection();
+                vista.getSpCantidad().getValueFactory().setValue(1);
+                return true;
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
+            return false;
     }
 }

@@ -73,6 +73,30 @@ public class VistaSolicitudes {
         return (seleccionado != null) ? seleccionado : "";
     }
 
+    public TextField getTfNota() {
+        return tfNota;
+    }
+
+    public DatePicker getDpFecha_recibo() {
+        return dpFecha_recibo;
+    }
+
+    public Spinner<Integer> getSpTiempoUso() {
+        return spTiempoUso;
+    }
+
+    public ComboBox<String> getCbTipoEquipo() {
+        return cbTipoEquipo;
+    }
+
+    public Spinner<Integer> getSpCantidad() {
+        return spCantidad;
+    }
+
+    public ComboBox<String> getCbEquipos() {
+        return cbEquipos;
+    }
+
     public int getCantidad() {
         Integer valor = spCantidad.getValue();
         return (valor != null) ? valor : 0;

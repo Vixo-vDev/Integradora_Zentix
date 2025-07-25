@@ -31,4 +31,11 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int totalSolicitudes() {
+        int totalSolicitudes=0;
+        String sql = "SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE id_usuario = 28;";
+        return totalSolicitudes;
+    }
 }

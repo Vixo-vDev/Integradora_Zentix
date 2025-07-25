@@ -91,7 +91,7 @@ public class VistaHistorial {
 
         TableColumn<Solicitud, String> columnaArticulo = new TableColumn<>("Artículo");
         columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
-        columnaArticulo.setPrefWidth(200);
+        columnaArticulo.setPrefWidth(400);
 
         TableColumn<Solicitud, Integer> columnaCantidad = new TableColumn<>("Cantidad");
         columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
