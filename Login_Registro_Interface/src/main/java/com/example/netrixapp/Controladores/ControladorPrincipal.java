@@ -1,8 +1,10 @@
 package com.example.netrixapp.Controladores;
 
 import com.example.netrixapp.HelloApplication;
+import com.example.netrixapp.Modelos.Usuario;
 import com.example.netrixapp.Vistas.*;
 import impl.EquipoDaoImpl;
+import impl.SolicitudDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,7 +21,12 @@ import oracle.jdbc.internal.XSCacheOutput;
 
 
 public class ControladorPrincipal {
+
+    Usuario usuario = SesionUsuario.getUsuarioActual();
+    int id_usuario = usuario.getId_usuario();
     EquipoDaoImpl equipoDao = new EquipoDaoImpl();
+    SolicitudDaoImpl solicitudDao = new SolicitudDaoImpl();
+
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
 
@@ -62,15 +69,15 @@ public class ControladorPrincipal {
         filaCards.getChildren().add(cardArticulos);
 
         // Card de Solicitudes
-        VBox cardSolicitudes = crearCardMetrica("Solicitudes", "200");
+        VBox cardSolicitudes = crearCardMetrica("Solicitudes", String.valueOf(solicitudDao.totalSolicitudes(id_usuario)));
         filaCards.getChildren().add(cardSolicitudes);
 
         // Card de Pendientes
-        VBox cardPendientes = crearCardMetrica("Pendientes", "200");
+        VBox cardPendientes = crearCardMetrica("Pendientes", String.valueOf(solicitudDao.total_pendientes(id_usuario)));
         filaCards.getChildren().add(cardPendientes);
 
         // Card de Rechazados
-        VBox cardRechazados = crearCardMetrica("Rechazados", "200");
+        VBox cardRechazados = crearCardMetrica("Rechazados", String.valueOf(solicitudDao.totalRechazados(id_usuario)));
         filaCards.getChildren().add(cardRechazados);
 
         // Ajustar el crecimiento horizontal de las cards

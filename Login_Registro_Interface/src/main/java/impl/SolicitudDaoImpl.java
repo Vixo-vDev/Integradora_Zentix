@@ -57,11 +57,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     @Override
     public int totalRechazados(int id_usuario) {
         int totalRechazados=0;
-        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'rechazado'";
+        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'rechazado' and  id_usuario = ?";
 
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,id_usuario);
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
@@ -77,11 +78,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     @Override
     public int total_pendientes(int id_usuario) {
         int total_pendiente=0;
-        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'pendiente'";
+        String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'pendiente' and   id_usuario = ?";
 
         try{
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,id_usuario);
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
