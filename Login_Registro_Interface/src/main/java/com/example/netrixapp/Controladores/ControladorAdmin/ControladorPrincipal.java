@@ -1,5 +1,7 @@
 package com.example.netrixapp.Controladores.ControladorAdmin;
 
+import com.example.netrixapp.Controladores.SesionUsuario;
+import com.example.netrixapp.Vistas.VistaLogin;
 import com.example.netrixapp.Vistas.VistasAdmin.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +11,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 public class ControladorPrincipal {
     private final VistaPrincipal vista;
@@ -220,7 +223,13 @@ public class ControladorPrincipal {
         alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
 
         if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-            System.exit(0);
+            if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+
+                SesionUsuario.cerrarSesion();
+                Stage stage = (Stage) vista.getRaiz().getScene().getWindow();
+                VistaLogin login = new VistaLogin();
+                login.start(stage);
+            }
         }
     }
 }

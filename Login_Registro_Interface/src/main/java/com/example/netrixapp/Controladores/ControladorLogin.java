@@ -1,7 +1,7 @@
 package com.example.netrixapp.Controladores;
 
-
 import com.example.netrixapp.HelloApplication;
+import com.example.netrixapp.HelloApplicationAdmin;
 import com.example.netrixapp.Modelos.Usuario;
 import com.example.netrixapp.Vistas.VistaLogin;
 import impl.UsuarioDaoImpl;
@@ -34,10 +34,19 @@ public class ControladorLogin {
             }
 
             else if(usuario != null){
-                SesionUsuario.setUsuarioActual(usuario);
-                Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
-                HelloApplication siguienteVentana = new HelloApplication();
-                siguienteVentana.start(stage);
+                if(user.equals("veronicasanchez@utez.edu.mx") || pass.equals("adminveronica")){
+                    SesionUsuario.setUsuarioActual(usuario);
+                    Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
+                    HelloApplicationAdmin siguienteVentana = new HelloApplicationAdmin();
+                    siguienteVentana.start(stage);
+                }
+                else{
+                    SesionUsuario.setUsuarioActual(usuario);
+                    Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
+                    HelloApplication siguienteVentana = new HelloApplication();
+                    siguienteVentana.start(stage);
+                }
+
             }
             else{
                 Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
