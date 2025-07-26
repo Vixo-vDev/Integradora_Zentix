@@ -27,10 +27,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             PreparedStatement ps=con.prepareStatement(sql);
             ps.setInt(1,id_usuario);
             ResultSet rs= ps.executeQuery();
+
+            System.out.println("Ejecutando consulta para usuario ID: " + id_usuario);
             while(rs.next()){
                 Solicitud solicitud =new Solicitud();
 
-                solicitud.setId_solitictud(rs.getInt("ID_SOLICITUD"));
+                solicitud.setId_solicitud(rs.getInt("ID_SOLICITUD"));
                 solicitud.setFecha_solicitud(LocalDate.parse(rs.getDate("FECHA_SOLICITUD").toString()));
                 solicitud.setArticulo(rs.getString("ARTICULO"));
                 solicitud.setCantidad(rs.getInt("CANTIDAD"));
@@ -38,12 +40,59 @@ public class SolicitudDaoImpl implements ISolicitudDao {
                 solicitudes.add(solicitud);
 
             }
+            System.out.println("Total solicitudes encontradas: " + solicitudes.size());
             return solicitudes;
-            
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Solicitud> findByFilters(int id_usuario, String estado, LocalDate desde, LocalDate hasta) {
+        List<Solicitud> solicitudes = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM SOLICITUD WHERE id_usuario = ?");
+        if (estado != null && !estado.equalsIgnoreCase("Todos")) {
+            sql.append(" AND LOWER(estado) = LOWER(?)");
+        }
+        if (desde != null) {
+            sql.append(" AND fecha_solicitud >= ?");
+        }
+        if (hasta != null) {
+            sql.append(" AND fecha_solicitud <= ?");
+        }
+        sql.append(" ORDER BY id_solicitud ASC");
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            int index = 1;
+            ps.setInt(index++, id_usuario);
+            if (estado != null && !estado.equalsIgnoreCase("Todos")) {
+                ps.setString(index++, estado);
+            }
+            if (desde != null) {
+                ps.setDate(index++, java.sql.Date.valueOf(desde));
+            }
+            if (hasta != null) {
+                ps.setDate(index++, java.sql.Date.valueOf(hasta));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Solicitud s = new Solicitud();
+                s.setId_solicitud(rs.getInt("id_solicitud"));
+                s.setFecha_solicitud(rs.getDate("fecha_solicitud").toLocalDate());
+                s.setArticulo(rs.getString("articulo"));
+                s.setCantidad(rs.getInt("cantidad"));
+                s.setEstado(rs.getString("estado"));
+                solicitudes.add(s);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return solicitudes;
+    }
+
 
     @Override
     public void create(Solicitud solicitud) throws Exception {

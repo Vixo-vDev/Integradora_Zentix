@@ -1,6 +1,8 @@
 package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.ControladorHistorial;
+import com.example.netrixapp.Modelos.Solicitud;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,68 +13,91 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 
 public class VistaHistorial {
+
+    private Button btnAplicar;
+    private Button btnLimpiar;
+    private DatePicker datePickerInicio;
+    private DatePicker datePickerFin;
+    private ComboBox<String> comboEstado;
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
+
+    private TableView<Solicitud> tablaHistorial;
+    private Pagination paginador;
+    private List<Solicitud> todosLasSolicitudes;
+    private static final int FILAS_POR_PAGINA = 50;
+
+    private VBox contenedorPrincipal;
 
     // Colores
     private final String COLOR_TEXTO_OSCURO = "#2C3E50";
     private final String COLOR_BOTON_NORMAL = "#E5E7EB";
     private final String COLOR_BOTON_ACCION = "#3B82F6";
 
+    public Button getBtnLimpiar() {
+        return btnLimpiar;
+    }
+
+    public Button getBtnAplicar() {
+        return btnAplicar;
+    }
+
+    public String getdateInicio(){
+        return datePickerInicio.getValue() != null ? datePickerInicio.getValue().toString() : null;
+    }
+
+    public String getdateFin(){
+        return datePickerFin.getValue() != null ? datePickerFin.getValue().toString() : null;
+    }
+
+    public String getComboEstado(){
+        return comboEstado.getValue();
+    }
+
     public VistaHistorial(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
         this.vista = new BorderPane();
         inicializarUI();
+
+        // 👇 Aquí se llama al controlador para que cargue los datos
+        new ControladorHistorial(this);
     }
 
     private void inicializarUI() {
         vista.setStyle("-fx-background-color: transparent;");
-
-        // Barra superior
         vista.setTop(controladorBarra.getBarraSuperior());
-
-        // Barra lateral
         vista.setLeft(controladorBarra.getBarraLateral());
 
-        // Contenido principal
-        VBox contenido = new VBox(20);
-        contenido.setPadding(new Insets(20));
-        contenido.setStyle("-fx-background-color: transparent;");
+        contenedorPrincipal = new VBox(20);
+        contenedorPrincipal.setPadding(new Insets(20));
+        contenedorPrincipal.setStyle("-fx-background-color: transparent;");
 
-        // 1. Panel de filtros
+        // Panel de filtros
         GridPane panelFiltros = new GridPane();
         panelFiltros.setHgap(15);
         panelFiltros.setVgap(10);
         panelFiltros.setPadding(new Insets(0, 0, 20, 0));
 
-        // Filtro por estado
         Label lblEstado = new Label("Estado");
         lblEstado.setStyle("-fx-font-size: 14px;");
-        ComboBox<String> comboEstado = new ComboBox<>();
+        comboEstado = new ComboBox<>();
         comboEstado.getItems().addAll("Todos", "Aprobado", "Pendiente", "Rechazado");
         comboEstado.setValue("Todos");
         comboEstado.setStyle("-fx-min-width: 150px;");
 
-        // Filtro por rango de fechas
         Label lblRangoFecha = new Label("Rango de fecha");
         lblRangoFecha.setStyle("-fx-font-size: 14px;");
-        DatePicker datePickerInicio = new DatePicker();
+        datePickerInicio = new DatePicker();
         datePickerInicio.setStyle("-fx-min-width: 120px;");
-        DatePicker datePickerFin = new DatePicker();
+        datePickerFin = new DatePicker();
         datePickerFin.setStyle("-fx-min-width: 120px;");
 
-        // Botones de acción
-        Button btnLimpiar = new Button("Limpiar");
-        btnLimpiar.setStyle("-fx-background-color: " + COLOR_BOTON_NORMAL + "; " +
-                "-fx-text-fill: " + COLOR_TEXTO_OSCURO + "; " +
-                "-fx-padding: 5 15;");
+        btnLimpiar = new Button("Limpiar");
+        btnLimpiar.setStyle("-fx-background-color: " + COLOR_BOTON_NORMAL + "; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-padding: 5 15;");
 
-        Button btnAplicar = new Button("Aplicar");
-        btnAplicar.setStyle("-fx-background-color: " + COLOR_BOTON_ACCION + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-padding: 5 15;");
+        btnAplicar = new Button("Aplicar");
+        btnAplicar.setStyle("-fx-background-color: " + COLOR_BOTON_ACCION + "; -fx-text-fill: white; -fx-padding: 5 15;");
 
-        // Organizar elementos en el grid
         panelFiltros.add(lblEstado, 0, 0);
         panelFiltros.add(comboEstado, 1, 0);
         panelFiltros.add(lblRangoFecha, 0, 1);
@@ -82,12 +107,12 @@ public class VistaHistorial {
         panelFiltros.add(btnLimpiar, 4, 0);
         panelFiltros.add(btnAplicar, 4, 1);
 
-        // 2. Tabla de historial
-        TableView<Solicitud> tablaHistorial = new TableView<>();
+        // Tabla
+        tablaHistorial = new TableView<>();
         tablaHistorial.setStyle("-fx-background-color: transparent;");
+        tablaHistorial.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        // Columnas de la tabla
-        TableColumn<Solicitud, String> columnaID = new TableColumn<>("ID");
+        TableColumn<Solicitud, Integer> columnaID = new TableColumn<>("ID");
         columnaID.setCellValueFactory(new PropertyValueFactory<>("id_solicitud"));
         columnaID.setPrefWidth(80);
 
@@ -107,47 +132,35 @@ public class VistaHistorial {
         columnaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
         columnaEstado.setPrefWidth(120);
 
-        // Añadir columnas a la tabla
-        tablaHistorial.getColumns().addAll(columnaID, columnaArticulo,
-                columnaCantidad, columnaFecha, columnaEstado);
+        tablaHistorial.getColumns().addAll(columnaID, columnaArticulo, columnaCantidad, columnaFecha, columnaEstado);
 
-        // Datos de ejemplo
-
-
-        // Construir vista completa
-        contenido.getChildren().addAll(panelFiltros, tablaHistorial);
-        vista.setCenter(contenido);
+        contenedorPrincipal.getChildren().addAll(panelFiltros, tablaHistorial);
+        vista.setCenter(contenedorPrincipal);
     }
 
-    public void mostrarHistorial(List<Solicitud> solicitud) {
-        this.
+    public VBox crearPagina(int pageIndex) {
+        int fromIndex = pageIndex * FILAS_POR_PAGINA;
+        int toIndex = Math.min(fromIndex + FILAS_POR_PAGINA, todosLasSolicitudes.size());
+
+        tablaHistorial.getItems().setAll(todosLasSolicitudes.subList(fromIndex, toIndex));
+
+        return new VBox(); // No se necesita retornar tabla aquí
+    }
+
+    public void mostrarHistorial(List<Solicitud> solicitudes) {
+        this.todosLasSolicitudes = solicitudes;
+
+        if (paginador != null) {
+            contenedorPrincipal.getChildren().remove(paginador);
+        }
+
+        paginador = new Pagination((int) Math.ceil((double) todosLasSolicitudes.size() / FILAS_POR_PAGINA), 0);
+        paginador.setPageFactory(this::crearPagina);
+
+        contenedorPrincipal.getChildren().add(paginador);
     }
 
     public BorderPane getVista() {
         return vista;
-    }
-
-    // Clase interna para representar las solicitudes
-    public static class Solicitud {
-        private final String id;
-        private final String articulo;
-        private final int cantidad;
-        private final String fecha;
-        private final String estado;
-
-        public Solicitud(String id, String articulo, int cantidad, String fecha, String estado) {
-            this.id = id;
-            this.articulo = articulo;
-            this.cantidad = cantidad;
-            this.fecha = fecha;
-            this.estado = estado;
-        }
-
-        // Getters necesarios para PropertyValueFactory
-        public String getId() { return id; }
-        public String getArticulo() { return articulo; }
-        public int getCantidad() { return cantidad; }
-        public String getFecha() { return fecha; }
-        public String getEstado() { return estado; }
     }
 }
