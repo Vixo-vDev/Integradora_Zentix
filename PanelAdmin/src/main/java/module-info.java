@@ -7,6 +7,8 @@ module com.example.paneladmin {
     requires org.kordamp.bootstrapfx.core;
     requires java.desktop;
 
-    opens com.example.paneladmin to javafx.fxml;
+    opens com.example.paneladmin.Vistas to javafx.fxml;
     exports com.example.paneladmin;
+    exports com.example.paneladmin.Vistas;
+    exports com.example.paneladmin.Controladores;
 }

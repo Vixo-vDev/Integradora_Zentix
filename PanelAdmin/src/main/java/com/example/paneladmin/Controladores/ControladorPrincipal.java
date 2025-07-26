@@ -1,7 +1,9 @@
 package com.example.paneladmin.Controladores;
 
 import com.example.paneladmin.DAO.ActividadDAO;
+import com.example.paneladmin.DAO.EstadisticaDAO;
 import com.example.paneladmin.DAO.Impl.ActividadDAOImpl;
+import com.example.paneladmin.DAO.Impl.EstadisticaDAOImpl;
 import com.example.paneladmin.DAO.Impl.UsuarioDAOImpl;
 import com.example.paneladmin.DAO.UsuarioDAO;
 import com.example.paneladmin.Modelo.Actividad;
@@ -243,8 +245,10 @@ public class ControladorPrincipal {
     }
 
     public void mostrarEstadisticas() {
+        EstadisticaDAO estadisticaDAO = new EstadisticaDAOImpl();
+        VistaEstadisticas vistaEstadisticas = new VistaEstadisticas(controladorBarra, estadisticaDAO);
+        actualizarVistaPrincipal(vistaEstadisticas.getVista());
         registrarActividad("Navegación", "Accedió a Estadísticas");
-        actualizarVistaPrincipal(new VistaEstadisticas(controladorBarra).getVista());
     }
 
     public void mostrarUsuarios() {

@@ -1,134 +1,250 @@
 package com.example.paneladmin.Vistas;
 
 import com.example.paneladmin.Controladores.ControladorBarraNavegacion;
+import com.example.paneladmin.DAO.EstadisticaDAO;
+import com.example.paneladmin.Modelo.Estadistica;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
+import javafx.util.Callback;
+
+import java.io.IOException;
+import java.util.List;
 
 public class VistaEstadisticas {
-    private final BorderPane vista;
+    @FXML private BorderPane vista;
+    @FXML private VBox contenidoPrincipal;
+
+    private final EstadisticaDAO estadisticaDAO;
     private final ControladorBarraNavegacion controladorBarra;
 
-    public VistaEstadisticas(ControladorBarraNavegacion controladorBarra) {
+    public VistaEstadisticas(ControladorBarraNavegacion controladorBarra, EstadisticaDAO estadisticaDAO) {
         this.controladorBarra = controladorBarra;
-        this.vista = new BorderPane();
-        inicializarUI();
+        this.estadisticaDAO = estadisticaDAO;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiseñoEstadisticas.fxml"));
+            loader.setController(this);
+            vista = loader.load();
+
+            // Cargar CSS específico
+            String cssFile = getClass().getResource("/css/EstiloEstadistica.css").toExternalForm();
+            vista.getStylesheets().add(cssFile);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar VistaEstadisticas.fxml", e);
+        }
     }
 
-    private void inicializarUI() {
-        // Configurar el layout principal con la barra de navegación
+    @FXML
+    public void initialize() {
+        configurarUI();
+        cargarEstadisticas();
+    }
+
+    private void configurarUI() {
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
-        vista.setStyle("-fx-background-color: #ECF0F1;");
-
-        // Contenido principal
-        VBox contenidoPrincipal = new VBox(20);
-        contenidoPrincipal.setPadding(new Insets(20));
-
-        // Título
-        Label lblTitulo = new Label("Estadísticas del Sistema");
-        lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
-        contenidoPrincipal.getChildren().add(lblTitulo);
-
-        // Tablas de estadísticas
-        VBox tablasContainer = new VBox(20);
-
-        // Tabla 1: Estadísticas de Usuarios
-        VBox tablaUsuarios = crearTablaDetallada(
-                "Estadísticas de Usuarios",
-                new String[]{"Métrica", "Valor", "Tendencia"},
-                new Object[][]{
-                        {"Usuarios Registrados", "142", "↑ 12.5%"},
-                        {"Usuarios Activos", "128 (90%)", "↑ 8.2%"},
-                        {"Nuevos Usuarios (30d)", "15", "↓ 2.3%"},
-                        {"Accesos Diarios Prom.", "87", "→ Estable"}
-                }
-        );
-
-        // Tabla 2: Estadísticas de Solicitudes
-        VBox tablaSolicitudes = crearTablaDetallada(
-                "Estadísticas de Solicitudes",
-                new String[]{"Tipo", "Total", "Pendientes", "Tiempo Prom."},
-                new Object[][]{
-                        {"Equipos", "56", "12", "2.3 días"},
-                        {"Software", "34", "8", "1.7 días"},
-                        {"Accesos", "22", "3", "0.5 días"},
-                        {"Otros", "15", "0", "1.2 días"}
-                }
-        );
-
-        // Tabla 3: Estadísticas de Inventario
-        VBox tablaInventario = crearTablaDetallada(
-                "Estadísticas de Inventario",
-                new String[]{"Categoría", "Total", "Disponibles", "% Disponibilidad"},
-                new Object[][]{
-                        {"Laptops", "120", "108", "90%"},
-                        {"Monitores", "85", "82", "96%"},
-                        {"Teléfonos", "65", "58", "89%"},
-                        {"Periféricos", "314", "302", "96%"}
-                }
-        );
-
-        tablasContainer.getChildren().addAll(tablaUsuarios, tablaSolicitudes, tablaInventario);
-        contenidoPrincipal.getChildren().add(tablasContainer);
-
-        // Configurar el centro del BorderPane con ScrollPane
-        ScrollPane scrollPane = new ScrollPane(contenidoPrincipal);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-
-        vista.setCenter(scrollPane);
+        vista.getStyleClass().add("raiz-estadisticas");
     }
 
-    private VBox crearTablaDetallada(String titulo, String[] columnas, Object[][] datos) {
+    private void cargarEstadisticas() {
+        contenidoPrincipal.getChildren().clear();
+
+        // Título principal
+        Label lblTitulo = new Label("Estadísticas del Sistema");
+        lblTitulo.getStyleClass().add("titulo-principal");
+        contenidoPrincipal.getChildren().add(lblTitulo);
+
+        // Cargar estadísticas por categoría
+        cargarEstadisticasPorCategoria("Usuarios");
+        cargarEstadisticasPorCategoria("Solicitudes");
+        cargarEstadisticasPorCategoria("Inventario");
+    }
+
+    private void cargarEstadisticasPorCategoria(String categoria) {
+        List<Estadistica> stats = estadisticaDAO.obtenerPorCategoria(categoria);
+
         VBox contenedorTabla = new VBox(10);
-        contenedorTabla.setPadding(new Insets(15));
-        contenedorTabla.setStyle("-fx-background-color: white; -fx-background-radius: 8;");
+        contenedorTabla.getStyleClass().add("contenedor-tabla");
 
-        Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        Label lblTitulo = new Label("Estadísticas de " + categoria);
+        lblTitulo.getStyleClass().add("titulo-seccion");
 
-        TableView<Object[]> tabla = new TableView<>();
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tabla.setStyle("-fx-font-size: 14px;");
+        TableView<Estadistica> tabla = new TableView<>();
+        tabla.getStyleClass().add("tabla-estadisticas");
 
-        // Crear columnas dinámicamente
-        for (int i = 0; i < columnas.length; i++) {
-            final int colIndex = i;
-            TableColumn<Object[], String> columna = new TableColumn<>(columnas[i]);
-            columna.setCellValueFactory(data -> {
-                Object value = data.getValue()[colIndex];
-                return new javafx.beans.property.SimpleStringProperty(value == null ? "" : value.toString());
-            });
-            tabla.getColumns().add(columna);
-        }
+        // Configurar columnas
+        TableColumn<Estadistica, String> colMetrica = new TableColumn<>("Métrica");
+        colMetrica.setCellValueFactory(new PropertyValueFactory<>("metrica"));
+        colMetrica.setPrefWidth(200);
 
-        // Agregar datos
-        for (Object[] fila : datos) {
-            tabla.getItems().add(fila);
-        }
+        TableColumn<Estadistica, String> colValor = new TableColumn<>("Valor");
+        colValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
+        colValor.setPrefWidth(150);
 
-        tabla.setRowFactory(tv -> new TableRow<Object[]>() {
+        TableColumn<Estadistica, String> colTendencia = new TableColumn<>("Tendencia");
+        colTendencia.setCellValueFactory(new PropertyValueFactory<>("tendencia"));
+        colTendencia.setPrefWidth(150);
+
+        // Aplicar estilo a la columna de tendencia
+        colTendencia.setCellFactory(new Callback<>() {
             @Override
-            protected void updateItem(Object[] item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setStyle("");
-                } else {
-                    if (getIndex() % 2 == 0) {
-                        setStyle("-fx-background-color: #F8F9F9;");
-                    } else {
-                        setStyle("-fx-background-color: white;");
+            public TableCell<Estadistica, String> call(TableColumn<Estadistica, String> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                        } else {
+                            setText(item);
+                            if (item.startsWith("↑")) {
+                                getStyleClass().add("tendencia-positiva");
+                            } else if (item.startsWith("↓")) {
+                                getStyleClass().add("tendencia-negativa");
+                            } else {
+                                getStyleClass().add("tendencia-neutral");
+                            }
+                        }
                     }
-                }
+                };
             }
         });
 
-        contenedorTabla.getChildren().addAll(lblTitulo, tabla);
-        return contenedorTabla;
+        tabla.getColumns().addAll(colMetrica, colValor, colTendencia);
+
+        // Agregar datos
+        ObservableList<Estadistica> datos = FXCollections.observableArrayList(stats);
+        tabla.setItems(datos);
+
+        // Botones CRUD
+        HBox contenedorBotones = new HBox(10);
+        contenedorBotones.getStyleClass().add("contenedor-botones");
+
+        Button btnAgregar = new Button("Agregar");
+        btnAgregar.getStyleClass().addAll("boton-operacion", "boton-agregar");
+        btnAgregar.setOnAction(e -> mostrarFormularioEdicion(null, categoria));
+
+        Button btnEditar = new Button("Editar");
+        btnEditar.getStyleClass().addAll("boton-operacion", "boton-editar");
+        btnEditar.setOnAction(e -> {
+            Estadistica seleccionada = tabla.getSelectionModel().getSelectedItem();
+            if (seleccionada != null) {
+                mostrarFormularioEdicion(seleccionada, categoria);
+            } else {
+                mostrarAlerta("Selección requerida", "Por favor seleccione una estadística para editar.");
+            }
+        });
+
+        Button btnEliminar = new Button("Eliminar");
+        btnEliminar.getStyleClass().addAll("boton-operacion", "boton-eliminar");
+        btnEliminar.setOnAction(e -> {
+            Estadistica seleccionada = tabla.getSelectionModel().getSelectedItem();
+            if (seleccionada != null) {
+                confirmarEliminacion(seleccionada);
+            } else {
+                mostrarAlerta("Selección requerida", "Por favor seleccione una estadística para eliminar.");
+            }
+        });
+
+        contenedorBotones.getChildren().addAll(btnAgregar, btnEditar, btnEliminar);
+        contenedorTabla.getChildren().addAll(lblTitulo, tabla, contenedorBotones);
+        contenidoPrincipal.getChildren().add(contenedorTabla);
+    }
+
+    private void mostrarFormularioEdicion(Estadistica estadistica, String categoria) {
+        Dialog<Estadistica> dialog = new Dialog<>();
+        dialog.setTitle(estadistica == null ? "Agregar Estadística" : "Editar Estadística");
+        dialog.getDialogPane().getStyleClass().add("dialogo-formulario");
+
+        // Configurar botones
+        ButtonType btnGuardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
+
+        // Crear formulario
+        GridPane grid = new GridPane();
+        grid.getStyleClass().add("grid-pane");
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 10, 10, 10));
+
+        TextField txtMetrica = new TextField();
+        TextField txtValor = new TextField();
+        TextField txtTendencia = new TextField();
+
+        if (estadistica != null) {
+            txtMetrica.setText(estadistica.getMetrica());
+            txtValor.setText(estadistica.getValor());
+            txtTendencia.setText(estadistica.getTendencia());
+        }
+
+        grid.add(new Label("Métrica:"), 0, 0);
+        grid.add(txtMetrica, 1, 0);
+        grid.add(new Label("Valor:"), 0, 1);
+        grid.add(txtValor, 1, 1);
+        grid.add(new Label("Tendencia:"), 0, 2);
+        grid.add(txtTendencia, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Convertir resultado
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == btnGuardar) {
+                if (txtMetrica.getText().isEmpty() || txtValor.getText().isEmpty()) {
+                    mostrarAlerta("Campos requeridos", "Métrica y Valor son campos obligatorios.");
+                    return null;
+                }
+
+                Estadistica resultado = estadistica != null ? estadistica : new Estadistica();
+                resultado.setCategoria(categoria);
+                resultado.setMetrica(txtMetrica.getText());
+                resultado.setValor(txtValor.getText());
+                resultado.setTendencia(txtTendencia.getText());
+                return resultado;
+            }
+            return null;
+        });
+
+        // Procesar resultado
+        dialog.showAndWait().ifPresent(result -> {
+            if (estadistica == null) {
+                estadisticaDAO.crearEstadistica(result);
+            } else {
+                estadisticaDAO.actualizarEstadistica(result);
+            }
+            cargarEstadisticas();
+        });
+    }
+
+    private void confirmarEliminacion(Estadistica estadistica) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText("¿Está seguro de eliminar esta estadística?");
+        alert.setContentText(estadistica.getMetrica() + ": " + estadistica.getValor());
+        alert.getDialogPane().getStyleClass().add("dialogo-formulario");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                estadisticaDAO.eliminarEstadistica(estadistica.getId());
+                cargarEstadisticas();
+            }
+        });
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.getDialogPane().getStyleClass().add("dialogo-formulario");
+        alert.showAndWait();
     }
 
     public BorderPane getVista() {
