@@ -1,22 +1,40 @@
 package com.example.paneladmin.Controladores;
 
+import com.example.paneladmin.DAO.ActividadDAO;
+import com.example.paneladmin.DAO.Impl.ActividadDAOImpl;
+import com.example.paneladmin.DAO.Impl.UsuarioDAOImpl;
+import com.example.paneladmin.DAO.UsuarioDAO;
+import com.example.paneladmin.Modelo.Actividad;
 import com.example.paneladmin.Vistas.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ControladorPrincipal {
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
+    private final ActividadDAO actividadDAO;
+    private final UsuarioDAO usuarioDAO;
+    private String usuarioActual = "admin";
 
     public ControladorPrincipal(VistaPrincipal vista) {
         this.vista = vista;
         this.controladorBarra = new ControladorBarraNavegacion();
+        this.actividadDAO = new ActividadDAOImpl();
+        this.usuarioDAO = new UsuarioDAOImpl();
+
+        // Aplicar CSS principal
+        String cssFile = getClass().getResource("/css/EstiloPrincipal.css").toExternalForm();
+        vista.getRaiz().getStylesheets().add(cssFile);
+
         configurarEventos();
         inicializarUI();
+        registrarActividad("Sistema iniciado", "Aplicación cargada correctamente");
     }
 
     private void configurarEventos() {
@@ -30,69 +48,19 @@ public class ControladorPrincipal {
     }
 
     private void inicializarUI() {
-        vista.getRaiz().setStyle("-fx-background-color: #F9FAFB;");
+        vista.getRaiz().getStyleClass().add("raiz-principal");
         vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
         vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
         mostrarDashboard();
     }
 
-    public void mostrarDashboard() {
-        VBox contenedorPrincipal = new VBox(20);
-        contenedorPrincipal.setStyle("-fx-background-color: #F5F7FA; -fx-padding: 20;");
-        contenedorPrincipal.setAlignment(Pos.TOP_LEFT);
+    private void registrarActividad(String accion, String detalles) {
+        Actividad actividad = new Actividad(usuarioActual, accion, LocalDateTime.now(), detalles);
+        actividadDAO.crearActividad(actividad);
+    }
 
-        // 1. Fila horizontal con las 4 cards
-        HBox filaCards = new HBox(15);
-        filaCards.setAlignment(Pos.TOP_LEFT);
-
-        // Card de Usuarios Registrados
-        VBox cardUsuarios = crearCardMetrica("Usuarios", "45", "👥");
-        filaCards.getChildren().add(cardUsuarios);
-
-        // Card de Activos en Sistema
-        VBox cardActivos = crearCardMetrica("Activos", "328", "💻");
-        filaCards.getChildren().add(cardActivos);
-
-        // Card de Solicitudes Pendientes
-        VBox cardPendientes = crearCardMetrica("Pendientes", "12", "⏳");
-        filaCards.getChildren().add(cardPendientes);
-
-        // Card de Alertas
-        VBox cardAlertas = crearCardMetrica("Alertas", "3", "⚠️");
-        filaCards.getChildren().add(cardAlertas);
-
-        // Ajustar el crecimiento horizontal de las cards
-        for (Node card : filaCards.getChildren()) {
-            HBox.setHgrow(card, Priority.ALWAYS);
-            ((VBox) card).setMaxWidth(Double.MAX_VALUE);
-        }
-
-        contenedorPrincipal.getChildren().add(filaCards);
-
-        // 2. Gráficos y estadísticas rápidas
-        HBox filaGraficos = new HBox(15);
-        filaGraficos.setAlignment(Pos.TOP_LEFT);
-
-        // Gráfico de actividad reciente
-        VBox cardActividad = crearCardGrafico("Actividad Reciente", "📊");
-        filaGraficos.getChildren().add(cardActividad);
-
-        // Gráfico de distribución de recursos
-        VBox cardRecursos = crearCardGrafico("Distribución Recursos", "📦");
-        filaGraficos.getChildren().add(cardRecursos);
-
-        // Ajustar crecimiento
-        for (Node card : filaGraficos.getChildren()) {
-            HBox.setHgrow(card, Priority.ALWAYS);
-            ((VBox) card).setMaxWidth(Double.MAX_VALUE);
-        }
-
-        contenedorPrincipal.getChildren().add(filaGraficos);
-
-        // 3. Tabla de Últimas Actividades
-        VBox cardActividades = crearCardActividades("Últimas actividades del sistema");
-        contenedorPrincipal.getChildren().add(cardActividades);
-
+    private void actualizarVistaPrincipal(Region contenidoCentral) {
+        // Asegurar que las barras de navegación estén presentes
         if (vista.getRaiz().getTop() == null) {
             vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
         }
@@ -100,25 +68,59 @@ public class ControladorPrincipal {
             vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
         }
 
-        vista.getRaiz().setCenter(contenedorPrincipal);
+        // Actualizar el contenido central
+        vista.getRaiz().setCenter(contenidoCentral);
+    }
+
+    public void mostrarDashboard() {
+        registrarActividad("Navegación", "Accedió al Dashboard");
+
+        VBox contenedorPrincipal = new VBox();
+        contenedorPrincipal.getStyleClass().add("contenedor-dashboard");
+
+        // 1. Fila horizontal con las 4 cards
+        HBox filaCards = new HBox();
+        filaCards.getStyleClass().add("fila-cards");
+
+        // Cards con datos dinámicos
+        VBox cardUsuarios = crearCardMetrica("Usuarios", String.valueOf(usuarioDAO.obtenerTodos().size()), "👥");
+        VBox cardActivos = crearCardMetrica("Activos", "0", "💻");
+        VBox cardPendientes = crearCardMetrica("Pendientes", "0", "⏳");
+        VBox cardAlertas = crearCardMetrica("Alertas", "0", "⚠️");
+
+        filaCards.getChildren().addAll(cardUsuarios, cardActivos, cardPendientes, cardAlertas);
+        contenedorPrincipal.getChildren().add(filaCards);
+
+        // 2. Gráficos y estadísticas rápidas
+        HBox filaGraficos = new HBox();
+        filaGraficos.getStyleClass().add("fila-cards");
+
+        VBox cardActividad = crearCardGrafico("Actividad Reciente", "📊");
+        VBox cardRecursos = crearCardGrafico("Distribución Recursos", "📦");
+        filaGraficos.getChildren().addAll(cardActividad, cardRecursos);
+        contenedorPrincipal.getChildren().add(filaGraficos);
+
+        // 3. Tabla de Últimas Actividades
+        VBox cardActividades = crearCardActividades("Últimas actividades del sistema");
+        contenedorPrincipal.getChildren().add(cardActividades);
+
+        actualizarVistaPrincipal(contenedorPrincipal);
     }
 
     private VBox crearCardMetrica(String titulo, String valor, String emoji) {
         VBox card = new VBox(10);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
-        card.setAlignment(Pos.TOP_LEFT);
-        card.setMinWidth(200);
+        card.getStyleClass().addAll("card", "card-metrica");
 
         HBox tituloBox = new HBox(5);
         tituloBox.setAlignment(Pos.CENTER_LEFT);
 
         Label lblEmoji = new Label(emoji);
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        lblTitulo.getStyleClass().add("titulo-card");
         tituloBox.getChildren().addAll(lblEmoji, lblTitulo);
 
         Label lblValor = new Label(valor);
-        lblValor.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #005994;");
+        lblValor.getStyleClass().add("valor-metrica");
 
         card.getChildren().addAll(tituloBox, lblValor);
         return card;
@@ -126,22 +128,18 @@ public class ControladorPrincipal {
 
     private VBox crearCardGrafico(String titulo, String emoji) {
         VBox card = new VBox(10);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
-        card.setAlignment(Pos.TOP_LEFT);
-        card.setMinHeight(200);
+        card.getStyleClass().addAll("card", "card-grafico");
 
         HBox tituloBox = new HBox(5);
         tituloBox.setAlignment(Pos.CENTER_LEFT);
 
         Label lblEmoji = new Label(emoji);
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        lblTitulo.getStyleClass().add("titulo-card");
         tituloBox.getChildren().addAll(lblEmoji, lblTitulo);
 
-        // Espacio para el gráfico
         Pane graficoPlaceholder = new Pane();
-        graficoPlaceholder.setStyle("-fx-background-color: #F5F7FA; -fx-min-height: 150px;");
-        graficoPlaceholder.setPrefHeight(150);
+        graficoPlaceholder.getStyleClass().add("placeholder-grafico");
 
         card.getChildren().addAll(tituloBox, graficoPlaceholder);
         return card;
@@ -149,32 +147,39 @@ public class ControladorPrincipal {
 
     private VBox crearCardActividades(String titulo) {
         VBox card = new VBox(10);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
-        card.setAlignment(Pos.TOP_LEFT);
+        card.getStyleClass().add("card");
 
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        lblTitulo.getStyleClass().add("titulo-seccion");
 
         GridPane tabla = new GridPane();
-        tabla.setHgap(30);
-        tabla.setVgap(10);
-        tabla.setPadding(new Insets(8, 0, 0, 0));
+        tabla.getStyleClass().add("tabla-actividades");
 
-        // Encabezados para actividades de admin
+        // Encabezados para actividades
         String[] encabezados = {"Usuario", "Acción", "Fecha/Hora", "Detalles"};
         for (int i = 0; i < encabezados.length; i++) {
             Label lbl = new Label(encabezados[i]);
-            lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+            lbl.getStyleClass().add("encabezado-tabla");
             tabla.add(lbl, i, 0);
         }
 
-        // Ejemplo de datos
-        agregarFilaActividad(tabla, 1, "admin", "Inicio de sesión", "2023-11-15 09:30", "Desde IP 192.168.1.100");
-        agregarFilaActividad(tabla, 2, "tony", "Actualización perfil", "2023-11-15 09:45", "Cambio de departamento");
-        agregarFilaActividad(tabla, 3, "david", "Backup automático", "2023-11-15 02:00", "Backup completo de la BD");
-        agregarFilaActividad(tabla, 4, "mildred", "Nuevo usuario", "2023-11-14 16:20", "Creó usuario Vega");
+        List<Actividad> actividades = actividadDAO.obtenerRecientes(5);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        card.getChildren().addAll(lblTitulo, tabla);
+        for (int i = 0; i < actividades.size(); i++) {
+            Actividad actividad = actividades.get(i);
+            agregarFilaActividad(tabla, i+1,
+                    actividad.getUsuario(),
+                    actividad.getAccion(),
+                    actividad.getFechaHora().format(formatter),
+                    actividad.getDetalles());
+        }
+
+        Button btnVerMas = new Button("Ver más actividades");
+        btnVerMas.setOnAction(e -> mostrarTodasActividades());
+        btnVerMas.getStyleClass().add("boton-primario");
+
+        card.getChildren().addAll(lblTitulo, tabla, btnVerMas);
         return card;
     }
 
@@ -184,41 +189,94 @@ public class ControladorPrincipal {
         tabla.add(new Label(fecha), 2, fila);
 
         Label lblDetalles = new Label(detalles);
-        lblDetalles.setStyle("-fx-text-fill: #7F8C8D;");
+        lblDetalles.getStyleClass().add("detalle-actividad");
         tabla.add(lblDetalles, 3, fila);
     }
 
+    private void mostrarTodasActividades() {
+        registrarActividad("Navegación", "Accedió a todas las actividades");
+
+        ScrollPane scrollPane = new ScrollPane();
+        VBox contenedor = new VBox(10);
+        contenedor.getStyleClass().add("scroll-contenedor");
+        contenedor.setPadding(new Insets(20));
+
+        Label titulo = new Label("Todas las actividades");
+        titulo.getStyleClass().add("titulo-grande");
+        contenedor.getChildren().add(titulo);
+
+        GridPane tabla = new GridPane();
+        tabla.getStyleClass().add("tabla-completa");
+
+        String[] encabezados = {"ID", "Usuario", "Acción", "Fecha/Hora", "Detalles"};
+        for (int i = 0; i < encabezados.length; i++) {
+            Label lbl = new Label(encabezados[i]);
+            lbl.getStyleClass().add("encabezado-tabla");
+            tabla.add(lbl, i, 0);
+        }
+
+        List<Actividad> actividades = actividadDAO.obtenerTodas();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        for (int i = 0; i < actividades.size(); i++) {
+            Actividad actividad = actividades.get(i);
+            tabla.add(new Label(String.valueOf(actividad.getId())), 0, i+1);
+            tabla.add(new Label(actividad.getUsuario()), 1, i+1);
+            tabla.add(new Label(actividad.getAccion()), 2, i+1);
+            tabla.add(new Label(actividad.getFechaHora().format(formatter)), 3, i+1);
+
+            Label detalles = new Label(actividad.getDetalles());
+            detalles.getStyleClass().add("detalle-actividad");
+            tabla.add(detalles, 4, i+1);
+        }
+
+        contenedor.getChildren().add(tabla);
+        scrollPane.setContent(contenedor);
+        scrollPane.setFitToWidth(true);
+
+        actualizarVistaPrincipal(scrollPane);
+    }
+
     public void mostrarInventario() {
-        vista.getRaiz().setCenter(new VistaInventario(controladorBarra).getVista());
+        registrarActividad("Navegación", "Accedió al Inventario");
+        actualizarVistaPrincipal(new VistaInventario(controladorBarra).getVista());
     }
 
     public void mostrarEstadisticas() {
-        vista.getRaiz().setCenter(new VistaEstadisticas(controladorBarra).getVista());
+        registrarActividad("Navegación", "Accedió a Estadísticas");
+        actualizarVistaPrincipal(new VistaEstadisticas(controladorBarra).getVista());
     }
 
     public void mostrarUsuarios() {
-        vista.getRaiz().setCenter(new VistaUsuarios(controladorBarra).getVista());
+        registrarActividad("Navegación", "Accedió a Gestión de Usuarios");
+        actualizarVistaPrincipal(new VistaUsuarios(controladorBarra).getVista());
     }
 
     public void mostrarSolicitudes() {
-        vista.getRaiz().setCenter(new VistaSolicitudes(controladorBarra).getVista());
+        registrarActividad("Navegación", "Accedió a Solicitudes");
+        actualizarVistaPrincipal(new VistaSolicitudes(controladorBarra).getVista());
     }
 
     public void mostrarNotificaciones() {
-        vista.getRaiz().setCenter(new VistaNotificaciones(controladorBarra).getVista());
+        registrarActividad("Navegación", "Accedió a Notificaciones");
+        actualizarVistaPrincipal(new VistaNotificaciones(controladorBarra).getVista());
     }
 
     private void confirmarCierreSesion() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cerrar sesión");
         alert.setHeaderText("¿Está seguro de que desea salir?");
+        alert.setContentText("Se registrará el cierre de sesión en el sistema");
 
         ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonType btnConfirmar = new ButtonType("Cerrar sesión", ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().setAll(btnCancelar, btnConfirmar);
 
-        if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-            System.exit(0);
-        }
+        alert.showAndWait().ifPresent(response -> {
+            if (response == btnConfirmar) {
+                registrarActividad("Cierre de sesión", "Usuario cerró sesión correctamente");
+                System.exit(0);
+            }
+        });
     }
 }
