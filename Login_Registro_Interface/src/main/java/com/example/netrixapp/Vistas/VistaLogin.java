@@ -49,7 +49,6 @@ public class VistaLogin extends Application {
 
     @Override
     public void start(Stage ventanaPrincipal) {
-        System.out.println("OLA");
         ventanaPrincipal.setWidth(1000);
         ventanaPrincipal.setHeight(600);
 
