@@ -5,7 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-public class HelloApplication extends Application {
+public class HelloApplicationAdmin extends Application {
     @Override
     public void start(Stage escenario) {
         VistaPrincipal vistaPrincipal = new VistaPrincipal();
