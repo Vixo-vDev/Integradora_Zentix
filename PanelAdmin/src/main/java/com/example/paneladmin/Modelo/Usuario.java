@@ -1,24 +1,31 @@
 package com.example.paneladmin.Modelo;
 
+import java.time.LocalDateTime;
+
 public class Usuario {
     private int id;
-    private String username;
-    private String password;
-    private String nombre;
+    private String nombreCompleto;  // Combinación de nombre (primer código) y nombreCompleto (segundo código)
+    private String nombreUsuario;   // Equivalente a username en el primer código
     private String email;
+    private String password;
     private String rol;
+    private String estado;          // Nuevo campo del segundo código
+    private LocalDateTime ultimoAcceso; // Nuevo campo del segundo código
     private boolean activo;
 
     public Usuario() {
     }
 
-    public Usuario(String username, String password, String nombre, String email, String rol) {
-        this.username = username;
-        this.password = password;
-        this.nombre = nombre;
+    // Constructor con los campos básicos (combinación de ambos constructores)
+    public Usuario(String nombreCompleto, String nombreUsuario, String email, String password, String rol) {
+        this.nombreCompleto = nombreCompleto;
+        this.nombreUsuario = nombreUsuario;
         this.email = email;
+        this.password = password;
         this.rol = rol;
-        this.activo = true;
+        this.estado = "Activo";     // Valor por defecto del segundo código
+        this.ultimoAcceso = LocalDateTime.now(); // Inicializado al momento actual
+        this.activo = true;         // Valor por defecto de ambos códigos
     }
 
     // Getters y Setters
@@ -30,28 +37,38 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNombreCompleto() {
+        return nombreCompleto;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    // Método alternativo para compatibilidad con el primer código
     public String getNombre() {
-        return nombre;
+        return nombreCompleto;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombreCompleto = nombre;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    // Método alternativo para compatibilidad con el primer código
+    public String getUsername() {
+        return nombreUsuario;
+    }
+
+    public void setUsername(String username) {
+        this.nombreUsuario = username;
     }
 
     public String getEmail() {
@@ -62,12 +79,36 @@ public class Usuario {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getRol() {
         return rol;
     }
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getUltimoAcceso() {
+        return ultimoAcceso;
+    }
+
+    public void setUltimoAcceso(LocalDateTime ultimoAcceso) {
+        this.ultimoAcceso = ultimoAcceso;
     }
 
     public boolean isActivo() {
@@ -82,10 +123,12 @@ public class Usuario {
     public String toString() {
         return "Usuario{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", nombre='" + nombre + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", nombreUsuario='" + nombreUsuario + '\'' +
                 ", email='" + email + '\'' +
                 ", rol='" + rol + '\'' +
+                ", estado='" + estado + '\'' +
+                ", ultimoAcceso=" + ultimoAcceso +
                 ", activo=" + activo +
                 '}';
     }

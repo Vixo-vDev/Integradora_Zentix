@@ -1,88 +1,67 @@
 package com.example.paneladmin.Vistas;
 
 import com.example.paneladmin.Controladores.ControladorBarraNavegacion;
+import com.example.paneladmin.DAO.UsuarioDAO;
+import com.example.paneladmin.Modelo.Usuario;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class VistaUsuarios {
-    private final BorderPane vista;
+    @FXML private BorderPane vista;
+    @FXML private TableView<Usuario> tablaUsuarios;
+    @FXML private TextField tfBusqueda;
+    @FXML private ComboBox<String> cbFiltroRol;
+    @FXML private ComboBox<String> cbFiltroEstado;
+
+    private final UsuarioDAO usuarioDAO;
     private final ControladorBarraNavegacion controladorBarra;
 
-    // Colores
-    private final String COLOR_EXITO = "#2ECC71";
-    private final String COLOR_PELIGRO = "#E74C3C";
-    private final String COLOR_PRIMARIO = "#3498DB";
-    private final String COLOR_INACTIVO = "#95A5A6";
-    private final String COLOR_FONDO = "#F5F7FA";
-    private final String COLOR_TEXTO_OSCURO = "#2C3E50";
-
-    public VistaUsuarios(ControladorBarraNavegacion controladorBarra) {
+    public VistaUsuarios(ControladorBarraNavegacion controladorBarra, UsuarioDAO usuarioDAO) {
         this.controladorBarra = controladorBarra;
-        this.vista = new BorderPane();
-        inicializarUI();
+        this.usuarioDAO = usuarioDAO;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiseñoUsuario.fxml"));
+            loader.setController(this);
+            vista = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar VistaUsuarios.fxml", e);
+        }
     }
 
-    private void inicializarUI() {
-        vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+    @FXML
+    public void initialize() {
+        configurarUI();
+        cargarUsuarios();
+        configurarEventos();
+    }
 
-        // Barras de navegación
+    private void configurarUI() {
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
 
-        // Contenido principal
-        VBox contenido = new VBox(20);
-        contenido.setPadding(new Insets(20));
-
-        // Encabezado con título y botón de agregar
-        HBox encabezado = new HBox();
-        encabezado.setAlignment(Pos.CENTER_LEFT);
-        encabezado.setSpacing(20);
-
-        Label lblTitulo = new Label("Gestión de Usuarios Registrados");
-        lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
-
-        Button btnAgregar = new Button("+ Nuevo Usuario");
-        btnAgregar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-font-weight: bold; " +
-                "-fx-padding: 8 16; -fx-background-radius: 4px;");
-        btnAgregar.setOnAction(e -> mostrarFormularioNuevoUsuario());
-
-        encabezado.getChildren().addAll(lblTitulo, btnAgregar);
-        contenido.getChildren().add(encabezado);
-
-        // Filtros y búsqueda
-        HBox controlesSuperiores = new HBox(15);
-        controlesSuperiores.setAlignment(Pos.CENTER_LEFT);
-
-        TextField tfBusqueda = new TextField();
-        tfBusqueda.setPromptText("Buscar usuario...");
-        tfBusqueda.setPrefWidth(250);
-
-        ComboBox<String> cbFiltroRol = new ComboBox<>();
+        // Configurar comboboxes
         cbFiltroRol.getItems().addAll("Todos", "Administrador", "Usuario");
         cbFiltroRol.setValue("Todos");
 
-        ComboBox<String> cbFiltroEstado = new ComboBox<>();
-        cbFiltroEstado.getItems().addAll("Todos", "Activos", "Inactivos", "Bloqueados");
+        cbFiltroEstado.getItems().addAll("Todos", "Activo", "Inactivo", "Bloqueado");
         cbFiltroEstado.setValue("Todos");
 
-        controlesSuperiores.getChildren().addAll(
-                new Label("Filtrar:"),
-                tfBusqueda,
-                new Label("Rol:"), cbFiltroRol,
-                new Label("Estado:"), cbFiltroEstado
-        );
-        contenido.getChildren().add(controlesSuperiores);
+        // Configurar tabla
+        configurarColumnasTabla();
+    }
 
-        // Tabla de usuarios
-        TableView<Usuario> tablaUsuarios = new TableView<>();
-        tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablaUsuarios.setStyle("-fx-font-size: 14px;");
-
-        // Columnas
+    private void configurarColumnasTabla() {
         TableColumn<Usuario, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
 
@@ -97,7 +76,7 @@ public class VistaUsuarios {
 
         TableColumn<Usuario, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        colEstado.setCellFactory(column -> new TableCell<Usuario, String>() {
+        colEstado.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -108,13 +87,13 @@ public class VistaUsuarios {
                     setText(item);
                     switch (item) {
                         case "Activo":
-                            setStyle("-fx-text-fill: " + COLOR_EXITO + "; -fx-font-weight: bold;");
+                            setStyle("-fx-text-fill: #2ECC71; -fx-font-weight: bold;");
                             break;
                         case "Bloqueado":
-                            setStyle("-fx-text-fill: " + COLOR_PELIGRO + "; -fx-font-weight: bold;");
+                            setStyle("-fx-text-fill: #E74C3C; -fx-font-weight: bold;");
                             break;
                         case "Inactivo":
-                            setStyle("-fx-text-fill: " + COLOR_INACTIVO + "; -fx-font-weight: bold;");
+                            setStyle("-fx-text-fill: #95A5A6; -fx-font-weight: bold;");
                             break;
                         default:
                             setStyle("");
@@ -124,30 +103,35 @@ public class VistaUsuarios {
         });
 
         TableColumn<Usuario, String> colUltimoAcceso = new TableColumn<>("Último Acceso");
-        colUltimoAcceso.setCellValueFactory(new PropertyValueFactory<>("ultimoAcceso"));
+        colUltimoAcceso.setCellValueFactory(cellData -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            return cellData.getValue().getUltimoAcceso() != null ?
+                    new javafx.beans.property.SimpleStringProperty(cellData.getValue().getUltimoAcceso().format(formatter)) :
+                    new javafx.beans.property.SimpleStringProperty("Nunca");
+        });
 
-        TableColumn<Usuario, String> colAcciones = new TableColumn<>("Acciones");
-        colAcciones.setCellFactory(col -> new TableCell<Usuario, String>() {
+        TableColumn<Usuario, Void> colAcciones = new TableColumn<>("Acciones");
+        colAcciones.setCellFactory(param -> new TableCell<>() {
             private final Button btnActivar = new Button("Activar");
             private final Button btnDesactivar = new Button("Desactivar");
             private final Button btnResetPass = new Button("Reset Pass");
-            private final Button btnCambiarRol = new Button("Cambiar Rol");
-            private final HBox cajaBotones = new HBox(5, btnActivar, btnDesactivar, btnResetPass, btnCambiarRol);
+            private final Button btnEditar = new Button("Editar");
+            private final HBox cajaBotones = new HBox(5, btnActivar, btnDesactivar, btnResetPass, btnEditar);
 
             {
-                btnActivar.setStyle("-fx-background-color: " + COLOR_EXITO + "; -fx-text-fill: white; -fx-min-width: 80;");
-                btnDesactivar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-min-width: 80;");
-                btnResetPass.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-min-width: 80;");
-                btnCambiarRol.setStyle("-fx-background-color: #9B59B6; -fx-text-fill: white; -fx-min-width: 80;");
+                btnActivar.setStyle("-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-min-width: 80;");
+                btnDesactivar.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-min-width: 80;");
+                btnResetPass.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-min-width: 80;");
+                btnEditar.setStyle("-fx-background-color: #9B59B6; -fx-text-fill: white; -fx-min-width: 80;");
 
                 btnActivar.setOnAction(e -> {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    cambiarEstadoUsuario(usuario, "Activo");
+                    activarUsuario(usuario.getId());
                 });
 
                 btnDesactivar.setOnAction(e -> {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    cambiarEstadoUsuario(usuario, "Inactivo");
+                    desactivarUsuario(usuario.getId());
                 });
 
                 btnResetPass.setOnAction(e -> {
@@ -155,44 +139,61 @@ public class VistaUsuarios {
                     resetearPassword(usuario);
                 });
 
-                btnCambiarRol.setOnAction(e -> {
+                btnEditar.setOnAction(e -> {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    cambiarRolUsuario(usuario);
+                    mostrarFormularioEdicion(usuario);
                 });
             }
 
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
+                if (empty) {
                     setGraphic(null);
                 } else {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    // Mostrar botones según estado
                     btnActivar.setDisable(usuario.getEstado().equals("Activo"));
-                    btnDesactivar.setDisable(usuario.getEstado().equals("Inactivo"));
+                    btnDesactivar.setDisable(usuario.getEstado().equals("Inactivo") || usuario.getEstado().equals("Bloqueado"));
                     setGraphic(cajaBotones);
                 }
             }
         });
 
         tablaUsuarios.getColumns().addAll(colNombre, colUsuario, colEmail, colRol, colEstado, colUltimoAcceso, colAcciones);
-
-        // Datos de ejemplo (solo usuarios registrados)
-        tablaUsuarios.getItems().addAll(
-                new Usuario("Juan Pérez", "jperez", "jperez@empresa.com", "Usuario", "Activo", "2023-11-15 09:30"),
-                new Usuario("María García", "mgarcia", "mgarcia@empresa.com", "Administrador", "Activo", "2023-11-15 10:15"),
-                new Usuario("Luis Rodríguez", "lrodriguez", "lrodriguez@empresa.com", "Usuario", "Inactivo", "2023-10-28 14:20"),
-                new Usuario("Ana López", "alopez", "alopez@empresa.com", "Usuario", "Bloqueado", "2023-11-10 16:45")
-        );
-
-        contenido.getChildren().add(tablaUsuarios);
-        vista.setCenter(contenido);
     }
 
+    private void configurarEventos() {
+        tfBusqueda.textProperty().addListener((obs, oldVal, newVal) -> filtrarUsuarios());
+        cbFiltroRol.valueProperty().addListener((obs, oldVal, newVal) -> filtrarUsuarios());
+        cbFiltroEstado.valueProperty().addListener((obs, oldVal, newVal) -> filtrarUsuarios());
+    }
+
+    private void cargarUsuarios() {
+        ObservableList<Usuario> usuarios = FXCollections.observableArrayList(usuarioDAO.obtenerTodos());
+        tablaUsuarios.setItems(usuarios);
+    }
+
+    private void filtrarUsuarios() {
+        String textoBusqueda = tfBusqueda.getText().toLowerCase();
+        String rolSeleccionado = cbFiltroRol.getValue();
+        String estadoSeleccionado = cbFiltroEstado.getValue();
+
+        List<Usuario> usuariosFiltrados = usuarioDAO.obtenerTodos().stream()
+                .filter(u -> textoBusqueda.isEmpty() ||
+                        u.getNombreCompleto().toLowerCase().contains(textoBusqueda) ||
+                        u.getNombreUsuario().toLowerCase().contains(textoBusqueda) ||
+                        u.getEmail().toLowerCase().contains(textoBusqueda))
+                .filter(u -> rolSeleccionado.equals("Todos") || u.getRol().equals(rolSeleccionado))
+                .filter(u -> estadoSeleccionado.equals("Todos") || u.getEstado().equals(estadoSeleccionado))
+                .collect(Collectors.toList());
+
+        tablaUsuarios.setItems(FXCollections.observableArrayList(usuariosFiltrados));
+    }
+
+    @FXML
     private void mostrarFormularioNuevoUsuario() {
         Dialog<Usuario> dialog = new Dialog<>();
-        dialog.setTitle("Nuevo Usuario Registrado");
+        dialog.setTitle("Nuevo Usuario");
         dialog.setHeaderText("Registrar nuevo usuario en el sistema");
 
         // Configurar botones
@@ -213,6 +214,8 @@ public class VistaUsuarios {
         tfEmail.setPromptText("Email");
         PasswordField pfPassword = new PasswordField();
         pfPassword.setPromptText("Contraseña");
+        PasswordField pfConfirmPassword = new PasswordField();
+        pfConfirmPassword.setPromptText("Confirmar contraseña");
         ComboBox<String> cbRol = new ComboBox<>();
         cbRol.getItems().addAll("Administrador", "Usuario");
         cbRol.setValue("Usuario");
@@ -225,108 +228,162 @@ public class VistaUsuarios {
         grid.add(tfEmail, 1, 2);
         grid.add(new Label("Contraseña:"), 0, 3);
         grid.add(pfPassword, 1, 3);
-        grid.add(new Label("Rol:"), 0, 4);
-        grid.add(cbRol, 1, 4);
+        grid.add(new Label("Confirmar:"), 0, 4);
+        grid.add(pfConfirmPassword, 1, 4);
+        grid.add(new Label("Rol:"), 0, 5);
+        grid.add(cbRol, 1, 5);
 
         dialog.getDialogPane().setContent(grid);
         dialog.setResultConverter(buttonType -> {
             if (buttonType == btnCrear) {
+                if (!pfPassword.getText().equals(pfConfirmPassword.getText())) {
+                    mostrarAlerta("Error", "Las contraseñas no coinciden");
+                    return null;
+                }
+                if (tfNombre.getText().isEmpty() || tfUsuario.getText().isEmpty() ||
+                        tfEmail.getText().isEmpty() || pfPassword.getText().isEmpty()) {
+                    mostrarAlerta("Error", "Todos los campos son obligatorios");
+                    return null;
+                }
+
                 return new Usuario(
                         tfNombre.getText(),
                         tfUsuario.getText(),
                         tfEmail.getText(),
-                        cbRol.getValue(),
-                        "Activo",
-                        "Nunca"
+                        pfPassword.getText(),
+                        cbRol.getValue()
                 );
             }
             return null;
         });
 
         dialog.showAndWait().ifPresent(usuario -> {
-            System.out.println("Nuevo usuario registrado creado: " + usuario.getNombreUsuario());
-            // Aquí iría la lógica para guardar el nuevo usuario
+            usuarioDAO.crearUsuario(usuario);
+            cargarUsuarios();
+            mostrarAlerta("Éxito", "Usuario creado correctamente");
         });
     }
 
-    private void cambiarEstadoUsuario(Usuario usuario, String nuevoEstado) {
-        System.out.println("Cambiando estado de " + usuario.getNombreUsuario() + " a " + nuevoEstado);
-        usuario.setEstado(nuevoEstado);
+    private void mostrarFormularioEdicion(Usuario usuario) {
+        Dialog<Usuario> dialog = new Dialog<>();
+        dialog.setTitle("Editar Usuario");
+        dialog.setHeaderText("Editar información del usuario");
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Estado actualizado");
-        alert.setHeaderText("El estado del usuario ha sido cambiado");
-        alert.setContentText("Nuevo estado: " + nuevoEstado);
-        alert.show();
+        // Configurar botones
+        ButtonType btnGuardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
+
+        // Crear formulario
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 10, 10, 10));
+
+        TextField tfNombre = new TextField(usuario.getNombreCompleto());
+        TextField tfUsuario = new TextField(usuario.getNombreUsuario());
+        TextField tfEmail = new TextField(usuario.getEmail());
+        ComboBox<String> cbRol = new ComboBox<>();
+        cbRol.getItems().addAll("Administrador", "Usuario");
+        cbRol.setValue(usuario.getRol());
+        ComboBox<String> cbEstado = new ComboBox<>();
+        cbEstado.getItems().addAll("Activo", "Inactivo", "Bloqueado");
+        cbEstado.setValue(usuario.getEstado());
+
+        grid.add(new Label("Nombre:"), 0, 0);
+        grid.add(tfNombre, 1, 0);
+        grid.add(new Label("Usuario:"), 0, 1);
+        grid.add(tfUsuario, 1, 1);
+        grid.add(new Label("Email:"), 0, 2);
+        grid.add(tfEmail, 1, 2);
+        grid.add(new Label("Rol:"), 0, 3);
+        grid.add(cbRol, 1, 3);
+        grid.add(new Label("Estado:"), 0, 4);
+        grid.add(cbEstado, 1, 4);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == btnGuardar) {
+                usuario.setNombreCompleto(tfNombre.getText());
+                usuario.setNombreUsuario(tfUsuario.getText());
+                usuario.setEmail(tfEmail.getText());
+                usuario.setRol(cbRol.getValue());
+                usuario.setEstado(cbEstado.getValue());
+                return usuario;
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(usuarioEditado -> {
+            usuarioDAO.actualizarUsuario(usuarioEditado);
+            cargarUsuarios();
+            mostrarAlerta("Éxito", "Usuario actualizado correctamente");
+        });
+    }
+
+    private void activarUsuario(int id) {
+        usuarioDAO.activarUsuario(id);
+        cargarUsuarios();
+        mostrarAlerta("Éxito", "Usuario activado correctamente");
+    }
+
+    private void desactivarUsuario(int id) {
+        usuarioDAO.desactivarUsuario(id);
+        cargarUsuarios();
+        mostrarAlerta("Éxito", "Usuario desactivado correctamente");
     }
 
     private void resetearPassword(Usuario usuario) {
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Resetear Contraseña");
-        confirmacion.setHeaderText("¿Resetear contraseña para " + usuario.getNombreUsuario() + "?");
-        confirmacion.setContentText("Se enviará una contraseña temporal al email del usuario.");
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Resetear Contraseña");
+        dialog.setHeaderText("Resetear contraseña para " + usuario.getNombreUsuario());
 
-        if (confirmacion.showAndWait().get() == ButtonType.OK) {
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
-            info.setTitle("Operación exitosa");
-            info.setHeaderText("Contraseña reseteada");
-            info.setContentText("Se ha enviado una contraseña temporal a " + usuario.getEmail());
-            info.show();
-        }
+        // Configurar botones
+        ButtonType btnConfirmar = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnConfirmar, ButtonType.CANCEL);
+
+        // Crear formulario
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 10, 10, 10));
+
+        PasswordField pfPassword = new PasswordField();
+        pfPassword.setPromptText("Nueva contraseña");
+        PasswordField pfConfirmPassword = new PasswordField();
+        pfConfirmPassword.setPromptText("Confirmar contraseña");
+
+        grid.add(new Label("Nueva contraseña:"), 0, 0);
+        grid.add(pfPassword, 1, 0);
+        grid.add(new Label("Confirmar:"), 0, 1);
+        grid.add(pfConfirmPassword, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == btnConfirmar) {
+                if (!pfPassword.getText().equals(pfConfirmPassword.getText())) {
+                    mostrarAlerta("Error", "Las contraseñas no coinciden");
+                    return null;
+                }
+                return pfPassword.getText();
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(nuevaPassword -> {
+            usuarioDAO.cambiarPassword(usuario.getId(), nuevaPassword);
+            mostrarAlerta("Éxito", "Contraseña actualizada correctamente");
+        });
     }
 
-    private void cambiarRolUsuario(Usuario usuario) {
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(
-                usuario.getRol(),
-                "Administrador",
-                "Usuario"
-        );
-        dialog.setTitle("Cambiar Rol");
-        dialog.setHeaderText("Cambiar rol de " + usuario.getNombreUsuario());
-        dialog.setContentText("Seleccione el nuevo rol:");
-
-        dialog.showAndWait().ifPresent(nuevoRol -> {
-            usuario.setRol(nuevoRol);
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
-            info.setTitle("Rol actualizado");
-            info.setHeaderText("El rol ha sido cambiado");
-            info.setContentText("Nuevo rol: " + nuevoRol);
-            info.show();
-        });
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     public BorderPane getVista() {
         return vista;
-    }
-
-    // Clase modelo para usuarios registrados
-    public static class Usuario {
-        private final String nombreCompleto;
-        private final String nombreUsuario;
-        private final String email;
-        private String rol;
-        private String estado;
-        private final String ultimoAcceso;
-
-        public Usuario(String nombreCompleto, String nombreUsuario, String email, String rol, String estado, String ultimoAcceso) {
-            this.nombreCompleto = nombreCompleto;
-            this.nombreUsuario = nombreUsuario;
-            this.email = email;
-            this.rol = rol;
-            this.estado = estado;
-            this.ultimoAcceso = ultimoAcceso;
-        }
-
-        // Getters
-        public String getNombreCompleto() { return nombreCompleto; }
-        public String getNombreUsuario() { return nombreUsuario; }
-        public String getEmail() { return email; }
-        public String getRol() { return rol; }
-        public String getEstado() { return estado; }
-        public String getUltimoAcceso() { return ultimoAcceso; }
-
-        // Setters
-        public void setEstado(String estado) { this.estado = estado; }
-        public void setRol(String rol) { this.rol = rol; }
     }
 }

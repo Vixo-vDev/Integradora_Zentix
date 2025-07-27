@@ -4,7 +4,9 @@ import com.example.paneladmin.DAO.ActividadDAO;
 import com.example.paneladmin.DAO.EstadisticaDAO;
 import com.example.paneladmin.DAO.Impl.ActividadDAOImpl;
 import com.example.paneladmin.DAO.Impl.EstadisticaDAOImpl;
+import com.example.paneladmin.DAO.Impl.NotificacionDAOImpl;
 import com.example.paneladmin.DAO.Impl.UsuarioDAOImpl;
+import com.example.paneladmin.DAO.NotificacionDAO;
 import com.example.paneladmin.DAO.UsuarioDAO;
 import com.example.paneladmin.Modelo.Actividad;
 import com.example.paneladmin.Vistas.*;
@@ -252,8 +254,10 @@ public class ControladorPrincipal {
     }
 
     public void mostrarUsuarios() {
+        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+        VistaUsuarios  vistaUsuarios= new VistaUsuarios(controladorBarra, usuarioDAO);
+        actualizarVistaPrincipal(vistaUsuarios.getVista());
         registrarActividad("Navegación", "Accedió a Gestión de Usuarios");
-        actualizarVistaPrincipal(new VistaUsuarios(controladorBarra).getVista());
     }
 
     public void mostrarSolicitudes() {
@@ -262,8 +266,9 @@ public class ControladorPrincipal {
     }
 
     public void mostrarNotificaciones() {
-        registrarActividad("Navegación", "Accedió a Notificaciones");
-        actualizarVistaPrincipal(new VistaNotificaciones(controladorBarra).getVista());
+        NotificacionDAO notificacionDAO = new NotificacionDAOImpl();
+        VistaNotificaciones vistaNotificaciones = new VistaNotificaciones(controladorBarra, notificacionDAO);
+        actualizarVistaPrincipal(vistaNotificaciones.getVista());
     }
 
     private void confirmarCierreSesion() {

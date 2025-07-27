@@ -1,159 +1,173 @@
 package com.example.paneladmin.Vistas;
 
 import com.example.paneladmin.Controladores.ControladorBarraNavegacion;
+
+import com.example.paneladmin.DAO.NotificacionDAO;
+import com.example.paneladmin.Modelo.Notificacion;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class VistaNotificaciones {
+    @FXML private BorderPane vista;
+    @FXML private VBox contenidoPrincipal;
+    @FXML private VBox listaNotificaciones;
+    @FXML private ToggleGroup grupoFiltros;
+    @FXML private RadioButton rbTodas;
+    @FXML private RadioButton rbNoLeidas;
+    @FXML private RadioButton rbImportantes;
+    @FXML private Button btnEliminarTodo;
+    @FXML private Button btnMarcarLeido;
 
-    private final BorderPane vista;  // Cambiado a BorderPane para mejor organización
+    private final NotificacionDAO notificacionDAO;
     private final ControladorBarraNavegacion controladorBarra;
 
-    // Colores específicos para esta vista
-    private final String COLOR_EXITO = "#2ECC71";
-    private final String COLOR_ADVERTENCIA = "#F39C12";
-    private final String COLOR_PELIGRO = "#E74C3C";
-    private final String COLOR_FONDO = "#ECF0F1";
-    private final String COLOR_TEXTO = "#2C3E50";
-
-    public VistaNotificaciones(ControladorBarraNavegacion controladorBarra) {
+    public VistaNotificaciones(ControladorBarraNavegacion controladorBarra, NotificacionDAO notificacionDAO) {
         this.controladorBarra = controladorBarra;
-        this.vista = new BorderPane();
-        inicializarUI();
+        this.notificacionDAO = notificacionDAO;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiseñoNotificaciones.fxml"));
+            loader.setController(this);
+            vista = loader.load();
+
+            if (grupoFiltros == null) {
+                grupoFiltros = new ToggleGroup();
+                rbTodas.setToggleGroup(grupoFiltros);
+                rbNoLeidas.setToggleGroup(grupoFiltros);
+                rbImportantes.setToggleGroup(grupoFiltros);
+                rbTodas.setSelected(true);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar VistaNotificaciones.fxml", e);
+        }
     }
 
-    private void inicializarUI() {
-        vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+    @FXML
+    public void initialize() {
+        configurarUI();
+        cargarNotificaciones();
+        configurarEventos();
+    }
 
-        // Panel de contenido principal
-        VBox panelContenido = new VBox();
-        panelContenido.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-        panelContenido.setPadding(new Insets(20));
-        VBox.setVgrow(panelContenido, Priority.ALWAYS);
-
-        // Panel superior (filtros y acciones)
-        HBox panelSuperior = new HBox();
-        panelSuperior.setAlignment(Pos.CENTER_LEFT);
-
-        // Panel de filtros
-        HBox panelFiltros = crearPanelFiltros();
-
-        // Panel de acciones
-        HBox panelAcciones = crearPanelAcciones();
-
-        // Espaciador para separar los dos grupos
-        Pane espaciador = new Pane();
-        HBox.setHgrow(espaciador, Priority.ALWAYS);
-
-        panelSuperior.getChildren().addAll(panelFiltros, espaciador, panelAcciones);
-
-        // Lista de notificaciones con scroll
-        ScrollPane scrollNotificaciones = new ScrollPane(crearListaNotificaciones());
-        scrollNotificaciones.setFitToWidth(true);
-        scrollNotificaciones.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollNotificaciones.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        VBox.setVgrow(scrollNotificaciones, Priority.ALWAYS);
-
-        panelContenido.getChildren().addAll(panelSuperior, scrollNotificaciones);
-
-        // Construir vista completa
+    private void configurarUI() {
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
-        vista.setCenter(panelContenido);
-
-        // Configurar márgenes
-        BorderPane.setMargin(panelContenido, new Insets(20));
-        BorderPane.setMargin(controladorBarra.getBarraLateral(), new Insets(0, 20, 0, 0));
+        vista.getStyleClass().add("vista-notificaciones");
     }
 
-    private HBox crearPanelFiltros() {
-        HBox panelFiltros = new HBox(10);
-        panelFiltros.setAlignment(Pos.CENTER_LEFT);
+    private void configurarEventos() {
+        // Filtros
+        rbTodas.setOnAction(e -> cargarNotificaciones());
+        rbNoLeidas.setOnAction(e -> cargarNotificaciones());
+        rbImportantes.setOnAction(e -> cargarNotificaciones());
 
-        Label lblFiltro = new Label("Filter:");
-        lblFiltro.setStyle("-fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO + ";");
-
-        ToggleGroup grupoFiltros = new ToggleGroup();
-        RadioButton rbTodas = new RadioButton("Todas");
-        RadioButton rbNoLeidas = new RadioButton("No leídas");
-        RadioButton rbImportantes = new RadioButton("Importantes");
-
-        // Estilo para los radio buttons
-        String estiloRadio = "-fx-text-fill: " + COLOR_TEXTO + ";";
-        rbTodas.setStyle(estiloRadio);
-        rbNoLeidas.setStyle(estiloRadio);
-        rbImportantes.setStyle(estiloRadio);
-
-        rbTodas.setToggleGroup(grupoFiltros);
-        rbNoLeidas.setToggleGroup(grupoFiltros);
-        rbImportantes.setToggleGroup(grupoFiltros);
-        rbTodas.setSelected(true);
-
-        panelFiltros.getChildren().addAll(lblFiltro, rbTodas, rbNoLeidas, rbImportantes);
-        return panelFiltros;
+        // Acciones
+        btnEliminarTodo.setOnAction(e -> confirmarEliminarTodas());
+        btnMarcarLeido.setOnAction(e -> marcarTodasComoLeidas());
     }
 
-    private HBox crearPanelAcciones() {
-        HBox panelAcciones = new HBox(15);
-        panelAcciones.setAlignment(Pos.CENTER_RIGHT);
+    private void cargarNotificaciones() {
+        listaNotificaciones.getChildren().clear();
 
-        Button btnEliminarTodo = new Button("Eliminar todo");
-        btnEliminarTodo.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_PELIGRO + "; " +
-                "-fx-border-color: " + COLOR_PELIGRO + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 5 10;");
+        List<Notificacion> notificaciones;
 
-        Button btnMarcarLeido = new Button("Marcar todo como leído");
-        btnMarcarLeido.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_TEXTO + "; " +
-                "-fx-border-color: " + COLOR_TEXTO + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 5 10;");
+        if (rbNoLeidas.isSelected()) {
+            notificaciones = notificacionDAO.obtenerNoLeidas();
+        } else if (rbImportantes.isSelected()) {
+            notificaciones = notificacionDAO.obtenerImportantes();
+        } else {
+            notificaciones = notificacionDAO.obtenerTodas();
+        }
 
-        panelAcciones.getChildren().addAll(btnEliminarTodo, btnMarcarLeido);
-        return panelAcciones;
+        if (notificaciones.isEmpty()) {
+            Label lblSinNotificaciones = new Label("No hay notificaciones");
+            lblSinNotificaciones.getStyleClass().add("texto-sin-notificaciones");
+            listaNotificaciones.getChildren().add(lblSinNotificaciones);
+            return;
+        }
+
+        for (Notificacion notificacion : notificaciones) {
+            agregarNotificacionUI(notificacion);
+        }
     }
 
-    private VBox crearListaNotificaciones() {
-        VBox listaNotificaciones = new VBox();
-        listaNotificaciones.setPadding(new Insets(10, 0, 0, 0));
-
-        // Notificaciones de ejemplo
-        agregarNotificacion(listaNotificaciones, "Nuevo artículo disponible", "2023-05-15", false);
-        agregarNotificacion(listaNotificaciones, "Solicitud aprobada", "2023-05-14", true);
-        agregarNotificacion(listaNotificaciones, "Recordatorio: inventario", "2023-05-12", false);
-        agregarNotificacion(listaNotificaciones, "Stock crítico: Teclados", "2023-05-10", true);
-
-        return listaNotificaciones;
-    }
-
-    private void agregarNotificacion(VBox contenedor, String mensaje, String fecha, boolean importante) {
-        HBox notificacion = new HBox(15);
-        notificacion.setStyle("-fx-background-color: #FFFFFF; -fx-padding: 15; " +
-                "-fx-border-color: #BDC3C7; -fx-border-width: 0 0 1 0;");
-        notificacion.setAlignment(Pos.CENTER_LEFT);
+    private void agregarNotificacionUI(Notificacion notificacion) {
+        HBox notificacionBox = new HBox(15);
+        notificacionBox.getStyleClass().add("notificacion");
+        if (notificacion.isImportante()) {
+            notificacionBox.getStyleClass().add("importante");
+        }
+        if (!notificacion.isLeida()) {
+            notificacionBox.getStyleClass().add("no-leida");
+        }
 
         // Icono
-        Label lblIcono = new Label(importante ? "❗" : "🔔");
-        lblIcono.setStyle("-fx-font-size: 20;");
+        Label lblIcono = new Label(notificacion.isImportante() ? "❗" : "🔔");
+        lblIcono.getStyleClass().add("icono-notificacion");
 
         // Contenido
         VBox contenido = new VBox(5);
-        Label lblMensaje = new Label(mensaje);
-        lblMensaje.setStyle("-fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO + ";" +
-                (importante ? "-fx-text-fill: " + COLOR_PELIGRO + ";" : ""));
+        Label lblTitulo = new Label(notificacion.getTitulo());
+        lblTitulo.getStyleClass().add("titulo-notificacion");
 
-        Label lblFecha = new Label(fecha);
-        lblFecha.setStyle("-fx-text-fill: #7F8C8D; -fx-font-size: 12;");
+        Label lblMensaje = new Label(notificacion.getMensaje());
+        lblMensaje.getStyleClass().add("mensaje-notificacion");
 
-        contenido.getChildren().addAll(lblMensaje, lblFecha);
-        notificacion.getChildren().addAll(lblIcono, contenido);
-        contenedor.getChildren().add(notificacion);
+        Label lblFecha = new Label(notificacion.getFecha()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        lblFecha.getStyleClass().add("fecha-notificacion");
+
+        contenido.getChildren().addAll(lblTitulo, lblMensaje, lblFecha);
+
+        // Botones de acción
+        HBox botones = new HBox(5);
+        botones.setAlignment(Pos.CENTER_RIGHT);
+
+        Button btnLeer = new Button(notificacion.isLeida() ? "✔ Leída" : "Marcar como leída");
+        btnLeer.getStyleClass().add(notificacion.isLeida() ? "boton-leida" : "boton-no-leida");
+        btnLeer.setOnAction(e -> {
+            notificacionDAO.marcarComoLeida(notificacion.getId());
+            cargarNotificaciones();
+        });
+
+        Button btnEliminar = new Button("Eliminar");
+        btnEliminar.getStyleClass().add("boton-eliminar");
+        btnEliminar.setOnAction(e -> {
+            notificacionDAO.eliminarNotificacion(notificacion.getId());
+            cargarNotificaciones();
+        });
+
+        botones.getChildren().addAll(btnLeer, btnEliminar);
+
+        notificacionBox.getChildren().addAll(lblIcono, contenido, botones);
+        listaNotificaciones.getChildren().add(notificacionBox);
+    }
+
+    private void marcarTodasComoLeidas() {
+        notificacionDAO.marcarTodasComoLeidas();
+        cargarNotificaciones();
+    }
+
+    private void confirmarEliminarTodas() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText("¿Está seguro de eliminar todas las notificaciones?");
+        alert.setContentText("Esta acción no se puede deshacer.");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                notificacionDAO.eliminarTodas();
+                cargarNotificaciones();
+            }
+        });
     }
 
     public BorderPane getVista() {
