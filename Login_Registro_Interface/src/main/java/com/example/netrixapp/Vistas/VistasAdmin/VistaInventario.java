@@ -203,7 +203,9 @@ public class VistaInventario {
         TextField txtMarca = new TextField(equipo.getMarca());
         TextField txtModelo = new TextField(equipo.getModelo());
         TextField txtSerie = new TextField(equipo.getNumero_serie());
-        Spinner<Integer> spinnerDisponible = new Spinner<>(0, 1000, equipo.getDisponible());
+        Spinner<Integer> spinnerDisponible = new Spinner<>(0, 1, equipo.getDisponible());
+        Spinner<Integer> spinnerTipoEquipo = new Spinner<>(0, 20, equipo.getTipo_equipo());
+
 
         formulario.addRow(0, new Label("Código:"), txtCodigo);
         formulario.addRow(1, new Label("Descripción:"), txtDescripcion);
@@ -211,6 +213,7 @@ public class VistaInventario {
         formulario.addRow(3, new Label("Modelo:"), txtModelo);
         formulario.addRow(4, new Label("Serie:"), txtSerie);
         formulario.addRow(5, new Label("Disponible:"), spinnerDisponible);
+        formulario.addRow(6, new Label("ID tipo equipo: ", spinnerTipoEquipo));
 
         // Añadir el formulario al diálogo
         alerta.getDialogPane().setContent(formulario);
@@ -229,8 +232,13 @@ public class VistaInventario {
                 equipo.setModelo(txtModelo.getText());
                 equipo.setNumero_serie(txtSerie.getText());
                 equipo.setDisponible(spinnerDisponible.getValue());
+                equipo.setTipo_equipo(spinnerTipoEquipo.getValue());
 
-                equipoDao.update(equipo, id);
+                try {
+                    equipoDao.update(equipo, id);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 tablaEquipos.refresh();
             }
         });

@@ -83,7 +83,7 @@ public class EquipoDaoImpl implements IEquipoDao {
         String sql = "UPDATE EQUIPO SET CODIGO_BIEN = ?, DESCRIPCION = ?, " +
                 "MARCA = ?, MODELO = ?, NUMERO_SERIE = ?, " +
                 "DISPONIBLE = ?, ID_TIPO_EQUIPO = ?\n" +
-                "WHERE ID_EQUIPO = ?;";
+                "WHERE ID_EQUIPO = ?";
 
         try {
             Connection con = ConnectionBD.getConnection();
