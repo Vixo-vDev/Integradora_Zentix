@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="interfaz.admin.controladores.AdminSolicitudesController">
+    <children>
+        <Label layoutX="30.0" layoutY="30.0" text="Gestión de Solicitudes" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+        <Separator layoutX="30.0" layoutY="70.0" prefWidth="940.0" />
+
+        <Label layoutX="30.0" layoutY="90.0" text="Filtros:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="estadoFilterComboBox" layoutX="90.0" layoutY="85.0" prefWidth="150.0" promptText="Filtrar por Estado"/>
+        <DatePicker fx:id="fechaInicioDatePicker" layoutX="260.0" layoutY="85.0" prefWidth="140.0" promptText="Fecha Inicio"/>
+        <DatePicker fx:id="fechaFinDatePicker" layoutX="410.0" layoutY="85.0" prefWidth="140.0" promptText="Fecha Fin"/>
+        <Button layoutX="570.0" layoutY="85.0" text="Aplicar Filtros" onAction="#aplicarFiltros" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button layoutX="690.0" layoutY="85.0" text="Mostrar Todas" onAction="#mostrarTodasSolicitudes" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Separator layoutX="30.0" layoutY="125.0" prefWidth="940.0" />
+
+        <TableView fx:id="solicitudesTable" layoutX="30.0" layoutY="140.0" prefHeight="450.0" prefWidth="940.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6;">
+            <columns>
+                <TableColumn fx:id="colIdSolicitud" prefWidth="40.0" text="ID"/>
+                <TableColumn fx:id="colIdUsuario" prefWidth="60.0" text="ID User"/>
+                <TableColumn fx:id="colArticulo" prefWidth="120.0" text="Artículo"/>
+                <TableColumn fx:id="colCantidad" prefWidth="60.0" text="Cant."/>
+                <TableColumn fx:id="colFechaSolicitud" prefWidth="85.0" text="F. Solicitud"/>
+                <TableColumn fx:id="colFechaRecibo" prefWidth="85.0" text="F. Recibo"/>
+                <TableColumn fx:id="colTiempoUso" prefWidth="80.0" text="Tiempo Uso"/>
+                <TableColumn fx:id="colRazonUso" prefWidth="150.0" text="Razón Uso"/>
+                <TableColumn fx:id="colEstado" prefWidth="80.0" text="Estado"/>
+                <TableColumn fx:id="colProfesorValida" prefWidth="60.0" text="ID Prof."/>
+                <TableColumn fx:id="colFechaValidacion" prefWidth="85.0" text="F. Val."/>
+                <TableColumn fx:id="colAdminEntrega" prefWidth="60.0" text="ID Ent."/>
+                <TableColumn fx:id="colFechaEntrega" prefWidth="85.0" text="F. Ent."/>
+                <TableColumn fx:id="colAdminRecibe" prefWidth="60.0" text="ID Rec."/>
+                <TableColumn fx:id="colFechaDevolucion" prefWidth="85.0" text="F. Dev."/>
+            </columns>
+        </TableView>
+
+        <Separator layoutX="30.0" layoutY="600.0" prefWidth="940.0" />
+
+        <Label layoutX="30.0" layoutY="620.0" text="Acciones:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <Button layoutX="100.0" layoutY="615.0" text="Aprobar Solicitud" onAction="#aprobarSolicitud" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button layoutX="260.0" layoutY="615.0" text="Rechazar Solicitud" onAction="#rechazarSolicitud" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button layoutX="420.0" layoutY="615.0" text="Entregar Solicitud" onAction="#entregarSolicitud" style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button layoutX="580.0" layoutY="615.0" text="Recibir Devolución" onAction="#recibirDevolucion" style="-fx-background-color: #ffc107; -fx-text-fill: #333; -fx-font-weight: bold;"/>
+    </children>
+</AnchorPane>

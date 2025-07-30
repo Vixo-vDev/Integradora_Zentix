@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="interfaz.admin.controladores.DashboardControlador">
+    <children>
+        <BorderPane prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <left>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #34495e;" BorderPane.alignment="CENTER">
+                    <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../img/user_icon.png" />
+                            </image>
+                            <VBox.margin>
+                                <Insets top="30.0" bottom="10.0" />
+                            </VBox.margin>
+                        </ImageView>
+                        <Label fx:id="labelNombreUsuario" text="Nombre del Usuario" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelRolUsuario" text="Rol del Usuario" textFill="#bdc3c7">
+                            <font>
+                                <Font size="12.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="20.0" />
+                            </VBox.margin>
+                        </Label>
+                        <VBox fx:id="menuAdmin" spacing="10.0" alignment="CENTER" visible="false" managed="false">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#mostrarGestionUsuarios" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Usuarios" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarGestionInventario" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Inventario" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarEstadisticas" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Estadisticas" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarSolicitudesAdmin" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Solicitudes" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarNotificaciones" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Notificaciones" textFill="WHITE" />
+                            </children>
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </VBox>
+                        <VBox fx:id="menuProfesor" spacing="10.0" alignment="CENTER" visible="false" managed="false">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#mostrarSolicitudesProfesor" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Mis Solicitudes" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarGestionInventario" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Ver Equipos Disponibles" textFill="WHITE" />
+                            </children>
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </VBox>
+                        <VBox fx:id="menuEstudiante" spacing="10.0" alignment="CENTER" visible="false" managed="false">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#mostrarMisSolicitudesEstudiante" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Mis Solicitudes" textFill="WHITE" />
+                                <Button mnemonicParsing="false" onAction="#mostrarCrearSolicitud" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2c3e50;" text="Solicitar Equipo" textFill="WHITE" />
+                            </children>
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #e74c3c;" text="Cerrar Sesión" textFill="WHITE">
+                            <VBox.margin>
+                                <Insets top="50.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+            </left>
+            <center>
+                <StackPane fx:id="contentArea" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
+                    <children>
+                        <VBox alignment="CENTER" spacing="20.0">
+                            <children>
+                                <Label text="Bienvenido al Dashboard" textFill="BLACK">
+                                    <font>
+                                        <Font name="System Bold" size="36.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets top="20.0" />
+                                    </VBox.margin>
+                                </Label>
+
+                                <Label text="Seleccione una opción del menú lateral." textFill="#7f8c8d">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="labelMensajeDashboard" textFill="#2c3e50" wrapText="true">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <padding>
+                                        <Insets left="20.0" right="20.0" />
+                                    </padding>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </StackPane>
+            </center>
+            <top>
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Gestor de Solicitudes de Equipos Tecnológicos" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+            </top>
+        </BorderPane>
+    </children>
+</AnchorPane>
