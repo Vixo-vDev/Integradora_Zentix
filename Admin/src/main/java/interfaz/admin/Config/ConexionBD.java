@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class ConexionBD {
 
     // Configuración para la conexión con Oracle Cloud y Wallet
-    private static final String TNS_ADMIN = "C:\\Users\\DevCa\\Documents\\Prototipo\\Admin\\src\\main\\resources\\Wallet_YHA6ZS91V0ZCFRSH"; // Ruta a la carpeta de la wallet
+    private static final String TNS_ADMIN = "C:\\Users\\mapi1\\Desktop\\Integradora_Zentix\\Admin\\src\\main\\resources\\Wallet_YHA6ZS91V0ZCFRSH"; // Ruta a la carpeta de la wallet
     private static final String URL_BASEDATOS = "jdbc:oracle:thin:@yha6zs91v0zcfrsh_high";
     private static final String USUARIO_BD = "ADMIN";
     private static final String PASSWORD_BD = "DevP1kNatura1";
