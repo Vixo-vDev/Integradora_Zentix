@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="VRPruebaInterfaz" />
-        <module name="PanelAdmin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="PanelAdmin" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

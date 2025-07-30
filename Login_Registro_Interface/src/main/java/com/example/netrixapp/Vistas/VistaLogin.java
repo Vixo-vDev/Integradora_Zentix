@@ -149,6 +149,7 @@ public class VistaLogin extends Application {
 
     }
 
+    
     public static void main(String[] args) throws SQLException {
         ConnectionBD con = new ConnectionBD();
         con.getConnection();
