@@ -9,6 +9,7 @@ module com.example.netrixapp {
     requires java.desktop;
     requires jdk.jdi;
     requires com.oracle.database.jdbc;
+    requires osdt.core;
 
     opens com.example.netrixapp.Vistas to javafx.fxml, javafx.graphics;
     opens com.example.netrixapp.Controladores to javafx.fxml;

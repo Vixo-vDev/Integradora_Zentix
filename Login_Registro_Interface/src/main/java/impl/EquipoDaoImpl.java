@@ -4,6 +4,7 @@ import Dao.IEquipoDao;
 import com.example.netrixapp.Controladores.ConnectionBD;
 import com.example.netrixapp.Modelos.Equipo;
 import oracle.jdbc.proxy.annotation.Pre;
+import oracle.security.crypto.core.Padding;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -103,8 +104,17 @@ public class EquipoDaoImpl implements IEquipoDao {
     }
 
     @Override
-    public void delete(Equipo equipo) throws Exception {
+    public void delete(Equipo equipo, int id) throws Exception {
+        String sql = "DELETE FROM EQUIPOS WHERE ID = ?";
 
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
