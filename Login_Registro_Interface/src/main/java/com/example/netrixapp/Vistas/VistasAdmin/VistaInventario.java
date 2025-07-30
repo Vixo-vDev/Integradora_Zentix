@@ -185,6 +185,9 @@ public class VistaInventario {
     }
 
     private void editarEquipo(Equipo equipo) {
+        int id = equipo.getId_equipo();  // <--- AQUÍ OBTIENES EL ID
+        System.out.println("ID del equipo seleccionado: " + id);
+
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Editar equipo");
         alerta.setHeaderText("Modifica los campos necesarios");
@@ -227,7 +230,7 @@ public class VistaInventario {
                 equipo.setNumero_serie(txtSerie.getText());
                 equipo.setDisponible(spinnerDisponible.getValue());
 
-                equipoDao.update(equipo);
+                equipoDao.update(equipo, id);
                 tablaEquipos.refresh();
             }
         });

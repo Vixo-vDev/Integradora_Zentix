@@ -79,18 +79,23 @@ public class EquipoDaoImpl implements IEquipoDao {
     }
 
     @Override
-    public void update(Equipo equipo) throws Exception {
-        String sql = "UPDATE ALUMNOS SET NOMBRES = ?, APELLIDOS = ?, CORREO = ?, " +
-                "FECHA_NACIMIENTO = ? WHERE ID = ?";
+    public void update(Equipo equipo, int id) throws Exception {
+        String sql = "UPDATE EQUIPO SET CODIGO_BIEN = ?, DESCRIPCION = ?, " +
+                "MARCA = ?, MODELO = ?, NUMERO_SERIE = ?, " +
+                "DISPONIBLE = ?, ID_TIPO_EQUIPO = ?\n" +
+                "WHERE ID_EQUIPO = ?;";
 
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, alumno.getNombres());
-            ps.setString(2, alumno.getApellidos());
-            ps.setString(3, alumno.getCorreo());
-            ps.setString(4, alumno.getFecha_nacimiento().toString());
-            ps.setInt(2, alumno.getId());
+            ps.setString(1, equipo.getCodigo_bien());
+            ps.setString(2, equipo.getDescripcion());
+            ps.setString(3, equipo.getMarca());
+            ps.setString(4, equipo.getModelo());
+            ps.setString(5, equipo.getNumero_serie());
+            ps.setString(6, String.valueOf(equipo.getDisponible()));
+            ps.setInt(7, equipo.getTipo_equipo());
+            ps.setInt(8, id);
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
