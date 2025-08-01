@@ -180,7 +180,74 @@ public class VistaInventario {
     }
 
     private void mostrarFormularioAgregar() {
-        // Tu lógica personalizada
+        Dialog<VistaUsuarios.Usuario> dialog = new Dialog<>();
+        dialog.setTitle("Registar un equipo");
+        dialog.setHeaderText("Registrar un nuevo equipo en el sistema");
+
+        // Configurar botones
+        ButtonType btnCrear = new ButtonType("Crear", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnCrear, ButtonType.CANCEL);
+
+        // Crear formulario
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 10, 10, 10));
+
+        TextField tfCodigoBien = new TextField();
+        tfCodigoBien.setPromptText("Código_Bien");
+
+        TextField tfDescripcion = new TextField();
+        tfDescripcion.setPromptText("Descripción");
+
+        TextField tfMarca = new TextField();
+        tfMarca.setPromptText("Marca");
+
+        TextField tfModelo = new TextField();
+        tfModelo.setPromptText("Modelo");
+
+        TextField tfNumeroSerie = new TextField();
+        tfNumeroSerie.setPromptText("Numero serie");
+
+        Spinner<Integer> spinnerTipoEquipo = new Spinner<>();
+        spinnerTipoEquipo.setPromptText("Tipo de Equipo");
+
+        grid.add(new Label("Codigo_Bien:"), 0, 0);
+        grid.add(tfCodigoBien, 1, 0);
+        grid.add(new Label("Descripcion:"), 0, 1);
+        grid.add(tfDescripcion, 1, 1);
+        grid.add(new Label("Marca:"), 0, 2);
+        grid.add(tfMarca, 1, 2);
+        grid.add(new Label("Modelo:"), 0, 3);
+        grid.add(tfModelo, 1, 3);
+        grid.add(new Label("Numero serie:"), 0, 4);
+        grid.add(tfNumeroSerie, 1, 4);
+        grid.add(new Label("Tipo de Equipo:"), 0, 5);
+        grid.add(spinnerTipoEquipo, 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == btnCrear) {
+                Equipo equipo = new Equipo();
+                        equipo.setCodigo_bien(tfCodigoBien.getText());
+                        equipo.setDescripcion(tfDescripcion.getText());
+                        equipo.setMarca(tfMarca.getText());
+                        equipo.setModelo(tfModelo.getText());
+                        equipo.setNumero_serie(tfNumeroSerie.getText());
+                        equipo.setTipo_equipo(spinnerTipoEquipo.getValue());
+                        try{
+                            equipoDao.create(equipo);
+                        }catch(Exception e){
+                            throw new RuntimeException(e);
+                        }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(usuario -> {
+            System.out.println("Nuevo usuario registrado creado: " + usuario.getNombreUsuario());
+            // Aquí iría la lógica para guardar el nuevo usuario
+        });
         System.out.println("Formulario para agregar equipo");
     }
 
@@ -246,13 +313,20 @@ public class VistaInventario {
 
 
     private void eliminarEquipo(Equipo equipo) {
+        int id  = equipo.getId_equipo();
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Eliminación");
         alert.setHeaderText("¿Eliminar equipo: " + equipo.getDescripcion() + "?");
         alert.setContentText("Esta acción no se puede deshacer.");
         if (alert.showAndWait().get() == ButtonType.OK) {
-            System.out.println("Equipo eliminado: " + equipo.getDescripcion());
-            // Lógica real aquí
+            try{
+                equipoDao.delete(equipo, id);
+                System.out.println("Equipo eliminado: " + equipo.getDescripcion());
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            tablaEquipos.refresh();
         }
     }
 

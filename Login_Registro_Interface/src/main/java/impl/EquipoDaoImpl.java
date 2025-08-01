@@ -105,7 +105,7 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public void delete(Equipo equipo, int id) throws Exception {
-        String sql = "DELETE FROM EQUIPOS WHERE ID = ?";
+        String sql = "DELETE FROM EQUIPO WHERE ID_EQUIPO = ?";
 
         try {
             Connection con = ConnectionBD.getConnection();
