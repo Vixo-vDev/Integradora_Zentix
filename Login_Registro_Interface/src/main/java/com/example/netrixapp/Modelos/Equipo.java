@@ -14,6 +14,19 @@ public class Equipo {
     private int tipo_equipo;
     //private List<Equipo> equipos;
 
+    public Equipo() {
+
+    }
+
+    public Equipo(String codigo_bien,  String descripcion, String marca, String modelo, String numero_serie, int tipo_equipo) {
+        this.codigo_bien = codigo_bien;
+        this.descripcion = descripcion;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.numero_serie = numero_serie;
+        this.tipo_equipo = tipo_equipo;
+    }
+
     public int getId_equipo() {
         return id_equipo;
     }

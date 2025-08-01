@@ -178,10 +178,9 @@ public class VistaInventario {
         card.getChildren().addAll(lblTitulo, lblValor);
         return card;
     }
-
     private void mostrarFormularioAgregar() {
-        Dialog<VistaUsuarios.Usuario> dialog = new Dialog<>();
-        dialog.setTitle("Registar un equipo");
+        Dialog<Equipo> dialog = new Dialog<>();
+        dialog.setTitle("Registrar un equipo");
         dialog.setHeaderText("Registrar un nuevo equipo en el sistema");
 
         // Configurar botones
@@ -209,9 +208,8 @@ public class VistaInventario {
         TextField tfNumeroSerie = new TextField();
         tfNumeroSerie.setPromptText("Numero serie");
 
-        Spinner<Integer> spinnerTipoEquipo = new Spinner<>();
-        spinnerTipoEquipo.setPromptText("Tipo de Equipo");
-
+        Spinner<Integer> spinnerTipoEquipo = new Spinner<>(1, 10, 1);
+        spinnerTipoEquipo.setEditable(false);
         grid.add(new Label("Codigo_Bien:"), 0, 0);
         grid.add(tfCodigoBien, 1, 0);
         grid.add(new Label("Descripcion:"), 0, 1);
@@ -226,30 +224,53 @@ public class VistaInventario {
         grid.add(spinnerTipoEquipo, 1, 5);
 
         dialog.getDialogPane().setContent(grid);
+
+        // Procesar resultado
         dialog.setResultConverter(buttonType -> {
             if (buttonType == btnCrear) {
-                Equipo equipo = new Equipo();
-                        equipo.setCodigo_bien(tfCodigoBien.getText());
-                        equipo.setDescripcion(tfDescripcion.getText());
-                        equipo.setMarca(tfMarca.getText());
-                        equipo.setModelo(tfModelo.getText());
-                        equipo.setNumero_serie(tfNumeroSerie.getText());
-                        equipo.setTipo_equipo(spinnerTipoEquipo.getValue());
-                        try{
-                            equipoDao.create(equipo);
-                        }catch(Exception e){
-                            throw new RuntimeException(e);
-                        }
+                String codigo_bien = tfCodigoBien.getText().trim();
+                String descripcion = tfDescripcion.getText().trim();
+                String marca = tfMarca.getText().trim();
+                String modelo = tfModelo.getText().trim();
+                String numero_serie = tfNumeroSerie.getText().trim();
+                Integer tipo_equipo = spinnerTipoEquipo.getValue();
+
+                if (codigo_bien.isEmpty() || descripcion.isEmpty() || marca.isEmpty() ||
+                        modelo.isEmpty() || numero_serie.isEmpty() || tipo_equipo == null) {
+                    Alert alerta = new Alert(Alert.AlertType.WARNING);
+                    alerta.setTitle("Campos incompletos");
+                    alerta.setHeaderText("Por favor completa todos los campos.");
+                    alerta.showAndWait();
+                    return null;
+                } else {
+                    return new Equipo(
+                            codigo_bien,
+                            descripcion,
+                            marca,
+                            modelo,
+                            numero_serie,
+                            tipo_equipo
+                    );
+                }
             }
             return null;
         });
 
-        dialog.showAndWait().ifPresent(usuario -> {
-            System.out.println("Nuevo usuario registrado creado: " + usuario.getNombreUsuario());
-            // Aquí iría la lógica para guardar el nuevo usuario
+        dialog.showAndWait().ifPresent(equipo -> {
+            try {
+                equipoDao.create(equipo);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Operación exitosa");
+                alert.setHeaderText("Equipo registrado");
+                alert.setContentText("Equipo registrado exitosamente.");
+                alert.showAndWait();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            tablaEquipos.refresh();
         });
-        System.out.println("Formulario para agregar equipo");
     }
+
 
     private void editarEquipo(Equipo equipo) {
         int id = equipo.getId_equipo();  // <--- AQUÍ OBTIENES EL ID
@@ -320,13 +341,30 @@ public class VistaInventario {
         alert.setHeaderText("¿Eliminar equipo: " + equipo.getDescripcion() + "?");
         alert.setContentText("Esta acción no se puede deshacer.");
         if (alert.showAndWait().get() == ButtonType.OK) {
-            try{
+            try {
                 equipoDao.delete(equipo, id);
                 System.out.println("Equipo eliminado: " + equipo.getDescripcion());
-            }catch(Exception e){
-                throw new RuntimeException(e);
+
+                todosLosEquipos = equipoDao.findAll();
+                int totalPaginas = (int) Math.ceil((double) todosLosEquipos.size() / FILAS_POR_PAGINA);
+                paginador.setPageCount(totalPaginas);
+
+                int paginaActual = paginador.getCurrentPageIndex();
+                if (paginaActual >= totalPaginas) {
+                    paginaActual = totalPaginas - 1;
+                    if (paginaActual < 0) paginaActual = 0;
+                }
+                paginador.setCurrentPageIndex(paginaActual);
+                paginador.setPageFactory(this::crearPagina);
+
+            } catch(Exception e) {
+                e.printStackTrace();
+                Alert alertError = new Alert(Alert.AlertType.ERROR);
+                alertError.setTitle("Error");
+                alertError.setHeaderText("No se pudo eliminar el equipo");
+                alertError.setContentText(e.getMessage());
+                alertError.showAndWait();
             }
-            tablaEquipos.refresh();
         }
     }
 

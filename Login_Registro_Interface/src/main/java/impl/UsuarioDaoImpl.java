@@ -48,7 +48,33 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 
     @Override
     public List<Usuario> findAll() throws Exception {
-        return List.of();
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM USUARIO";  // Ajusta el nombre de la tabla si es distinto
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                // Extraemos columnas según tu modelo Usuario
+                int id = rs.getInt("id_usuario");
+                String nombre = rs.getString("nombre");
+                String apellidos = rs.getString("apellidos");
+                String correo = rs.getString("correo");
+                String direccion = rs.getString("direccion");
+                String lada = rs.getString("lada");
+                String telefono = rs.getString("telefono");
+                LocalDate date = rs.getDate("date") != null ? rs.getDate("date").toLocalDate() : null;
+                int edad = rs.getInt("edad");
+                String rol = rs.getString("rol");
+                String matricula = rs.getString("matricula");
+                String password = rs.getString("password");
+
+                Usuario usuario = new Usuario(id, nombre, apellidos, correo, direccion, lada, telefono, date, edad, rol, matricula, password);
+                usuarios.add(usuario);
+            }
+        }
+        return usuarios;
     }
 
     @Override

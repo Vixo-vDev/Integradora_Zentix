@@ -85,7 +85,8 @@ public class EquipoDaoImpl implements IEquipoDao {
             ps.setString(3, equipo.getMarca());
             ps.setString(4, equipo.getModelo());
             ps.setString(5, equipo.getNumero_serie());
-            ps.setInt(6, equipo.getId_equipo());
+            ps.setInt(6, equipo.getTipo_equipo());
+            ps.executeUpdate();
         }catch(SQLException e){
             throw new RuntimeException(e);
         }
@@ -106,7 +107,7 @@ public class EquipoDaoImpl implements IEquipoDao {
             ps.setString(3, equipo.getMarca());
             ps.setString(4, equipo.getModelo());
             ps.setString(5, equipo.getNumero_serie());
-            ps.setString(6, String.valueOf(equipo.getDisponible()));
+            ps.setInt(6, equipo.getDisponible());
             ps.setInt(7, equipo.getTipo_equipo());
             ps.setInt(8, id);
             ps.executeUpdate();
