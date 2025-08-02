@@ -227,6 +227,40 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         }
     }
 
-    
+    @Override
+    public List<Solicitud> findByEstado(String estado) {
+        List<Solicitud> solicitudes = new ArrayList<>();
+        String sql = "SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
+                "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO " +
+                "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO " +
+                "WHERE LOWER(S.ESTADO) = LOWER(?) ORDER BY ID_SOLICITUD ASC";
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Solicitud solicitud = new Solicitud();
+                solicitud.setId_solicitud(rs.getInt("ID_SOLICITUD"));
+                solicitud.setId_usuario(rs.getInt("ID_USUARIO"));
+                solicitud.setNombreUsuario(rs.getString("NOMBRE"));
+                solicitud.setFecha_solicitud(rs.getDate("FECHA_SOLICITUD").toLocalDate());
+                solicitud.setArticulo(rs.getString("ARTICULO"));
+                solicitud.setCantidad(rs.getInt("CANTIDAD"));
+                solicitud.setFecha_recibo(rs.getDate("FECHA_RECIBO").toLocalDate());
+                solicitud.setTiempo_uso(rs.getString("TIEMPO_USO"));
+                solicitud.setRazon(rs.getString("RAZON_USO"));
+                solicitud.setEstado(rs.getString("ESTADO"));
+                solicitudes.add(solicitud);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return solicitudes;
+    }
+
+
+
 
 }
