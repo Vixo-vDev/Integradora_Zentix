@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class VistaUsuarios {
     private TextField edad;
     private ComboBox<String> comboRol;
     private TextField matricula;
+    private TextField password;
 
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
@@ -90,6 +92,10 @@ public class VistaUsuarios {
     }
     public String getmatricula() {
         return matricula.getText().trim();
+    }
+
+    public String getPassword() {
+        return password.getText().trim();
     }
 
     private void inicializarUI() {
@@ -258,11 +264,62 @@ public class VistaUsuarios {
         return confirmacion;
     }
 
-    private void mostrarFormularioNuevoUsuario() {
+    public Alert mostrarFormularioNuevoUsuario() {
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Editar usuario");
+        alerta.setHeaderText("Modifica los campos necesarios");
+
+        GridPane formulario = new GridPane();
+        formulario.setHgap(10);
+        formulario.setVgap(10);
+        formulario.setPadding(new Insets(20));
+
+        txtNombre = new TextField("Nombre");
+        txtAepellidos = new TextField("Apellidos");
+        txtCorreo = new TextField("Correo");
+        txtDireccion = new TextField("Direccion");
+        txtLada = new TextField("Lada");
+        txtTelefono = new TextField("Telefono");
+        fecha = new DatePicker();
+        calcularEdad(edad);
+        edad = new TextField("Edad:");
+        edad.setEditable(false);
+        comboRol = new ComboBox<>();
+        comboRol.getItems().addAll("Alumno", "Docente");
+        comboRol.setValue("Seleccionar rol");
+        matricula = new TextField("Matrícula");
+        password = new TextField("Contraseña:");
+
+        formulario.addRow(0, new Label("Nombre:"), txtNombre);
+        formulario.addRow(1, new Label("Apellidos:"), txtAepellidos);
+        formulario.addRow(2, new Label("Correo:"), txtCorreo);
+        formulario.addRow(3, new Label("Dirección:"), txtDireccion);
+        formulario.addRow(4, new Label("Lada:"), txtLada);
+        formulario.addRow(5, new Label("Teléfono:"), txtTelefono);
+        formulario.addRow(6, new Label("Fecha Nacimiento:"), fecha);
+        formulario.addRow(7, new Label("Edad:"), edad);
+        formulario.addRow(8, new Label("Rol:"), comboRol);
+        formulario.addRow(9, new Label("Matrícula:"), matricula);
+        formulario.addRow(9, new Label("Password:"), password);
+
+        alerta.getDialogPane().setContent(formulario);
+
+        return alerta;
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Funcionalidad no implementada");
         alert.setHeaderText(null);
         alert.setContentText("Aquí puedes implementar el formulario para crear un nuevo usuario.");
-        alert.showAndWait();
+        return alert;
+    }
+
+    public void calcularEdad(TextField edad) {
+        fecha.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                int edadCalculada = Period.between(newValue, LocalDate.now()).getYears();
+                edad.setText(String.valueOf(edadCalculada));
+            } else {
+                edad.clear();
+            }
+        });
     }
 }
