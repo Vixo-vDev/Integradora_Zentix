@@ -65,7 +65,7 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
                 solicitud.setId_solicitud(rs.getInt("ID_SOLICITUD"));
                 solicitud.setId_usuario(rs.getInt("ID_USUARIO"));
-                solicitud.setNombreUsario(rs.getString("NOMBRE"));
+                solicitud.setNombreUsuario(rs.getString("NOMBRE"));
                 solicitud.setFecha_solicitud(LocalDate.parse(rs.getDate("FECHA_SOLICITUD").toString()));
                 solicitud.setArticulo(rs.getString("ARTICULO"));
                 solicitud.setCantidad(rs.getInt("CANTIDAD"));

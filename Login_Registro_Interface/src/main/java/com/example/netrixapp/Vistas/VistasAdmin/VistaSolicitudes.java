@@ -64,15 +64,9 @@ public class VistaSolicitudes {
         cbFiltroEstado.setValue("Todas");
         cbFiltroEstado.setPromptText("Filtrar por estado");
 
-        ComboBox<String> cbFiltroUsuario = new ComboBox<>();
-        cbFiltroUsuario.getItems().addAll("Todos los usuarios", "jperez", "mgarcia", "lrodriguez");
-        cbFiltroUsuario.setValue("Todos los usuarios");
-        cbFiltroUsuario.setPromptText("Filtrar por usuario");
-
         filtros.getChildren().addAll(
                 new Label("Filtros:"),
-                cbFiltroEstado,
-                cbFiltroUsuario
+                cbFiltroEstado
         );
         contenido.getChildren().add(filtros);
 
@@ -103,14 +97,8 @@ public class VistaSolicitudes {
            TableColumn<Solicitud, String> colCantidad = new TableColumn<>("Cantidad");
            colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
-           TableColumn<Solicitud, String> colTiempoUso = new TableColumn<>("Tiempo");
-           colTiempoUso.setCellValueFactory(new PropertyValueFactory<>("tiempo_uso"));
-
            TableColumn<Solicitud, String> colRazon = new TableColumn<>("Razon");
            colRazon.setCellValueFactory(new PropertyValueFactory<>("razon"));
-
-           TableColumn<Solicitud, String> colFechaSolicitud = new TableColumn<>("Fecha Solicitud");
-           colFechaSolicitud.setCellValueFactory(new PropertyValueFactory<>("fecha_solicitud"));
 
            TableColumn<Solicitud, String> colFechaRecibo = new TableColumn<>("Fecha Recibo");
            colFechaRecibo.setCellValueFactory(new PropertyValueFactory<>("fecha_recibo"));
@@ -176,8 +164,8 @@ public class VistaSolicitudes {
                }
            });
 
-           tablaSolicitudes.getColumns().addAll(colUsuario, colArticulo, colCantidad, colTiempoUso,
-                   colRazon, colFechaSolicitud, colFechaRecibo, colEstado, colAcciones);
+           tablaSolicitudes.getColumns().addAll(colUsuario, colArticulo, colCantidad,
+                   colRazon, colFechaRecibo, colEstado, colAcciones);
 
        }
 
@@ -203,7 +191,7 @@ public class VistaSolicitudes {
 
     private void cambiarEstadoSolicitud(Solicitud solicitud, String nuevoEstado) {
         // Aquí iría la lógica para actualizar el estado en la base de datos
-        System.out.println("Cambiando estado de solicitud de " + solicitud.getNombreUsario() +
+        System.out.println("Cambiando estado de solicitud de " + solicitud.getNombreUsuario() +
                 " a " + nuevoEstado);
 
         // Actualizar el estado en la tabla

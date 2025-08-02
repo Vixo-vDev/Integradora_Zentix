@@ -111,11 +111,11 @@ public class Solicitud {
         this.estado = estado;
     }
 
-    public String getNombreUsario() {
+    public String getNombreUsuario() {
         return nombreUsuario;
     }
 
-    public void setNombreUsario(String nombreUsario) {
+    public void setNombreUsuario(String nombreUsario) {
         this.nombreUsuario = nombreUsario;
     }
 }
