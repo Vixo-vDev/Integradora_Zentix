@@ -213,4 +213,20 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         }
         return total_pendiente;
     }
+
+    @Override
+    public void actualizarEstado(int idSolicitud, String nuevoEstado) {
+        String sql = "UPDATE SOLICITUD SET ESTADO = ? WHERE ID_SOLICITUD = ?";
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, idSolicitud);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    
+
 }
