@@ -39,7 +39,7 @@ public class ControladorRegistro {
             String confirmarPassword = vista.getConfirmarPassword();
             String passwordConfirmar = vista.getConfirmarPassword();
 
-            Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, matricula, password);
+            Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, matricula, password, "ACTIVO");
 
 
             if (nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || calle.isEmpty() || lada.isEmpty()

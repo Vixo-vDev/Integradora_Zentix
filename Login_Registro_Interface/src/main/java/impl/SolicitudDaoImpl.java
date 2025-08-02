@@ -49,6 +49,42 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     }
 
     @Override
+    public List<Solicitud> findAllAdmin(){
+        String sql="SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
+                "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO\n" +
+                "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO ORDER BY ID_SOLICITUD ASC";
+        List<Solicitud> solicitudes= new ArrayList<>();
+
+        try {
+            Connection con= ConnectionBD.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs= ps.executeQuery();
+
+            while(rs.next()){
+                Solicitud solicitud =new Solicitud();
+
+                solicitud.setId_solicitud(rs.getInt("ID_SOLICITUD"));
+                solicitud.setId_usuario(rs.getInt("ID_USUARIO"));
+                solicitud.setNombreUsario(rs.getString("NOMBRE"));
+                solicitud.setFecha_solicitud(LocalDate.parse(rs.getDate("FECHA_SOLICITUD").toString()));
+                solicitud.setArticulo(rs.getString("ARTICULO"));
+                solicitud.setCantidad(rs.getInt("CANTIDAD"));
+                solicitud.setFecha_recibo(LocalDate.parse(rs.getDate("FECHA_RECIBO").toString()));
+                solicitud.setTiempo_uso(rs.getString("TIEMPO_USO"));
+                solicitud.setRazon(rs.getString("RAZON_USO"));
+                solicitud.setEstado(rs.getString("ESTADO"));
+                solicitudes.add(solicitud);
+
+            }
+            System.out.println("Total solicitudes encontradas: " + solicitudes.size());
+            return solicitudes;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Solicitud> findByFilters(int id_usuario, String estado, LocalDate desde, LocalDate hasta) {
         List<Solicitud> solicitudes = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM SOLICITUD WHERE id_usuario = ?");

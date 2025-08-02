@@ -59,7 +59,6 @@ public class VistaHistorial {
         this.vista = new BorderPane();
         inicializarUI();
 
-        // 👇 Aquí se llama al controlador para que cargue los datos
         new ControladorHistorial(this);
     }
 

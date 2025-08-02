@@ -25,7 +25,6 @@ public class ControladorLogin {
             String user = vista.getCampoUsuario();
             String pass = vista.getCampoPassword();
             Usuario usuario = usuarioDao.login(user, pass);
-            usuario.setEstado(usuario.getEstado());
 
             if(user.isEmpty() || pass.isEmpty()){
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);

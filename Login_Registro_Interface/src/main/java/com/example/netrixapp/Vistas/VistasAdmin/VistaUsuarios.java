@@ -116,7 +116,7 @@ public class VistaUsuarios {
 
         Button btnAgregar = new Button("+ Nuevo Usuario");
         btnAgregar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 4px;");
-        btnAgregar.setOnAction(e -> mostrarFormularioNuevoUsuario());
+        btnAgregar.setOnAction(e -> controladorUsuarios.agregarUsuario());
 
         encabezado.getChildren().addAll(lblTitulo, btnAgregar);
         contenido.getChildren().add(encabezado);
@@ -233,6 +233,8 @@ public class VistaUsuarios {
         txtTelefono = new TextField(usuario.getTelefono());
         fecha = new DatePicker(usuario.getDate());
         edad = new TextField(String.valueOf(usuario.getEdad()));
+        edad.setEditable(false);
+        calcularEdad(edad);
         comboRol = new ComboBox<>();
         comboRol.getItems().addAll("Alumno", "Docente");
         comboRol.setValue(usuario.getRol());
@@ -266,29 +268,30 @@ public class VistaUsuarios {
 
     public Alert mostrarFormularioNuevoUsuario() {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Editar usuario");
-        alerta.setHeaderText("Modifica los campos necesarios");
+        alerta.setTitle("Agregar usuario");
+        alerta.setHeaderText("Ingresa los campos que se te solicitan");
+        alerta.setContentText("Aquí puedes implementar el formulario para crear un nuevo usuario.");
 
         GridPane formulario = new GridPane();
         formulario.setHgap(10);
         formulario.setVgap(10);
         formulario.setPadding(new Insets(20));
 
-        txtNombre = new TextField("Nombre");
-        txtAepellidos = new TextField("Apellidos");
-        txtCorreo = new TextField("Correo");
-        txtDireccion = new TextField("Direccion");
-        txtLada = new TextField("Lada");
-        txtTelefono = new TextField("Telefono");
+        txtNombre = new TextField();
+        txtAepellidos = new TextField();
+        txtCorreo = new TextField();
+        txtDireccion = new TextField();
+        txtLada = new TextField();
+        txtTelefono = new TextField();
         fecha = new DatePicker();
+        edad = new TextField();
         calcularEdad(edad);
-        edad = new TextField("Edad:");
         edad.setEditable(false);
         comboRol = new ComboBox<>();
         comboRol.getItems().addAll("Alumno", "Docente");
         comboRol.setValue("Seleccionar rol");
-        matricula = new TextField("Matrícula");
-        password = new TextField("Contraseña:");
+        matricula = new TextField();
+        password = new TextField();
 
         formulario.addRow(0, new Label("Nombre:"), txtNombre);
         formulario.addRow(1, new Label("Apellidos:"), txtAepellidos);
@@ -300,16 +303,11 @@ public class VistaUsuarios {
         formulario.addRow(7, new Label("Edad:"), edad);
         formulario.addRow(8, new Label("Rol:"), comboRol);
         formulario.addRow(9, new Label("Matrícula:"), matricula);
-        formulario.addRow(9, new Label("Password:"), password);
+        formulario.addRow(10, new Label("Password:"), password);
 
         alerta.getDialogPane().setContent(formulario);
 
         return alerta;
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Funcionalidad no implementada");
-        alert.setHeaderText(null);
-        alert.setContentText("Aquí puedes implementar el formulario para crear un nuevo usuario.");
-        return alert;
     }
 
     public void calcularEdad(TextField edad) {

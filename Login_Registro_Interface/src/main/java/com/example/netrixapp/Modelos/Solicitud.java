@@ -14,6 +14,7 @@ public class Solicitud {
     private String tiempo_uso;
     private String razon;
     private String estado;
+    private String nombreUsuario;
 
     public Solicitud() {
 
@@ -108,5 +109,13 @@ public class Solicitud {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getNombreUsario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsario(String nombreUsario) {
+        this.nombreUsuario = nombreUsario;
     }
 }

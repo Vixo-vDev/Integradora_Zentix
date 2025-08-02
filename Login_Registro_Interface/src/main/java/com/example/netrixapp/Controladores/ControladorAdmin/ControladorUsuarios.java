@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ControladorUsuarios {
     private VistaUsuarios vista;
@@ -111,6 +112,67 @@ public class ControladorUsuarios {
                 error.setTitle("Error");
                 error.setHeaderText("No se pudo eliminar el usuario.");
                 error.setContentText("Ocurrió un error inesperado.");
+                error.showAndWait();
+            }
+        }
+    }
+
+    public void agregarUsuario() {
+        Alert editar = vista.mostrarFormularioNuevoUsuario();
+        Optional<ButtonType> resultado = editar.showAndWait();
+
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            try {
+                String nombre = vista.getNombre();
+                String apellidos = vista.getApellidos();
+                String correo = vista.getCorreo();
+                String direccion = vista.getCalle();
+                String lada = vista.getLada();
+                String telefono = vista.getTelefono();
+                String matricula = vista.getmatricula();
+                String rol = vista.getRol();
+                int edad = vista.getEdad();
+                LocalDate fechaNacimiento = vista.getFecha();
+                String password = vista.getPassword();
+
+                if (nombre.isEmpty() || correo.isEmpty() || rol == null || fechaNacimiento == null ||
+                        password.isEmpty()) {
+                    Alert alerta = new Alert(Alert.AlertType.ERROR);
+                    alerta.setHeaderText("Campos vacíos");
+                    alerta.setContentText("Por favor completa todos los campos requeridos.");
+                    alerta.showAndWait();
+                    return;
+                }
+
+                Usuario usuario = new Usuario();
+                usuario.setNombre(nombre);
+                usuario.setApellidos(apellidos);
+                usuario.setCorreo(correo);
+                usuario.setDireccion(direccion);
+                usuario.setLada(lada);
+                usuario.setTelefono(telefono);
+                usuario.setDate(fechaNacimiento);
+                usuario.setEdad(edad);
+                usuario.setRol(rol);
+                usuario.setMatricula(matricula);
+                usuario.setPassword(password);
+                usuario.setEstado("ACTIVO");
+
+                // Actualizar en base de datos
+                usuarioDao.create(usuario);
+                // Recargar lista
+                cargarUsuarios();
+
+                Alert exito = new Alert(Alert.AlertType.INFORMATION);
+                exito.setTitle("Éxito");
+                exito.setHeaderText(null);
+                exito.setContentText("Usuario actualizado correctamente.");
+                exito.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setHeaderText("Error al guardar");
+                error.setContentText("Verifica los datos e intenta nuevamente.");
                 error.showAndWait();
             }
         }

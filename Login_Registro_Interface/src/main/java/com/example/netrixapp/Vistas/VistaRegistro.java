@@ -35,14 +35,14 @@ public class VistaRegistro {
 
     public String getNombre() { return campoNombre.getText().trim(); }
     public String getApellidos() { return campoApellidos.getText().trim(); }
-    public String getCorreo() { return campoCorreo.getText().trim(); }
+    public String getCorreo() { return campoCorreo.getText().trim().toLowerCase(); }
     public String getCalle() { return campoCalle.getText().trim(); }
     public String getLada() { return campoLada.getText().trim(); }
     public String getTelefono() { return campoTelefono.getText().trim(); }
     public LocalDate getFecha() { return campoFecha.getValue(); }
     public int getEdad() { return Integer.parseInt(campoEdad.getText().trim()); }
     public String getRol() { return comboRol.getSelectionModel().getSelectedItem().trim().toUpperCase();  }
-    public String getmatricula() { return matricula.getText().trim(); }
+    public String getmatricula() { return matricula.getText().trim().toLowerCase(); }
     public String getPassword() { return campoContrasena.getText().trim(); }
     public String getConfirmarPassword() { return campoConfirmar.getText().trim(); }
     public Button getBotonContinuar() {

@@ -24,7 +24,7 @@ public class Usuario {
     public Usuario(){}
 
     //Constructor con parámetros
-    public Usuario(String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password) {
+    public Usuario(String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password, String estado) {
 
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -37,6 +37,7 @@ public class Usuario {
         this.rol = rol;
         this.matricula = matricula;
         this.password = password;
+        this.estado = estado;
     }
 
     public Usuario(int id_usuario, String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password,  String estado) {
