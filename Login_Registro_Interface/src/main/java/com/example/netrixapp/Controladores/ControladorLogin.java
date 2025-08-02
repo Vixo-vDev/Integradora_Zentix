@@ -25,6 +25,7 @@ public class ControladorLogin {
             String user = vista.getCampoUsuario();
             String pass = vista.getCampoPassword();
             Usuario usuario = usuarioDao.login(user, pass);
+            usuario.setEstado(usuario.getEstado());
 
             if(user.isEmpty() || pass.isEmpty()){
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -40,11 +41,17 @@ public class ControladorLogin {
                     HelloApplicationAdmin siguienteVentana = new HelloApplicationAdmin();
                     siguienteVentana.start(stage);
                 }
-                else{
+                else if(usuario.getEstado().equals("ACTIVO")){
                     SesionUsuario.setUsuarioActual(usuario);
                     Stage stage = (Stage) vista.getBtnConfirmar().getScene().getWindow();
                     HelloApplication siguienteVentana = new HelloApplication();
                     siguienteVentana.start(stage);
+                }
+                else{
+                    Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerta.setHeaderText("ERROR");
+                    alerta.setContentText("Esta cuenta no está activa");
+                    alerta.showAndWait();
                 }
 
             }

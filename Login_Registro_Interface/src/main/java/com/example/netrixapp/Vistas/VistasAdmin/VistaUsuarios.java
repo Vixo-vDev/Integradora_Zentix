@@ -174,16 +174,12 @@ public class VistaUsuarios {
 
                 btnEditar.setOnAction(e -> {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    Alert alerta = editarUsuario(usuario);
-                    Optional<ButtonType> resultado = alerta.showAndWait();
-                    if (resultado.isPresent() && resultado.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                        controladorUsuarios.mostrarDialogoEdicion(usuario);
-                    }
+                    controladorUsuarios.guardarUsuarioEditado(usuario);
                 });
 
                 btnEliminar.setOnAction(e -> {
                     Usuario usuario = getTableView().getItems().get(getIndex());
-                    eliminarUsuario(usuario);
+                    controladorUsuarios.eliminarUsuario(usuario);
                 });
             }
 
@@ -213,7 +209,7 @@ public class VistaUsuarios {
         paginador.setPageFactory(this::crearPagina);
     }
 
-    private Alert editarUsuario(Usuario usuario) {
+    public Alert editarUsuario(Usuario usuario) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Editar usuario");
         alerta.setHeaderText("Modifica los campos necesarios");
@@ -249,38 +245,17 @@ public class VistaUsuarios {
 
         alerta.getDialogPane().setContent(formulario);
 
-        btnGuardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alerta.getButtonTypes().setAll(btnGuardar, btnCancelar);
-
         return alerta;
     }
 
-    private void eliminarUsuario(Usuario usuario) {
+    public Alert confirmarEliminacion(Usuario usuario) {
         int id = usuario.getId_usuario();
         System.out.println(id);
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Eliminar Usuario");
         confirmacion.setHeaderText("¿Eliminar usuario: " + usuario.getNombre() + " " + usuario.getApellidos() + "?");
         confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-
-            if (confirmacion.showAndWait().get() == ButtonType.OK) {
-                try {
-                    ControladorUsuarios controladorUsuarios1 = null;
-                    usuarioDao.delete(usuario);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Usuario eliminado");
-                    info.setHeaderText(null);
-                    info.setContentText("Usuario eliminado correctamente.");
-                    info.showAndWait();
-                    controladorUsuarios1.cargarUsuarios();
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
+        return confirmacion;
     }
 
     private void mostrarFormularioNuevoUsuario() {

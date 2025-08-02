@@ -18,6 +18,7 @@ public class Usuario {
     private String rol;
     private String matricula;
     private String password;
+    private String estado;
 
     //Constructor vacío
     public Usuario(){}
@@ -38,7 +39,7 @@ public class Usuario {
         this.password = password;
     }
 
-    public Usuario(int id_usuario, String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password) {
+    public Usuario(int id_usuario, String nombre, String apellidos, String correo, String direccion, String lada, String telefono, LocalDate date, int edad, String rol, String matricula, String password,  String estado) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -51,6 +52,7 @@ public class Usuario {
         this.rol = rol;
         this.matricula = matricula;
         this.password = password;
+        this.estado = estado;
     }
 
     public int getId_usuario() {return id_usuario;}
@@ -139,5 +141,13 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

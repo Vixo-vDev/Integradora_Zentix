@@ -38,8 +38,7 @@ public class VistaLogin extends Application {
         return campoUsuario.getText().trim();
     }
 
-    public
-    String getCampoPassword() {
+    public String getCampoPassword() {
         return campoPassword.getText().trim();
     }
 

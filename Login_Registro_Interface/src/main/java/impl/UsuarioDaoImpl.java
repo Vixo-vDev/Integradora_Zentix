@@ -18,7 +18,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     public Usuario login(String correo, String pass) throws Exception {
         String sql= "SELECT ID_USUARIO,NOMBRE, " +
                 "APELLIDOS, CORREO_INSTITUCIONAL,DOMICILIO, LADA, TELEFONO, FECHA_NACIMIENTO," +
-                "EDAD, ROL, MATRICULA, PASSWORD FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
+                "EDAD, ROL, MATRICULA, PASSWORD, ESTADO FROM USUARIO WHERE CORREO_INSTITUCIONAL=? and PASSWORD=?";
         try {
             Connection con = ConnectionBD.getConnection(); // se estable la conexion
             PreparedStatement ps =  con.prepareStatement(sql); //se prepara la consulta para evitar la inyecion de SQL
@@ -39,6 +39,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
                 usuario.setRol(resultSet.getString("ROL"));
                 usuario.setMatricula(resultSet.getString("MATRICULA"));
                 usuario.setPassword(resultSet.getString("PASSWORD"));
+                usuario.setEstado(resultSet.getString("ESTADO"));
 
                 return usuario;
             }
@@ -51,7 +52,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     @Override
     public List<Usuario> findAll() throws Exception {
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT * FROM USUARIO";
+        String sql = "SELECT * FROM USUARIO WHERE ESTADO = 'ACTIVO'";
 
         try (Connection con = ConnectionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -72,7 +73,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
                 String matricula = rs.getString("matricula");
                 String password = rs.getString("password");
 
-                Usuario usuario = new Usuario(id, nombre, apellidos, correo, direccion, lada, telefono, date, edad, rol, matricula, password);
+                Usuario usuario = new Usuario(id, nombre, apellidos, correo, direccion, lada, telefono, date, edad, rol, matricula, password, "ACTIVO");
                 usuarios.add(usuario);
             }
             System.out.println("Usuarios encontrados: " + usuarios.size());
@@ -140,7 +141,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 
     @Override
     public void delete(Usuario user) throws Exception {
-        String sql = "DELETE FROM USUARIO WHERE ID_USUARIO = ?";
+        String sql = "UPDATE USUARIO SET ESTADO = 'INACTIVO' WHERE ID_USUARIO = ?";
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
