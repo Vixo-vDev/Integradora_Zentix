@@ -15,7 +15,9 @@ public interface ISolicitudDao {
     int totalSolicitudes(int id_usuario);
     int totalRechazados(int id_usuario);
     int total_pendientes(int id_usuario);
-    public void actualizarEstado(int idSolicitud, String nuevoEstado);
+    void actualizarEstado(int idSolicitud, String nuevoEstado);
     public List<Solicitud> findByEstado(String estado);
+    List<Object[]> findEquiposMasSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception;
+    List<Object[]> findEquiposMenosSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception;
 
 }

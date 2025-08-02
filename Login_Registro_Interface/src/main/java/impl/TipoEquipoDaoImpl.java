@@ -1,7 +1,7 @@
 package impl;
 
 import Dao.ITipoEquipoDao;
-import com.example.netrixapp.Controladores.ConnectionBD;
+import config.ConnectionBD;
 import com.example.netrixapp.Modelos.TipoEquipo;
 
 import java.sql.*;

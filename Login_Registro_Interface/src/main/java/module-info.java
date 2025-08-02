@@ -17,4 +17,5 @@ module com.example.netrixapp {
 
     opens com.example.netrixapp to javafx.fxml;
     exports com.example.netrixapp;
+    opens config to javafx.fxml;
 }

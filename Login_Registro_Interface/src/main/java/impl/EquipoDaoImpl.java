@@ -1,10 +1,8 @@
 package impl;
 
 import Dao.IEquipoDao;
-import com.example.netrixapp.Controladores.ConnectionBD;
+import config.ConnectionBD;
 import com.example.netrixapp.Modelos.Equipo;
-import oracle.jdbc.proxy.annotation.Pre;
-import oracle.security.crypto.core.Padding;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

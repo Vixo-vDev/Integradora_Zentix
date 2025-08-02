@@ -1,15 +1,10 @@
 package impl;
 
 import Dao.ISolicitudDao;
-import com.example.netrixapp.Controladores.ConnectionBD;
-import com.example.netrixapp.Modelos.Equipo;
+import config.ConnectionBD;
 import com.example.netrixapp.Modelos.Solicitud;
-import oracle.jdbc.proxy.annotation.Pre;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -262,5 +257,66 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         return solicitudes;
     }
 
+    @Override
+    public List<Object[]> findEquiposMasSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception {
+        List<Object[]> resultados = new ArrayList<>();
+        String sql = """
+        SELECT e.DESCRIPCION, COUNT(*) AS cantidad
+        FROM SOLICITUD s
+        INNER JOIN EQUIPO e ON s.ID_EQUIPO = e.ID_EQUIPO
+        WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?
+        GROUP BY e.DESCRIPCION
+        ORDER BY cantidad DESC
+        FETCH FIRST ? ROWS ONLY
+    """;
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(inicio));
+            ps.setDate(2, Date.valueOf(fin));
+            ps.setInt(3, limite);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Object[] fila = new Object[2];
+                fila[0] = rs.getString("DESCRIPCION");
+                fila[1] = rs.getInt("cantidad");
+                resultados.add(fila);
+            }
+        }
+
+        return resultados;
+    }
+
+    @Override
+    public List<Object[]> findEquiposMenosSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception {
+        List<Object[]> resultados = new ArrayList<>();
+        String sql = """
+        SELECT e.DESCRIPCION, COUNT(*) AS cantidad
+        FROM SOLICITUD s
+        JOIN EQUIPO e ON s.ID_EQUIPO = e.ID_EQUIPO
+        WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?
+        GROUP BY e.DESCRIPCION
+        ORDER BY cantidad ASC
+        FETCH FIRST ? ROWS ONLY
+    """;
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(inicio));
+            ps.setDate(2, Date.valueOf(fin));
+            ps.setInt(3, limite);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Object[] fila = new Object[2];
+                fila[0] = rs.getString("DESCRIPCION");
+                fila[1] = rs.getInt("cantidad");
+                resultados.add(fila);
+            }
+        }
+
+        return resultados;
+    }
 
 }

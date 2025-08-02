@@ -1,7 +1,7 @@
 package impl;
 
 import Dao.IUsuarioDao;
-import com.example.netrixapp.Controladores.ConnectionBD;
+import config.ConnectionBD;
 import com.example.netrixapp.Modelos.Usuario;
 
 import java.sql.Connection;

@@ -1,17 +1,11 @@
 package com.example.netrixapp.Vistas;
 
 
-import com.example.netrixapp.Controladores.ConnectionBD;
+import config.ConnectionBD;
 import com.example.netrixapp.Controladores.ControladorLogin;
-import com.example.netrixapp.Controladores.ControladorRegistro;
-import com.example.netrixapp.Controladores.ControladorSolicitudes;
-import com.example.netrixapp.HelloApplication;
-import impl.UsuarioDaoImpl;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
