@@ -249,6 +249,7 @@ public class VistaInventario {
                             marca,
                             modelo,
                             numero_serie,
+                            1,
                             tipo_equipo
                     );
                 }
@@ -271,9 +272,8 @@ public class VistaInventario {
         });
     }
 
-
     private void editarEquipo(Equipo equipo) {
-        int id = equipo.getId_equipo();  // <--- AQUÍ OBTIENES EL ID
+        int id = equipo.getId_equipo();
         System.out.println("ID del equipo seleccionado: " + id);
 
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);

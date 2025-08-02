@@ -76,7 +76,8 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public void create(Equipo equipo) throws Exception {
-        String sql = "INSERT INTO EQUIPO (CODIGO_BIEN, DESCRIPCION, MARCA, MODELO, NUMERO_SERIE, ID_TIPO_EQUIPO) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO EQUIPO (CODIGO_BIEN, DESCRIPCION, MARCA, MODELO, NUMERO_SERIE, ID_TIPO_EQUIPO) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try{
             Connection con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);

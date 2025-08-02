@@ -15,15 +15,15 @@ public class Equipo {
     //private List<Equipo> equipos;
 
     public Equipo() {
-
     }
 
-    public Equipo(String codigo_bien,  String descripcion, String marca, String modelo, String numero_serie, int tipo_equipo) {
+    public Equipo(String codigo_bien,  String descripcion, String marca, String modelo, String numero_serie, int disponible, int tipo_equipo) {
         this.codigo_bien = codigo_bien;
         this.descripcion = descripcion;
         this.marca = marca;
         this.modelo = modelo;
         this.numero_serie = numero_serie;
+        this.disponible = disponible;
         this.tipo_equipo = tipo_equipo;
     }
 
