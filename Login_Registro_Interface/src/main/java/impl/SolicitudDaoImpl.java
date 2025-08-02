@@ -233,11 +233,11 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         String sql = "SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
                 "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO " +
                 "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO " +
-                "WHERE LOWER(S.ESTADO) = LOWER(?) ORDER BY ID_SOLICITUD ASC";
+                "WHERE S.ESTADO = ? ORDER BY ID_SOLICITUD ASC";
 
         try (Connection con = ConnectionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, estado);
+            ps.setString(1, estado);  // Asegúrate de pasar exactamente "Pendiente", "Aprobada", etc.
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -257,10 +257,10 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println("Solicitudes encontradas: " + solicitudes.size());
         return solicitudes;
     }
-
-
 
 
 }

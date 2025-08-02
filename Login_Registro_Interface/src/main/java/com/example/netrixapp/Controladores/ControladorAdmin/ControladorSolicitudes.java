@@ -12,6 +12,7 @@ public class ControladorSolicitudes {
     private final SolicitudDaoImpl solicitudDao;
 
     public ControladorSolicitudes(VistaSolicitudes vista) {
+
         this.vista = vista;
         this.solicitudDao = new SolicitudDaoImpl();
         cargarSolicitudes();
@@ -25,4 +26,30 @@ public class ControladorSolicitudes {
             e.printStackTrace();
        }
     }
+
+    public void actualizarEstadoSolicitud(int idSolicitud, String nuevoEstado) {
+        try {
+            System.out.println(idSolicitud);
+            solicitudDao.actualizarEstado(idSolicitud, nuevoEstado);
+            cargarSolicitudes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void filtrarPorEstado(String estado) {
+        try {
+            List<Solicitud> solicitudesFiltradas;
+            if (estado.equals("Todas")) {
+                solicitudesFiltradas = solicitudDao.findAllAdmin();
+            } else {
+                solicitudesFiltradas = solicitudDao.findByEstado(estado);
+            }
+            vista.mostrarSolicitudes(solicitudesFiltradas);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

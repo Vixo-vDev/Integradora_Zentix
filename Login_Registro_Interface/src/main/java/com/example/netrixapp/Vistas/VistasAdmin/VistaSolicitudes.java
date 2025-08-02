@@ -60,7 +60,7 @@ public class VistaSolicitudes {
         filtros.setAlignment(Pos.CENTER_LEFT);
 
         ComboBox<String> cbFiltroEstado = new ComboBox<>();
-        cbFiltroEstado.getItems().addAll("Todas", "Pendientes", "Aprobadas", "Rechazadas");
+        cbFiltroEstado.getItems().addAll("Todas", "pendiente", "aprobado", "rechazado");
         cbFiltroEstado.setValue("Todas");
         cbFiltroEstado.setPromptText("Filtrar por estado");
 
@@ -69,6 +69,12 @@ public class VistaSolicitudes {
                 cbFiltroEstado
         );
         contenido.getChildren().add(filtros);
+
+        cbFiltroEstado.setOnAction(e -> {
+            String estadoSeleccionado = cbFiltroEstado.getValue();
+            controladorSolicitudes.filtrarPorEstado(estadoSeleccionado);
+        });
+
 
         // Tabla
         tablaSolicitudes = new TableView<>();
@@ -116,10 +122,10 @@ public class VistaSolicitudes {
                    } else {
                        setText(item);
                        switch (item) {
-                           case "Aprobada":
+                           case "aprobado":
                                setStyle("-fx-text-fill: " + COLOR_EXITO + "; -fx-font-weight: bold;");
                                break;
-                           case "Rechazada":
+                           case "rechazado":
                                setStyle("-fx-text-fill: " + COLOR_PELIGRO + "; -fx-font-weight: bold;");
                                break;
                            default:
@@ -141,19 +147,20 @@ public class VistaSolicitudes {
                    btnRechazar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white;");
                    btnPendiente.setStyle("-fx-background-color: " + COLOR_ADVERTENCIA + "; -fx-text-fill: white;");
 
-                   btnAprobar.setOnAction(e -> {
-                       Solicitud solicitud = getTableView().getItems().get(getIndex());
-                       cambiarEstadoSolicitud(solicitud, "Aprobada");
-                   });
+
+                   btnAprobar.setOnAction(e ->{
+                           Solicitud solicitud = getTableView().getItems().get(getIndex());
+                   controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "aprobado");
+               });
 
                    btnRechazar.setOnAction(e -> {
                        Solicitud solicitud = getTableView().getItems().get(getIndex());
-                       cambiarEstadoSolicitud(solicitud, "Rechazada");
+                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "rechazado");
                    });
 
                    btnPendiente.setOnAction(e -> {
                        Solicitud solicitud = getTableView().getItems().get(getIndex());
-                       cambiarEstadoSolicitud(solicitud, "Pendiente");
+                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "pendiente");
                    });
                }
 
