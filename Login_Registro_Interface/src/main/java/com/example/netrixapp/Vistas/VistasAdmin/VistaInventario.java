@@ -1,7 +1,9 @@
 package com.example.netrixapp.Vistas.VistasAdmin;
 
-import com.example.netrixapp.Controladores.ControladorAdmin.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.ControladorAdmin.*;
+import com.example.netrixapp.Controladores.ControladorAdmin.ControladorSolicitudes;
 import com.example.netrixapp.Modelos.Equipo;
+import com.example.netrixapp.Modelos.Usuario;
 import impl.EquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,11 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VistaInventario {
+    private ControladorInventario controladorInventario;
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
     private TableView<Equipo> tablaEquipos;
     private Pagination paginador;
     private List<Equipo> todosLosEquipos;
+    private TextField tfCodigoBien = new TextField();
+    private TextField tfDescripcion = new TextField();
+    private TextField tfMarca = new TextField();
+    private TextField tfModelo = new TextField();
+    private TextField tfNumeroSerie = new TextField();
+    private Spinner<Integer> spinnerTipoEquipo = new Spinner<>(1, 10, 1);
 
     private final EquipoDaoImpl equipoDao = new EquipoDaoImpl();
     private static final int FILAS_POR_PAGINA = 10;
@@ -33,11 +42,38 @@ public class VistaInventario {
     private final String COLOR_PELIGRO = "#E74C3C";
     private final String COLOR_EXITO = "#2ECC71";
 
+    public String getCodigoBien() {
+        return tfCodigoBien.getText().trim();
+    }
+
+    public String getDescripcion() {
+        return tfDescripcion.getText().trim();
+    }
+
+    public String getMarca() {
+        return tfMarca.getText().trim();
+    }
+
+    public String getModelo() {
+        return tfModelo.getText().trim();
+    }
+
+    public String getNumeroSerie() {
+        return tfNumeroSerie.getText().trim();
+    }
+
+    public int getTipoEquipo() {
+        return spinnerTipoEquipo.getValue();
+    }
+
+
     public VistaInventario(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
         this.vista = new BorderPane();
         inicializarUI();
+        this.controladorInventario = new ControladorInventario(this);
     }
+
 
     private void inicializarUI() {
         vista.setStyle("-fx-background-color: #F5F7FA;");
@@ -57,7 +93,7 @@ public class VistaInventario {
 
         Button btnAgregar = new Button("+ Agregar Producto");
         btnAgregar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 4px;");
-        btnAgregar.setOnAction(e -> mostrarFormularioAgregar());
+        btnAgregar.setOnAction(e -> controladorInventario.agregarEquipo());
 
         encabezado.getChildren().addAll(lblTitulo, btnAgregar);
         contenido.getChildren().add(encabezado);
@@ -86,44 +122,36 @@ public class VistaInventario {
 
         paginador = new Pagination();
 
-        try {
-            todosLosEquipos = equipoDao.findAll(); // Datos reales de BD
-        } catch (Exception e) {
-            e.printStackTrace();
-            todosLosEquipos = new ArrayList<>();
-        }
-
-        int totalPaginas = (int) Math.ceil((double) todosLosEquipos.size() / FILAS_POR_PAGINA);
-        paginador.setPageCount(totalPaginas);
+        paginador = new Pagination();
         paginador.setPageFactory(this::crearPagina);
 
-        seccionTabla.getChildren().addAll(lblTablaTitulo, paginador);
-        contenido.getChildren().add(seccionTabla);
+        contenido.getChildren().addAll(tablaEquipos, paginador);
 
         vista.setCenter(contenido);
     }
 
+
     private void configurarColumnasTabla() {
         TableColumn<Equipo, Number> colId = new TableColumn<>("ID");
-        colId.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getId_equipo()));
+        colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
 
         TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código");
-        colCodigo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCodigo_bien()));
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
 
         TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
-        colDescripcion.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDescripcion()));
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
         TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
-        colMarca.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMarca()));
+        colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
 
         TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
-        colModelo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getModelo()));
+        colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
 
         TableColumn<Equipo, String> colSerie = new TableColumn<>("Numero Serie");
-        colSerie.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNumero_serie()));
+        colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
 
         TableColumn<Equipo, Number> colDisponible = new TableColumn<>("Disponible");
-        colDisponible.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getDisponible()));
+        colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
 
         TableColumn<Equipo, Void> colAcciones = new TableColumn<>("Acciones");
         colAcciones.setCellFactory(col -> new TableCell<>() {
@@ -142,7 +170,7 @@ public class VistaInventario {
 
                 btnEliminar.setOnAction(e -> {
                     Equipo equipo = getTableView().getItems().get(getIndex());
-                    eliminarEquipo(equipo);
+                    controladorInventario.eliminarUsuario(equipo);
                 });
             }
 
@@ -163,6 +191,15 @@ public class VistaInventario {
         return new VBox(tablaEquipos);
     }
 
+    public void mostrarEquipos(List<Equipo> equipos) {
+        this.todosLosEquipos = equipos;
+        int totalPaginas = (int) Math.ceil((double) todosLosEquipos.size() / FILAS_POR_PAGINA);
+        if (totalPaginas == 0) totalPaginas = 1;
+        paginador.setPageCount(totalPaginas);
+        paginador.setCurrentPageIndex(0);
+        paginador.setPageFactory(this::crearPagina);
+    }
+
     private VBox crearCardMetrica(String titulo, String valor, String colorTexto) {
         VBox card = new VBox(8);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 16;");
@@ -178,14 +215,11 @@ public class VistaInventario {
         card.getChildren().addAll(lblTitulo, lblValor);
         return card;
     }
-    private void mostrarFormularioAgregar() {
-        Dialog<Equipo> dialog = new Dialog<>();
-        dialog.setTitle("Registrar un equipo");
-        dialog.setHeaderText("Registrar un nuevo equipo en el sistema");
-
-        // Configurar botones
-        ButtonType btnCrear = new ButtonType("Crear", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnCrear, ButtonType.CANCEL);
+    public Alert mostrarFormularioAgregar() {
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Agregar un nuevo Equipo");
+        alerta.setHeaderText("Ingresa los campos que se te solicitan");
+        alerta.setContentText("Aquí puedes implementar el formulario para crear un nuevo equipo");
 
         // Crear formulario
         GridPane grid = new GridPane();
@@ -193,23 +227,24 @@ public class VistaInventario {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 10, 10, 10));
 
-        TextField tfCodigoBien = new TextField();
+        tfCodigoBien = new TextField();
         tfCodigoBien.setPromptText("Código_Bien");
 
-        TextField tfDescripcion = new TextField();
+        tfDescripcion = new TextField();
         tfDescripcion.setPromptText("Descripción");
 
-        TextField tfMarca = new TextField();
+        tfMarca = new TextField();
         tfMarca.setPromptText("Marca");
 
-        TextField tfModelo = new TextField();
+        tfModelo = new TextField();
         tfModelo.setPromptText("Modelo");
 
-        TextField tfNumeroSerie = new TextField();
+        tfNumeroSerie = new TextField();
         tfNumeroSerie.setPromptText("Numero serie");
 
-        Spinner<Integer> spinnerTipoEquipo = new Spinner<>(1, 10, 1);
+        spinnerTipoEquipo = new Spinner<>(1, 10, 1);
         spinnerTipoEquipo.setEditable(false);
+
         grid.add(new Label("Codigo_Bien:"), 0, 0);
         grid.add(tfCodigoBien, 1, 0);
         grid.add(new Label("Descripcion:"), 0, 1);
@@ -223,54 +258,9 @@ public class VistaInventario {
         grid.add(new Label("Tipo de Equipo:"), 0, 5);
         grid.add(spinnerTipoEquipo, 1, 5);
 
-        dialog.getDialogPane().setContent(grid);
-
-        // Procesar resultado
-        dialog.setResultConverter(buttonType -> {
-            if (buttonType == btnCrear) {
-                String codigo_bien = tfCodigoBien.getText().trim();
-                String descripcion = tfDescripcion.getText().trim();
-                String marca = tfMarca.getText().trim();
-                String modelo = tfModelo.getText().trim();
-                String numero_serie = tfNumeroSerie.getText().trim();
-                Integer tipo_equipo = spinnerTipoEquipo.getValue();
-
-                if (codigo_bien.isEmpty() || descripcion.isEmpty() || marca.isEmpty() ||
-                        modelo.isEmpty() || numero_serie.isEmpty() || tipo_equipo == null) {
-                    Alert alerta = new Alert(Alert.AlertType.WARNING);
-                    alerta.setTitle("Campos incompletos");
-                    alerta.setHeaderText("Por favor completa todos los campos.");
-                    alerta.showAndWait();
-                    return null;
-                } else {
-                    return new Equipo(
-                            codigo_bien,
-                            descripcion,
-                            marca,
-                            modelo,
-                            numero_serie,
-                            1,
-                            tipo_equipo
-                    );
-                }
-            }
-            return null;
-        });
-
-        dialog.showAndWait().ifPresent(equipo -> {
-            try {
-                equipoDao.create(equipo);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Operación exitosa");
-                alert.setHeaderText("Equipo registrado");
-                alert.setContentText("Equipo registrado exitosamente.");
-                alert.showAndWait();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            tablaEquipos.refresh();
-        });
-    }
+        alerta.getDialogPane().setContent(grid);
+            return alerta;
+        }
 
     private void editarEquipo(Equipo equipo) {
         int id = equipo.getId_equipo();
@@ -333,39 +323,14 @@ public class VistaInventario {
     }
 
 
-    private void eliminarEquipo(Equipo equipo) {
-        int id  = equipo.getId_equipo();
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar Eliminación");
-        alert.setHeaderText("¿Eliminar equipo: " + equipo.getDescripcion() + "?");
-        alert.setContentText("Esta acción no se puede deshacer.");
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            try {
-                equipoDao.delete(equipo, id);
-                System.out.println("Equipo eliminado: " + equipo.getDescripcion());
-
-                todosLosEquipos = equipoDao.findAll();
-                int totalPaginas = (int) Math.ceil((double) todosLosEquipos.size() / FILAS_POR_PAGINA);
-                paginador.setPageCount(totalPaginas);
-
-                int paginaActual = paginador.getCurrentPageIndex();
-                if (paginaActual >= totalPaginas) {
-                    paginaActual = totalPaginas - 1;
-                    if (paginaActual < 0) paginaActual = 0;
-                }
-                paginador.setCurrentPageIndex(paginaActual);
-                paginador.setPageFactory(this::crearPagina);
-
-            } catch(Exception e) {
-                e.printStackTrace();
-                Alert alertError = new Alert(Alert.AlertType.ERROR);
-                alertError.setTitle("Error");
-                alertError.setHeaderText("No se pudo eliminar el equipo");
-                alertError.setContentText(e.getMessage());
-                alertError.showAndWait();
-            }
-        }
+    public Alert confirmareliminarEquipo(Equipo equipo) {
+        int id = equipo.getId_equipo();
+        System.out.println(id);
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Eliminar Equipo");
+        confirmacion.setHeaderText("¿Eliminar equipo: " + equipo.getDescripcion() + "?");
+        confirmacion.setContentText("Esta acción no se puede deshacer.");
+        return confirmacion;
     }
 
     public BorderPane getVista() {

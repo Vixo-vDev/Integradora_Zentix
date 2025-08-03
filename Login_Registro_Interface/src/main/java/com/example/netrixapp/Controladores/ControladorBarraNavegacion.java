@@ -75,7 +75,6 @@ public class ControladorBarraNavegacion {
         btnHistorial = crearBotonLateral("Historial", "🕒");
         btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
         btnPerfil = crearBotonLateral("Perfil","📝");
-        btnNotificaciones = crearBotonLateral("Notificaciones", "🔔");
 
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);

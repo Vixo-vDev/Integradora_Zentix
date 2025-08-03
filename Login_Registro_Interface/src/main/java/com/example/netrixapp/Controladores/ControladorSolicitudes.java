@@ -1,88 +1,105 @@
 package com.example.netrixapp.Controladores;
 
+import com.example.netrixapp.Modelos.DetalleSolicitud;
+import com.example.netrixapp.Modelos.Equipo;
 import com.example.netrixapp.Modelos.Solicitud;
-import com.example.netrixapp.Modelos.Usuario;
 import com.example.netrixapp.Vistas.VistaSolicitudes;
+import impl.DetalleSolicitudDaoImpl;
 import impl.SolicitudDaoImpl;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
 
 import java.time.LocalDate;
 
 public class ControladorSolicitudes {
 
-    SolicitudDaoImpl solicitudDao = new SolicitudDaoImpl();
-    Usuario usuario = SesionUsuario.getUsuarioActual();
-    int id_usuario = usuario.getId_usuario();
-    private VistaSolicitudes vista;
-
-    //Declaracion de atributos
-    String razon;
-    LocalDate fecha_solicitud;
-    String tiempoUso;
-    String articulo;
-    int cantidad;
-    LocalDate fecha_registro;
+    private final VistaSolicitudes vista;
+    private final SolicitudDaoImpl solicitudDao;
+    private final DetalleSolicitudDaoImpl detalleSolicitudDao;
 
     public ControladorSolicitudes(VistaSolicitudes vista) {
-
         this.vista = vista;
-        vista.getBtnAgregar().setOnAction(e -> agregarArticulo());
+        this.solicitudDao = new SolicitudDaoImpl();
+        this.detalleSolicitudDao = new DetalleSolicitudDaoImpl();
         vista.getBtnEnviar().setOnAction(e -> enviarSolicitud());
+
     }
 
-    public boolean verificarCampos(){
 
-        razon = vista.getNota();
-        fecha_solicitud = LocalDate.now();
-        tiempoUso = vista.getTiempoUso();
-        articulo = vista.getEquipos();
-        cantidad = vista.getCantidad();
-        fecha_registro = vista.getFecha_recibo();
 
-        if(razon.isEmpty() || fecha_registro == null || tiempoUso.isEmpty() || articulo.isEmpty() || articulo == "" || cantidad == 0 ){
+    private void enviarSolicitud() {
+        System.out.println("olaaaa");
+        try {
+            int idTipoEquipo = vista.getIdTipoEquipoSeleccionado();
+            Equipo equipoSeleccionado = vista.getEquipoSeleccionado();
+
+            if (idTipoEquipo == -1 || equipoSeleccionado == null) {
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+                alerta.setHeaderText("Campos incompletos");
+                alerta.setContentText("Por favor selecciona un tipo de equipo y un equipo válido.");
+                alerta.showAndWait();
+                return;
+            }
+
+            int idUsuario = SesionUsuario.getUsuarioActual().getId_usuario(); // Ajusta según tu sesión
+            LocalDate fechaSolicitud = LocalDate.now();
+            String articulo = equipoSeleccionado.getDescripcion();
+            int cantidadSolicitud = vista.getCantidad();
+            LocalDate fechaRecibo = vista.getFechaRecibo();
+            int tiempoUso = vista.getTiempoUso();
+            String razon = vista.getNota();
+
+            Solicitud solicitud = new Solicitud(
+                    idUsuario,
+                    fechaSolicitud,
+                    articulo,
+                    cantidadSolicitud,
+                    fechaRecibo,
+                    String.valueOf(tiempoUso),
+                    razon,
+                    "pendiente"
+            );
+
+            System.out.println("Solicitud a insertar:");
+            System.out.println("Usuario ID: " + idUsuario);
+            System.out.println("Fecha Solicitud: " + fechaSolicitud);
+            System.out.println("Articulo: " + articulo);
+            System.out.println("Cantidad: " + cantidadSolicitud);
+            System.out.println("Fecha Recibo: " + fechaRecibo);
+            System.out.println("Tiempo Uso: " + tiempoUso);
+            System.out.println("Razon: " + razon);
+            System.out.println("Estado: pendiente");
+
+            int id_equipo1 = vista.getIdTipoEquipoSeleccionado();
+            int idSolicitud = solicitudDao.create(solicitud);
+
+            System.out.println("Solicitud creada con ID: " + idSolicitud);
+
+            DetalleSolicitud detalleSolicitud = new DetalleSolicitud(
+                    idTipoEquipo,
+                    idTipoEquipo,
+                    idSolicitud,
+                    cantidadSolicitud
+            );
+
+            System.out.println("DetalleSolicitud a insertar:");
+            System.out.println("ID Equipo: " + detalleSolicitud.getId_equipo());
+            System.out.println("ID Tipo Equipo: " + detalleSolicitud.getId_tipo_equipo());
+            System.out.println("ID Solicitud: " + detalleSolicitud.getId_solicitud());
+            System.out.println("Cantidad: " + detalleSolicitud.getCantidad());
+
+            detalleSolicitudDao.create(detalleSolicitud);
+
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-            alerta.setHeaderText("ERROR");
-            alerta.setContentText("Hay campos sin completar");
+            alerta.setHeaderText("Éxito");
+            alerta.setContentText("Solicitud enviada correctamente.");
             alerta.showAndWait();
 
-            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setHeaderText("Error");
+            alerta.setContentText("No se pudo enviar la solicitud: " + ex.getMessage());
+            alerta.showAndWait();
         }
-
-        else{
-            return true;
-        }
-    }
-
-    public void agregarArticulo() {
-        if(verificarCampos()){
-            Solicitud solicitud = new Solicitud(id_usuario,fecha_solicitud, articulo, cantidad, fecha_registro, tiempoUso, razon, "pendiente");
-
-        }
-    }
-
-    public boolean enviarSolicitud() {
-        System.out.println("ola");
-        if(verificarCampos()){
-            try{
-                Solicitud solicitud = new Solicitud(id_usuario,fecha_solicitud, articulo, cantidad, fecha_registro, tiempoUso, razon, "pendiente");
-                solicitudDao.create(solicitud);
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                alerta.setHeaderText("ÉXTIO");
-                alerta.setContentText("Solicitud enviada con éxito");
-                alerta.showAndWait();
-
-                vista.getTfNota().clear(); // si defines un método específico, o accedes directamente
-                vista.getDpFecha_recibo().setValue(null);
-                vista.getSpTiempoUso().getValueFactory().setValue(8); // o el valor por defecto que uses
-                vista.getCbTipoEquipo().getSelectionModel().clearSelection();
-                vista.getCbEquipos().getSelectionModel().clearSelection();
-                vista.getSpCantidad().getValueFactory().setValue(1);
-                return true;
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-            return false;
     }
 }

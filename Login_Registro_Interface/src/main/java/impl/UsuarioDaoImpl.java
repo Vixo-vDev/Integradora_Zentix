@@ -151,4 +151,21 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int totalUsuarios(){
+        int totalUsuario=0;
+        String sql="SELECT COUNT(*) AS TOTAL FROM USUARIO";
+        try{
+            Connection con= ConnectionBD.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                totalUsuario=rs.getInt("TOTAL");
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return totalUsuario;
+    }
 }

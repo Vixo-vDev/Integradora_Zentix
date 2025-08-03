@@ -1,8 +1,12 @@
 package com.example.netrixapp.Controladores.ControladorAdmin;
 
 import com.example.netrixapp.Controladores.SesionUsuario;
+import com.example.netrixapp.Modelos.Solicitud;
 import com.example.netrixapp.Vistas.VistaLogin;
 import com.example.netrixapp.Vistas.VistasAdmin.*;
+import impl.EquipoDaoImpl;
+import impl.SolicitudDaoImpl;
+import impl.UsuarioDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,9 +17,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class ControladorPrincipal {
     private final VistaPrincipal vista;
     private final ControladorBarraNavegacion controladorBarra;
+    SolicitudDaoImpl solicitudDao = new SolicitudDaoImpl();
+    UsuarioDaoImpl usuarioDao = new UsuarioDaoImpl();
+    EquipoDaoImpl equipoDao = new EquipoDaoImpl();
 
     public ControladorPrincipal(VistaPrincipal vista) {
         this.vista = vista;
@@ -30,7 +39,6 @@ public class ControladorPrincipal {
         controladorBarra.getBtnEstadisticas().setOnAction(e -> mostrarEstadisticas());
         controladorBarra.getBtnUsuarios().setOnAction(e -> mostrarUsuarios());
         controladorBarra.getBtnSolicitudes().setOnAction(e -> mostrarSolicitudes());
-        controladorBarra.getBtnNotificaciones().setOnAction(e -> mostrarNotificaciones());
         controladorBarra.getBtnSalir().setOnAction(e -> confirmarCierreSesion());
     }
 
@@ -51,20 +59,16 @@ public class ControladorPrincipal {
         filaCards.setAlignment(Pos.TOP_LEFT);
 
         // Card de Usuarios Registrados
-        VBox cardUsuarios = crearCardMetrica("Usuarios", "45", "👥");
+        VBox cardUsuarios = crearCardMetrica("Usuarios", String.valueOf(usuarioDao.totalUsuarios()), "👥");
         filaCards.getChildren().add(cardUsuarios);
 
         // Card de Activos en Sistema
-        VBox cardActivos = crearCardMetrica("Activos", "328", "💻");
+        VBox cardActivos = crearCardMetrica("Activos", String.valueOf(equipoDao.totalEquipos()), "💻");
         filaCards.getChildren().add(cardActivos);
 
         // Card de Solicitudes Pendientes
-        VBox cardPendientes = crearCardMetrica("Pendientes", "12", "⏳");
+        VBox cardPendientes = crearCardMetrica("Pendientes", String.valueOf(solicitudDao.total_pendientesAdmin()), "⏳");
         filaCards.getChildren().add(cardPendientes);
-
-        // Card de Alertas
-        VBox cardAlertas = crearCardMetrica("Alertas", "3", "⚠️");
-        filaCards.getChildren().add(cardAlertas);
 
         // Ajustar el crecimiento horizontal de las cards
         for (Node card : filaCards.getChildren()) {
@@ -77,14 +81,6 @@ public class ControladorPrincipal {
         // 2. Gráficos y estadísticas rápidas
         HBox filaGraficos = new HBox(15);
         filaGraficos.setAlignment(Pos.TOP_LEFT);
-
-        // Gráfico de actividad reciente
-        VBox cardActividad = crearCardGrafico("Actividad Reciente", "📊");
-        filaGraficos.getChildren().add(cardActividad);
-
-        // Gráfico de distribución de recursos
-        VBox cardRecursos = crearCardGrafico("Distribución Recursos", "📦");
-        filaGraficos.getChildren().add(cardRecursos);
 
         // Ajustar crecimiento
         for (Node card : filaGraficos.getChildren()) {
@@ -165,19 +161,33 @@ public class ControladorPrincipal {
         tabla.setVgap(10);
         tabla.setPadding(new Insets(8, 0, 0, 0));
 
-        // Encabezados para actividades de admin
-        String[] encabezados = {"Usuario", "Acción", "Fecha/Hora", "Detalles"};
+        // Encabezados que solo muestran datos propios de la solicitud
+        String[] encabezados = {"Artículo", "Fecha de solicitud", "Estado"};
         for (int i = 0; i < encabezados.length; i++) {
             Label lbl = new Label(encabezados[i]);
             lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #2C3E50;");
             tabla.add(lbl, i, 0);
         }
 
-        // Ejemplo de datos
-        agregarFilaActividad(tabla, 1, "admin", "Inicio de sesión", "2023-11-15 09:30", "Desde IP 192.168.1.100");
-        agregarFilaActividad(tabla, 2, "tony", "Actualización perfil", "2023-11-15 09:45", "Cambio de departamento");
-        agregarFilaActividad(tabla, 3, "david", "Backup automático", "2023-11-15 02:00", "Backup completo de la BD");
-        agregarFilaActividad(tabla, 4, "mildred", "Nuevo usuario", "2023-11-14 16:20", "Creó usuario Vega");
+        try {
+            List<Solicitud> solicitudes = solicitudDao.solicitudesRecientes();
+            for (int i = 0; i < solicitudes.size(); i++) {
+                Solicitud s = solicitudes.get(i);
+
+                Label lblArticulo = new Label(s.getArticulo());
+                Label lblFecha = new Label(s.getFecha_solicitud().toString());
+                Label lblEstado = new Label(s.getEstado());
+
+                tabla.add(lblArticulo, 0, i + 1);
+                tabla.add(lblFecha, 1, i + 1);
+                tabla.add(lblEstado, 2, i + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Label error = new Label("No se pudieron cargar las solicitudes recientes.");
+            error.setStyle("-fx-text-fill: red;");
+            tabla.add(error, 0, 1);
+        }
 
         card.getChildren().addAll(lblTitulo, tabla);
         return card;

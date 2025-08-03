@@ -1,79 +1,96 @@
 package com.example.netrixapp.Vistas.VistasAdmin;
 
 import com.example.netrixapp.Controladores.ControladorAdmin.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.ControladorAdmin.ControladorEstadisticas;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.util.List;
+
+import static javafx.application.Application.launch;
 
 public class VistaEstadisticas {
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
+    private final VBox contenedorMasSolicitados;
+    private final VBox contenedorMenosSolicitados;
+    private final TableView<Object[]> tablaMasSolicitados;
+    private final TableView<Object[]> tablaMenosSolicitados;
+
+    private final ControladorEstadisticas controlador;
 
     public VistaEstadisticas(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
         this.vista = new BorderPane();
+        this.tablaMasSolicitados = new TableView<>();
+        this.tablaMenosSolicitados = new TableView<>();
+        this.contenedorMasSolicitados = new VBox(10);
+        this.contenedorMenosSolicitados = new VBox(10);
+        this.controlador = new ControladorEstadisticas(this); // Instancia del controlador
         inicializarUI();
     }
 
     private void inicializarUI() {
-        // Configurar el layout principal con la barra de navegación
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
         vista.setStyle("-fx-background-color: #ECF0F1;");
 
-        // Contenido principal
         VBox contenidoPrincipal = new VBox(20);
         contenidoPrincipal.setPadding(new Insets(20));
 
-        // Título
-        Label lblTitulo = new Label("Estadísticas del Sistema");
+        // Título principal visible y con texto oscuro
+        Label lblTitulo = new Label("Estadísticas de Solicitudes");
         lblTitulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
-        contenidoPrincipal.getChildren().add(lblTitulo);
 
-        // Tablas de estadísticas
-        VBox tablasContainer = new VBox(20);
+        // Filtro de periodo con botón aplicar y botón quitar filtros
+        HBox filtroBox = new HBox(10);
+        Label lblFiltro = new Label("Periodo:");
+        lblFiltro.setStyle("-fx-text-fill: #2C3E50; -fx-font-weight: bold;");
+        ComboBox<String> comboPeriodo = new ComboBox<>();
+        comboPeriodo.getItems().addAll("Semana", "Mes");
+        comboPeriodo.setValue("Semana");
 
-        // Tabla 1: Estadísticas de Usuarios
-        VBox tablaUsuarios = crearTablaDetallada(
-                "Estadísticas de Usuarios",
-                new String[]{"Métrica", "Valor", "Tendencia"},
-                new Object[][]{
-                        {"Usuarios Registrados", "142", "↑ 12.5%"},
-                        {"Usuarios Activos", "128 (90%)", "↑ 8.2%"},
-                        {"Nuevos Usuarios (30d)", "15", "↓ 2.3%"},
-                        {"Accesos Diarios Prom.", "87", "→ Estable"}
-                }
-        );
+        Button btnAplicar = new Button("Aplicar filtros");
+        btnAplicar.setOnAction(e -> {
+            String seleccion = comboPeriodo.getValue().toLowerCase();
+            controlador.cargarDatosEstadisticos(seleccion);
+        });
 
-        // Tabla 2: Estadísticas de Solicitudes
-        VBox tablaSolicitudes = crearTablaDetallada(
-                "Estadísticas de Solicitudes",
-                new String[]{"Tipo", "Total", "Pendientes", "Tiempo Prom."},
-                new Object[][]{
-                        {"Equipos", "56", "12", "2.3 días"},
-                        {"Software", "34", "8", "1.7 días"},
-                        {"Accesos", "22", "3", "0.5 días"},
-                        {"Otros", "15", "0", "1.2 días"}
-                }
-        );
+        Button btnQuitarFiltros = new Button("Quitar filtros");
+        btnQuitarFiltros.setOnAction(e -> {
+            controlador.cargarMasSolicitadosSinFiltro();
+        });
 
-        // Tabla 3: Estadísticas de Inventario
-        VBox tablaInventario = crearTablaDetallada(
-                "Estadísticas de Inventario",
-                new String[]{"Categoría", "Total", "Disponibles", "% Disponibilidad"},
-                new Object[][]{
-                        {"Laptops", "120", "108", "90%"},
-                        {"Monitores", "85", "82", "96%"},
-                        {"Teléfonos", "65", "58", "89%"},
-                        {"Periféricos", "314", "302", "96%"}
-                }
-        );
+        filtroBox.getChildren().addAll(lblFiltro, comboPeriodo, btnAplicar, btnQuitarFiltros);
+        filtroBox.setPadding(new Insets(10, 0, 10, 0));
 
-        tablasContainer.getChildren().addAll(tablaUsuarios, tablaSolicitudes, tablaInventario);
-        contenidoPrincipal.getChildren().add(tablasContainer);
+        // Configurar tablas
+        configurarTabla(tablaMasSolicitados, new String[]{"Equipo", "Cantidad"});
+        configurarTabla(tablaMenosSolicitados, new String[]{"Equipo", "Cantidad"});
 
-        // Configurar el centro del BorderPane con ScrollPane
+        // Etiqueta para tabla más solicitados con texto oscuro
+        Label lblMas = new Label("Equipos Más Solicitados");
+        lblMas.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        contenedorMasSolicitados.getChildren().addAll(lblMas, tablaMasSolicitados);
+        contenedorMasSolicitados.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #BDC3C7; -fx-border-radius: 8;");
+        contenedorMasSolicitados.setPadding(new Insets(15));
+
+        // Etiqueta para tabla menos solicitados con texto oscuro
+        Label lblMenos = new Label("Equipos Menos Solicitados");
+        lblMenos.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+        contenedorMenosSolicitados.getChildren().addAll(lblMenos, tablaMenosSolicitados);
+        contenedorMenosSolicitados.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #BDC3C7; -fx-border-radius: 8;");
+        contenedorMenosSolicitados.setPadding(new Insets(15));
+
+        // Separador para separar visualmente las tablas
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(10, 0, 10, 0));
+
+        contenidoPrincipal.getChildren().addAll(lblTitulo, filtroBox, contenedorMasSolicitados, separator, contenedorMenosSolicitados);
+
         ScrollPane scrollPane = new ScrollPane(contenidoPrincipal);
         scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -82,32 +99,19 @@ public class VistaEstadisticas {
         vista.setCenter(scrollPane);
     }
 
-    private VBox crearTablaDetallada(String titulo, String[] columnas, Object[][] datos) {
-        VBox contenedorTabla = new VBox(10);
-        contenedorTabla.setPadding(new Insets(15));
-        contenedorTabla.setStyle("-fx-background-color: white; -fx-background-radius: 8;");
-
-        Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
-
-        TableView<Object[]> tabla = new TableView<>();
+    private void configurarTabla(TableView<Object[]> tabla, String[] columnas) {
+        tabla.getColumns().clear();
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tabla.setStyle("-fx-font-size: 14px;");
 
-        // Crear columnas dinámicamente
         for (int i = 0; i < columnas.length; i++) {
             final int colIndex = i;
             TableColumn<Object[], String> columna = new TableColumn<>(columnas[i]);
             columna.setCellValueFactory(data -> {
-                Object value = data.getValue()[colIndex];
-                return new javafx.beans.property.SimpleStringProperty(value == null ? "" : value.toString());
+                Object val = data.getValue()[colIndex];
+                return new javafx.beans.property.SimpleStringProperty(val == null ? "" : val.toString());
             });
             tabla.getColumns().add(columna);
-        }
-
-        // Agregar datos
-        for (Object[] fila : datos) {
-            tabla.getItems().add(fila);
         }
 
         tabla.setRowFactory(tv -> new TableRow<Object[]>() {
@@ -117,20 +121,26 @@ public class VistaEstadisticas {
                 if (empty || item == null) {
                     setStyle("");
                 } else {
-                    if (getIndex() % 2 == 0) {
-                        setStyle("-fx-background-color: #F8F9F9;");
-                    } else {
-                        setStyle("-fx-background-color: white;");
-                    }
+                    setStyle("-fx-background-color: " + (getIndex() % 2 == 0 ? "#F8F9F9" : "white") + ";");
                 }
             }
         });
 
-        contenedorTabla.getChildren().addAll(lblTitulo, tabla);
-        return contenedorTabla;
+        tabla.setPlaceholder(new Label("No hay datos disponibles."));
+    }
+
+    public void mostrarEquiposMasSolicitados(List<Object[]> datos) {
+        tablaMasSolicitados.getItems().clear();
+        tablaMasSolicitados.getItems().addAll(datos);
+    }
+
+    public void mostrarEquiposMenosSolicitados(List<Object[]> datos) {
+        tablaMenosSolicitados.getItems().clear();
+        tablaMenosSolicitados.getItems().addAll(datos);
     }
 
     public BorderPane getVista() {
         return vista;
     }
+
 }

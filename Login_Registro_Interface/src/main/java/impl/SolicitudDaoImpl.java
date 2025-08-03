@@ -4,6 +4,8 @@ import Dao.ISolicitudDao;
 import config.ConnectionBD;
 import com.example.netrixapp.Modelos.Solicitud;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -126,27 +128,36 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
 
     @Override
-    public void create(Solicitud solicitud) throws Exception {
-        String sql="INSERT INTO SOLICITUD (ID_USUARIO, FECHA_SOLICITUD, ARTICULO, CANTIDAD," +
-                "FECHA_RECIBO, TIEMPO_USO, RAZON_USO, ESTADO) " +
-                "VALUES (?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, ?)";
-        try {
-            Connection con= ConnectionBD.getConnection(); //Se establece la conexion
-            PreparedStatement ps=con.prepareStatement(sql); // se prepara la consulta para evitar inyeccion sql
+    public int create(Solicitud solicitud) throws Exception {
+        String sql = "BEGIN INSERT INTO SOLICITUD (ID_USUARIO, FECHA_SOLICITUD, ARTICULO, CANTIDAD, FECHA_RECIBO, TIEMPO_USO, RAZON_USO, ESTADO) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING ID_SOLICITUD INTO ?; END;";
 
-            ps.setInt(1,solicitud.getId_usuario());
-            ps.setString(2,solicitud.getFecha_solicitud().toString());
-            ps.setString(3,solicitud.getArticulo());
-            ps.setInt(4,solicitud.getCantidad());
-            ps.setString(5,solicitud.getFecha_recibo().toString());
-            ps.setString(6,solicitud.getTiempo_uso());
-            ps.setString(7, solicitud.getRazon());
-            ps.setString(8, solicitud.getEstado());
-            ps.executeQuery();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        try (Connection con = ConnectionBD.getConnection();
+             CallableStatement cs = con.prepareCall(sql)) {
+
+            cs.setInt(1, solicitud.getId_usuario());
+            cs.setDate(2, Date.valueOf(solicitud.getFecha_solicitud()));
+            cs.setString(3, solicitud.getArticulo());
+            cs.setInt(4, solicitud.getCantidad());
+            cs.setDate(5, Date.valueOf(solicitud.getFecha_recibo()));
+            cs.setString(6, solicitud.getTiempo_uso());
+            cs.setString(7, solicitud.getRazon());
+            cs.setString(8, solicitud.getEstado());
+
+            // Parámetro de salida
+            cs.registerOutParameter(9, java.sql.Types.INTEGER);
+
+            // Ejecutar
+            cs.execute();
+
+            return cs.getInt(9); // Este SÍ es el ID real generado por Oracle
         }
     }
+
+
+
+
+
 
     @Override
     public int totalSolicitudes(int id_usuario) {
@@ -258,23 +269,48 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     }
 
     @Override
-    public List<Object[]> findEquiposMasSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception {
+    public List<Object[]> findEquiposMasSolicitadosSinFiltro(int limite) throws Exception {
         List<Object[]> resultados = new ArrayList<>();
-        String sql = """
-        SELECT e.DESCRIPCION, COUNT(*) AS cantidad
-        FROM SOLICITUD s
-        INNER JOIN EQUIPO e ON s.ID_EQUIPO = e.ID_EQUIPO
-        WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?
-        GROUP BY e.DESCRIPCION
-        ORDER BY cantidad DESC
-        FETCH FIRST ? ROWS ONLY
-    """;
+        String sql = "SELECT e.DESCRIPCION, COUNT(*) AS cantidad\n" +
+                "FROM DETALLESOLICITUD d\n" +
+                "INNER JOIN EQUIPO e ON d.ID_EQUIPO = e.ID_EQUIPO\n" +
+                "GROUP BY e.DESCRIPCION\n" +
+                "ORDER BY cantidad DESC\n" +
+                "FETCH FIRST " + limite + " ROWS ONLY";
 
         try (Connection con = ConnectionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(inicio));
-            ps.setDate(2, Date.valueOf(fin));
-            ps.setInt(3, limite);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Object[] fila = new Object[2];
+                fila[0] = rs.getString("DESCRIPCION");
+                fila[1] = rs.getInt("cantidad");
+                resultados.add(fila);
+            }
+            System.out.println("Equipos más solicitados sin filtro: " + resultados.size());
+        }
+
+        return resultados;
+    }
+
+
+    @Override
+    public List<Object[]> findEquiposMasSolicitados(Date inicio, Date fin, int limite) throws Exception {
+        List<Object[]> resultados = new ArrayList<>();
+        String sql = "SELECT e.DESCRIPCION, COUNT(*) AS cantidad\n" +
+                "FROM DETALLESOLICITUD d\n" +
+                "INNER JOIN EQUIPO e ON d.ID_EQUIPO = e.ID_EQUIPO\n" +
+                "INNER JOIN SOLICITUD s ON d.ID_SOLICITUD = s.ID_SOLICITUD\n" +
+                "WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?\n" +
+                "GROUP BY e.DESCRIPCION\n" +
+                "ORDER BY cantidad DESC\n" +
+                "FETCH FIRST " + limite + " ROWS ONLY";
+
+        try (Connection con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            // Pasa directamente las fechas sin conversiones adicionales
+            ps.setDate(1, inicio);
+            ps.setDate(2, fin);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -283,29 +319,29 @@ public class SolicitudDaoImpl implements ISolicitudDao {
                 fila[1] = rs.getInt("cantidad");
                 resultados.add(fila);
             }
+            System.out.println("Equipos más solicitados encontrados: " + resultados.size());
         }
 
         return resultados;
     }
 
     @Override
-    public List<Object[]> findEquiposMenosSolicitados(LocalDate inicio, LocalDate fin, int limite) throws Exception {
+    public List<Object[]> findEquiposMenosSolicitados(Date inicio, Date fin, int limite) throws Exception {
         List<Object[]> resultados = new ArrayList<>();
-        String sql = """
-        SELECT e.DESCRIPCION, COUNT(*) AS cantidad
-        FROM SOLICITUD s
-        JOIN EQUIPO e ON s.ID_EQUIPO = e.ID_EQUIPO
-        WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?
-        GROUP BY e.DESCRIPCION
-        ORDER BY cantidad ASC
-        FETCH FIRST ? ROWS ONLY
-    """;
+        String sql = "SELECT e.DESCRIPCION, COUNT(*) AS cantidad\n" +
+                "FROM DETALLESOLICITUD d\n" +
+                "INNER JOIN EQUIPO e ON d.ID_EQUIPO = e.ID_EQUIPO\n" +
+                "INNER JOIN SOLICITUD s ON d.ID_SOLICITUD = s.ID_SOLICITUD\n" +
+                "WHERE s.FECHA_SOLICITUD BETWEEN ? AND ?\n" +
+                "GROUP BY e.DESCRIPCION\n" +
+                "ORDER BY cantidad ASC\n" +
+                "FETCH FIRST " + limite + " ROWS ONLY";
 
         try (Connection con = ConnectionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(inicio));
-            ps.setDate(2, Date.valueOf(fin));
-            ps.setInt(3, limite);
+            // Pasa directamente las fechas sin conversiones adicionales
+            ps.setDate(1, inicio);
+            ps.setDate(2, fin);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -314,9 +350,52 @@ public class SolicitudDaoImpl implements ISolicitudDao {
                 fila[1] = rs.getInt("cantidad");
                 resultados.add(fila);
             }
+            System.out.println("Equipos menos solicitados encontrados: " + resultados.size());
         }
 
         return resultados;
     }
+
+    @Override
+    public int total_pendientesAdmin(){
+        int total_pendientesAdmin = 0;
+        String sql = "SELECT COUNT (*) AS CANTIDAD FROM SOLICITUD WHERE ESTADO = 'pendiente'";
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total_pendientesAdmin = rs.getInt("cantidad");
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return  total_pendientesAdmin;
+    }
+
+    @Override
+    public List<Solicitud> solicitudesRecientes(){
+        List<Solicitud> lista = new ArrayList<>();
+        String sql = "SELECT * FROM SOLICITUD WHERE ESTADO = 'pendiente' FETCH FIRST 5 ROWS ONLY";
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Solicitud s = new Solicitud();
+                s.setId_solicitud(rs.getInt("id_solicitud"));
+                s.setId_usuario(rs.getInt("id_usuario"));
+                s.setArticulo(rs.getString("articulo"));
+                s.setFecha_solicitud(rs.getDate("fecha_solicitud").toLocalDate());
+                s.setEstado(rs.getString("estado"));
+                // Agrega otros campos si son necesarios
+                lista.add(s);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
+    }
+
 
 }

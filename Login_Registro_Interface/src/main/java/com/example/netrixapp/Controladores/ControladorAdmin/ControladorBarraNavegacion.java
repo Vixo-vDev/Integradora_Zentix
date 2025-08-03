@@ -74,8 +74,6 @@ public class ControladorBarraNavegacion {
         btnEstadisticas = crearBotonLateral("Estadísticas", "📈");  // Reemplaza a Historial
         btnUsuarios = crearBotonLateral("Usuarios", "👥");         // Reemplaza a Perfil
         btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
-        btnNotificaciones = crearBotonLateral("Notificaciones", "🔔");
-
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);
 
@@ -84,7 +82,7 @@ public class ControladorBarraNavegacion {
                 "-fx-font-weight: bold; -fx-background-radius: 8px;");
 
         barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnEstadisticas,
-                btnUsuarios, btnSolicitudes, btnNotificaciones, espaciador, btnSalir);
+                btnUsuarios, btnSolicitudes, espaciador, btnSalir);
         return barra;
     }
 

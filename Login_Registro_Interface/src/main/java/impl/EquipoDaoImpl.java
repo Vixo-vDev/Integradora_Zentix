@@ -15,7 +15,7 @@ public class EquipoDaoImpl implements IEquipoDao {
     @Override
     public List<Equipo> findAll() throws Exception {
 
-        String sql="SELECT * FROM EQUIPO ORDER BY ID_EQUIPO ASC";
+        String sql="SELECT * FROM EQUIPO WHERE DISPONIBLE = '1' ORDER BY ID_EQUIPO ASC";
         List<Equipo> equipos= new ArrayList<>();
 
         try {
@@ -116,13 +116,13 @@ public class EquipoDaoImpl implements IEquipoDao {
     }
 
     @Override
-    public void delete(Equipo equipo, int id) throws Exception {
-        String sql = "DELETE FROM EQUIPO WHERE ID_EQUIPO = ?";
+    public void delete(Equipo equipo) throws Exception {
+        String sql = "UPDATE EQUIPO SET DISPONIBLE = '0' WHERE ID_EQUIPO = ?";
 
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, equipo.getId_equipo());
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -209,6 +209,23 @@ public class EquipoDaoImpl implements IEquipoDao {
         }
 
         return cantidad;
+    }
+
+    @Override
+    public int equiposActivos(){
+        int equiposActivos = 0;
+        String sql = "SELECT COUNT (*) AS TOTAL FROM EQUIPO WHERE DISPONIBLE = '1'";
+        try{
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                equiposActivos = rs.getInt("TOTAL");
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return  equiposActivos;
     }
 
 }
