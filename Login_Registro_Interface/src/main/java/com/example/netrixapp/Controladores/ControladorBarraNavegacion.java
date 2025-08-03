@@ -4,7 +4,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -32,7 +36,6 @@ public class ControladorBarraNavegacion {
     public ControladorBarraNavegacion() {
         this.barraSuperior = crearBarraSuperior();
         this.barraLateral = crearBarraLateral();
-
     }
 
     private HBox crearBarraSuperior() {
@@ -74,7 +77,7 @@ public class ControladorBarraNavegacion {
         btnInventario = crearBotonLateral("Inventario", "📦");
         btnHistorial = crearBotonLateral("Historial", "🕒");
         btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
-        btnPerfil = crearBotonLateral("Perfil","📝");
+        btnPerfil = crearBotonLateral("Perfil", "📝");
 
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);
@@ -84,13 +87,14 @@ public class ControladorBarraNavegacion {
                 "-fx-font-weight: bold; -fx-background-radius: 8px;");
 
         barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnHistorial,
-                btnSolicitudes, btnPerfil ,espaciador, btnSalir);
+                btnSolicitudes, btnPerfil, espaciador, btnSalir);
         return barra;
     }
 
     private Button crearBotonLateral(String texto, String emoji) {
         Button btn = new Button(texto + "  " + emoji);
-        btn.setStyle("-fx-background-color: transparent; " +
+
+        String estiloBase = "-fx-background-color: transparent; " +
                 "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
                 "-fx-font-size: 14px; " +
                 "-fx-font-weight: 500; " +
@@ -98,14 +102,18 @@ public class ControladorBarraNavegacion {
                 "-fx-alignment: center-left; " +
                 "-fx-min-width: 180px; " +
                 "-fx-background-radius: 8px; " +
-                "-fx-cursor: hand;");
+                "-fx-cursor: hand;";
 
-        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: 600;"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
-                "-fx-font-weight: 500;"));
+        // Aplica el estilo base
+        btn.setStyle(estiloBase);
+
+        // Al entrar el mouse, solo cambia color de fondo y texto
+        btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
+                "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
+                "-fx-text-fill: white;"));
+
+        // Al salir, restaura el estilo base
+        btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
 
         return btn;
     }

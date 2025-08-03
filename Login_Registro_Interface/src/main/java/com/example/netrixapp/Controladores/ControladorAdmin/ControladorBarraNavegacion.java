@@ -4,7 +4,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -68,12 +72,13 @@ public class ControladorBarraNavegacion {
         Label lblMenu = new Label("Menú");
         lblMenu.setStyle("-fx-text-fill: " + COLOR_TEXTO_CLARO + "; -fx-font-weight: bold; -fx-font-size: 18px;");
 
-        // Botones de navegación (actualizados para administrador)
+        // Botones de navegación
         btnDashboard = crearBotonLateral("Dashboard", "📊");
         btnInventario = crearBotonLateral("Inventario", "📦");
-        btnEstadisticas = crearBotonLateral("Estadísticas", "📈");  // Reemplaza a Historial
-        btnUsuarios = crearBotonLateral("Usuarios", "👥");         // Reemplaza a Perfil
+        btnEstadisticas = crearBotonLateral("Estadísticas", "📈");
+        btnUsuarios = crearBotonLateral("Usuarios", "👥");
         btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
+
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);
 
@@ -88,7 +93,8 @@ public class ControladorBarraNavegacion {
 
     private Button crearBotonLateral(String texto, String emoji) {
         Button btn = new Button(texto + "  " + emoji);
-        btn.setStyle("-fx-background-color: transparent; " +
+
+        String estiloBase = "-fx-background-color: transparent; " +
                 "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
                 "-fx-font-size: 14px; " +
                 "-fx-font-weight: 500; " +
@@ -96,19 +102,20 @@ public class ControladorBarraNavegacion {
                 "-fx-alignment: center-left; " +
                 "-fx-min-width: 180px; " +
                 "-fx-background-radius: 8px; " +
-                "-fx-cursor: hand;");
+                "-fx-cursor: hand;";
 
-        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: 600;"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
-                "-fx-font-weight: 500;"));
+        btn.setStyle(estiloBase);
+
+        btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
+                "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
+                "-fx-text-fill: white;"));
+
+        btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
 
         return btn;
     }
 
-    // Getters para los botones (actualizados)
+    // Getters para los botones
     public Button getBtnDashboard() { return btnDashboard; }
     public Button getBtnInventario() { return btnInventario; }
     public Button getBtnEstadisticas() { return btnEstadisticas; }
