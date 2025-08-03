@@ -7,6 +7,7 @@ import com.example.netrixapp.Vistas.VistaSolicitudes;
 import impl.DetalleSolicitudDaoImpl;
 import impl.SolicitudDaoImpl;
 import javafx.scene.control.Alert;
+import javafx.scene.control.SpinnerValueFactory;
 
 import java.time.LocalDate;
 
@@ -40,7 +41,7 @@ public class ControladorSolicitudes {
                 return;
             }
 
-            int idUsuario = SesionUsuario.getUsuarioActual().getId_usuario(); // Ajusta según tu sesión
+            int idUsuario = SesionUsuario.getUsuarioActual().getId_usuario();
             LocalDate fechaSolicitud = LocalDate.now();
             String articulo = equipoSeleccionado.getDescripcion();
             int cantidadSolicitud = vista.getCantidad();
@@ -88,6 +89,21 @@ public class ControladorSolicitudes {
             System.out.println("Cantidad: " + detalleSolicitud.getCantidad());
 
             detalleSolicitudDao.create(detalleSolicitud);
+            vista.getTfNota().clear();
+            vista.getDpFecha_recibo().setValue(null);
+
+            SpinnerValueFactory.IntegerSpinnerValueFactory tiempoUsoFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) vista.getSpTiempoUso().getValueFactory();
+            tiempoUsoFactory.setValue(tiempoUsoFactory.getMin());
+
+            vista.getCbTipoEquipo().getSelectionModel().clearSelection();
+            vista.getCbTipoEquipo().setValue(null);
+
+            vista.getCbEquipos().getSelectionModel().clearSelection();
+            vista.getCbEquipos().setValue(null);
+
+            SpinnerValueFactory.IntegerSpinnerValueFactory cantidadFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) vista.getSpCantidad().getValueFactory();
+            cantidadFactory.setValue(cantidadFactory.getMin());
+
 
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Éxito");

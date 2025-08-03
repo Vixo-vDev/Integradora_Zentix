@@ -84,7 +84,7 @@ public class ControladorBarraNavegacion {
                 "-fx-font-weight: bold; -fx-background-radius: 8px;");
 
         barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnHistorial,
-                btnSolicitudes, btnPerfil ,btnNotificaciones, espaciador, btnSalir);
+                btnSolicitudes, btnPerfil ,espaciador, btnSalir);
         return barra;
     }
 
@@ -115,7 +115,6 @@ public class ControladorBarraNavegacion {
     public Button getBtnInventario() { return btnInventario; }
     public Button getBtnHistorial() { return btnHistorial; }
     public Button getBtnSolicitudes() { return btnSolicitudes; }
-    public Button getBtnNotificaciones() { return btnNotificaciones; }
     public Button getBtnPerfil() { return btnPerfil; }
     public Button getBtnSalir() { return btnSalir; }
 

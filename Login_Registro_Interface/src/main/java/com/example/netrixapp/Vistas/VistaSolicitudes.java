@@ -104,13 +104,11 @@ public class VistaSolicitudes {
         spTiempoUso = new Spinner<>(1, 24, 8);
         spTiempoUso.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO + ";");
 
-        btnAgregar = new Button("Agregar");
-        btnAgregar.setStyle("-fx-background-color: " + COLOR_AGREGAR + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
         btnEnviar = new Button("Enviar");
         btnEnviar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;");
         new ControladorSolicitudes(this);
 
-        HBox botones = new HBox(10, btnAgregar, btnEnviar);
+        HBox botones = new HBox(10, btnEnviar);
         botones.setAlignment(Pos.CENTER_RIGHT);
 
         panelContenido.getChildren().addAll(
@@ -177,9 +175,15 @@ public class VistaSolicitudes {
         return -1;
     }
 
+    public ComboBox<String> getCbTipoEquipo() {
+        return cbTipoEquipo;
+    }
+
     public Equipo getEquipoSeleccionado() {
         return cbEquipos.getValue();
     }
+
+
 
     public String getNota() {
         return tfNota.getText().trim();
@@ -203,5 +207,48 @@ public class VistaSolicitudes {
 
     public BorderPane getVista() {
         return vista;
+    }
+
+    public void setTfNota(TextField tfNota) {
+        this.tfNota = tfNota;
+    }
+
+    public void setDpFecha_recibo(DatePicker dpFecha_recibo) {
+        this.dpFecha_recibo = dpFecha_recibo;
+    }
+
+    public void setSpTiempoUso(Spinner<Integer> spTiempoUso) {
+        this.spTiempoUso = spTiempoUso;
+    }
+
+    public void setCbTipoEquipo(ComboBox<String> cbTipoEquipo) {
+        this.cbTipoEquipo = cbTipoEquipo;
+    }
+
+    public void setCbEquipos(ComboBox<Equipo> cbEquipos) {
+        this.cbEquipos = cbEquipos;
+    }
+
+    public void setSpCantidad(Spinner<Integer> spCantidad) {
+        this.spCantidad = spCantidad;
+    }
+
+    public TextField getTfNota() {
+        return tfNota;
+    }
+
+    public DatePicker getDpFecha_recibo() {
+        return dpFecha_recibo;
+    }
+
+    public Spinner<Integer> getSpTiempoUso() {
+        return spTiempoUso;
+    }
+    public Spinner<Integer> getSpCantidad() {
+        return spCantidad;
+    }
+
+    public ComboBox<Equipo> getCbEquipos() {
+        return cbEquipos;
     }
 }

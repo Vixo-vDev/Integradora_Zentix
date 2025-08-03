@@ -44,7 +44,6 @@ public class ControladorPrincipal {
         controladorBarra.getBtnHistorial().setOnAction(e -> mostrarHistorial());
         controladorBarra.getBtnSolicitudes().setOnAction(e -> mostrarSolicitudes());
         controladorBarra.getBtnPerfil().setOnAction(e -> mostrarPerfil());
-        controladorBarra.getBtnNotificaciones().setOnAction(e -> mostrarNotificaciones());
         controladorBarra.getBtnSalir().setOnAction(e -> confirmarCierreSesion());
     }
 
