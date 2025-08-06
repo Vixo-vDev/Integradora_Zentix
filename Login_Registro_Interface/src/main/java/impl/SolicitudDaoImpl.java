@@ -1,6 +1,7 @@
 package impl;
 
 import Dao.ISolicitudDao;
+import com.example.netrixapp.Controladores.ControladorAdmin.ControladorEstadisticas;
 import config.ConnectionBD;
 import com.example.netrixapp.Modelos.Solicitud;
 
@@ -15,12 +16,13 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
 
     @Override
-    public List<Solicitud> findAll(int id_usuario){
+    public List<Solicitud> findAll(int id_usuario) throws Exception {
+        Connection con = null;
         String sql="SELECT * FROM SOLICITUD WHERE id_usuario = ? ORDER BY ID_SOLICITUD ASC";
         List<Solicitud> solicitudes= new ArrayList<>();
 
         try {
-            Connection con= ConnectionBD.getConnection();
+            con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ps.setInt(1,id_usuario);
             ResultSet rs= ps.executeQuery();
@@ -42,18 +44,23 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
     }
 
     @Override
-    public List<Solicitud> findAllAdmin(){
+    public List<Solicitud> findAllAdmin() throws Exception {
+        Connection con = null;
         String sql="SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
                 "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO\n" +
                 "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO ORDER BY ID_SOLICITUD ASC";
         List<Solicitud> solicitudes= new ArrayList<>();
 
         try {
-            Connection con= ConnectionBD.getConnection();
+            con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs= ps.executeQuery();
 
@@ -78,11 +85,17 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
+
     }
 
     @Override
-    public List<Solicitud> findByFilters(int id_usuario, String estado, LocalDate desde, LocalDate hasta) {
+    public List<Solicitud> findByFilters(int id_usuario, String estado, LocalDate desde, LocalDate hasta) throws Exception {
+        Connection con = null;
         List<Solicitud> solicitudes = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM SOLICITUD WHERE id_usuario = ?");
         if (estado != null && !estado.equalsIgnoreCase("Todos")) {
@@ -96,8 +109,9 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         }
         sql.append(" ORDER BY id_solicitud ASC");
 
-        try (Connection con = ConnectionBD.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+        try{
+            con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql.toString());
             int index = 1;
             ps.setInt(index++, id_usuario);
             if (estado != null && !estado.equalsIgnoreCase("Todos")) {
@@ -123,17 +137,24 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        finally{
+            if (con != null) {
+                con.close();
+            }
+        }
         return solicitudes;
     }
 
 
     @Override
     public int create(Solicitud solicitud) throws Exception {
+        Connection con = null;
         String sql = "BEGIN INSERT INTO SOLICITUD (ID_USUARIO, FECHA_SOLICITUD, ARTICULO, CANTIDAD, FECHA_RECIBO, TIEMPO_USO, RAZON_USO, ESTADO) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING ID_SOLICITUD INTO ?; END;";
 
-        try (Connection con = ConnectionBD.getConnection();
-             CallableStatement cs = con.prepareCall(sql)) {
+        try {
+            con = ConnectionBD.getConnection();
+            CallableStatement cs = con.prepareCall(sql);
 
             cs.setInt(1, solicitud.getId_usuario());
             cs.setDate(2, Date.valueOf(solicitud.getFecha_solicitud()));
@@ -151,6 +172,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             cs.execute();
 
             return cs.getInt(9); // Este SÍ es el ID real generado por Oracle
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
     }
 
@@ -160,11 +187,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
 
     @Override
-    public int totalSolicitudes(int id_usuario) {
+    public int totalSolicitudes(int id_usuario) throws Exception {
+        Connection con = null;
         int totalSolicitudes=0;
         String sql = "SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE id_usuario = ?";
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,id_usuario);
             ResultSet rs = ps.executeQuery();
@@ -175,16 +203,22 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        finally{
+            if (con != null) {
+                con.close();
+            }
+        }
         return totalSolicitudes;
     }
 
     @Override
-    public int totalRechazados(int id_usuario) {
+    public int totalRechazados(int id_usuario) throws Exception {
+        Connection con = null;
         int totalRechazados=0;
         String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'rechazado' and  id_usuario = ?";
 
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,id_usuario);
             ResultSet rs = ps.executeQuery();
@@ -195,17 +229,22 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
         }catch(SQLException e){
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
         return totalRechazados;
     }
 
     @Override
-    public int total_pendientes(int id_usuario) {
+    public int total_pendientes(int id_usuario) throws Exception{
+        Connection con = null;
         int total_pendiente=0;
         String sql = " SELECT COUNT (id_solicitud) FROM SOLICITUD WHERE estado = 'pendiente' and   id_usuario = ?";
 
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,id_usuario);
             ResultSet rs = ps.executeQuery();
@@ -216,33 +255,45 @@ public class SolicitudDaoImpl implements ISolicitudDao {
 
         }catch(SQLException e){
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
         return total_pendiente;
     }
 
     @Override
-    public void actualizarEstado(int idSolicitud, String nuevoEstado) {
+    public void actualizarEstado(int idSolicitud, String nuevoEstado) throws Exception{
+        Connection con = null;
         String sql = "UPDATE SOLICITUD SET ESTADO = ? WHERE ID_SOLICITUD = ?";
-        try (Connection con = ConnectionBD.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try {
+            con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nuevoEstado);
             ps.setInt(2, idSolicitud);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
     }
 
     @Override
-    public List<Solicitud> findByEstado(String estado) {
+    public List<Solicitud> findByEstado(String estado) throws Exception {
+        Connection con = null;
         List<Solicitud> solicitudes = new ArrayList<>();
         String sql = "SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
                 "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO " +
                 "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO " +
                 "WHERE S.ESTADO = ? ORDER BY ID_SOLICITUD ASC";
 
-        try (Connection con = ConnectionBD.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try {
+            con = ConnectionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, estado);  // Asegúrate de pasar exactamente "Pendiente", "Aprobada", etc.
             ResultSet rs = ps.executeQuery();
 
@@ -262,6 +313,11 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        finally{
+            if (con != null) {
+                con.close();
+            }
         }
 
         System.out.println("Solicitudes encontradas: " + solicitudes.size());
@@ -357,11 +413,12 @@ public class SolicitudDaoImpl implements ISolicitudDao {
     }
 
     @Override
-    public int total_pendientesAdmin(){
+    public int total_pendientesAdmin() throws  Exception {
+        Connection con = null;
         int total_pendientesAdmin = 0;
         String sql = "SELECT COUNT (*) AS CANTIDAD FROM SOLICITUD WHERE ESTADO = 'pendiente'";
         try {
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -369,6 +426,10 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
+        }finally{
+            if (con != null) {
+                con.close();
+            }
         }
         return  total_pendientesAdmin;
     }

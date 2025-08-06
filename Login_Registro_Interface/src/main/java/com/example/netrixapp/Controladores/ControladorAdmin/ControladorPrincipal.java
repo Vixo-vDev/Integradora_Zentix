@@ -59,15 +59,30 @@ public class ControladorPrincipal {
         filaCards.setAlignment(Pos.TOP_LEFT);
 
         // Card de Usuarios Registrados
-        VBox cardUsuarios = crearCardMetrica("Usuarios", String.valueOf(usuarioDao.totalUsuarios()), "👥");
+        VBox cardUsuarios = null;
+        try {
+            cardUsuarios = crearCardMetrica("Usuarios", String.valueOf(usuarioDao.totalUsuarios()), "👥");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         filaCards.getChildren().add(cardUsuarios);
 
         // Card de Activos en Sistema
-        VBox cardActivos = crearCardMetrica("Activos", String.valueOf(equipoDao.totalEquipos()), "💻");
+        VBox cardActivos = null;
+        try {
+            cardActivos = crearCardMetrica("Activos", String.valueOf(equipoDao.totalEquipos()), "💻");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         filaCards.getChildren().add(cardActivos);
 
         // Card de Solicitudes Pendientes
-        VBox cardPendientes = crearCardMetrica("Pendientes", String.valueOf(solicitudDao.total_pendientesAdmin()), "⏳");
+        VBox cardPendientes = null;
+        try {
+            cardPendientes = crearCardMetrica("Pendientes", String.valueOf(solicitudDao.total_pendientesAdmin()), "⏳");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         filaCards.getChildren().add(cardPendientes);
 
         // Ajustar el crecimiento horizontal de las cards

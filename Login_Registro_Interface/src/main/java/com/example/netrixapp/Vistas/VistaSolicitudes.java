@@ -135,7 +135,12 @@ public class VistaSolicitudes {
         cbEquipos.setOnAction(e -> {
             Equipo equipoSeleccionado = cbEquipos.getValue();
             if (equipoSeleccionado != null) {
-                int maxCantidad = equipoDao.calcularCantidad(equipoSeleccionado.getDescripcion());
+                int maxCantidad = 0;
+                try {
+                    maxCantidad = equipoDao.calcularCantidad(equipoSeleccionado.getDescripcion());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
                 spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxCantidad, 1));
             }
         });

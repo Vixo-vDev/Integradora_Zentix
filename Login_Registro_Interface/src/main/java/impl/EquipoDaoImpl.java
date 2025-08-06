@@ -14,12 +14,12 @@ import java.util.List;
 public class EquipoDaoImpl implements IEquipoDao {
     @Override
     public List<Equipo> findAll() throws Exception {
-
+        Connection con = null;
         String sql="SELECT * FROM EQUIPO WHERE DISPONIBLE = '1' ORDER BY ID_EQUIPO ASC";
         List<Equipo> equipos= new ArrayList<>();
 
         try {
-            Connection con= ConnectionBD.getConnection();
+            con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs= ps.executeQuery();
             while(rs.next()){
@@ -43,15 +43,21 @@ public class EquipoDaoImpl implements IEquipoDao {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        finally {
+            if(con != null){
+                con.close();
+            }
+        }
     }
 
     @Override
     public List<Equipo> tipoEquipo(int idTipoEquipo) throws Exception {
+        Connection con = null;
         List<Equipo> equipos= new ArrayList<>();
 
         String sql = "SELECT DISTINCT DESCRIPCION FROM EQUIPO WHERE ID_TIPO_EQUIPO = ?";
 
-        Connection con= ConnectionBD.getConnection();
+        con= ConnectionBD.getConnection();
         PreparedStatement ps=con.prepareStatement(sql);
         ps.setInt(1, idTipoEquipo);
         ResultSet rs = ps.executeQuery();
@@ -62,7 +68,7 @@ public class EquipoDaoImpl implements IEquipoDao {
             equipos.add(equipo);
         }
 
-
+        con.close();
         return equipos;
     }
 
@@ -74,10 +80,11 @@ public class EquipoDaoImpl implements IEquipoDao {
 
     @Override
     public void create(Equipo equipo) throws Exception {
+        Connection con = null;
         String sql = "INSERT INTO EQUIPO (CODIGO_BIEN, DESCRIPCION, MARCA, MODELO, NUMERO_SERIE, ID_TIPO_EQUIPO) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         try{
-            Connection con= ConnectionBD.getConnection();
+            con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ps.setString(1, equipo.getCodigo_bien());
             ps.setString(2, equipo.getDescripcion());
@@ -88,18 +95,23 @@ public class EquipoDaoImpl implements IEquipoDao {
             ps.executeUpdate();
         }catch(SQLException e){
             throw new RuntimeException(e);
+        } finally {
+            if(con != null){
+                con.close();
+            }
         }
     }
 
     @Override
     public void update(Equipo equipo, int id) throws Exception {
+        Connection con = null;
         String sql = "UPDATE EQUIPO SET CODIGO_BIEN = ?, DESCRIPCION = ?, " +
                 "MARCA = ?, MODELO = ?, NUMERO_SERIE = ?, " +
                 "DISPONIBLE = ?, ID_TIPO_EQUIPO = ?\n" +
                 "WHERE ID_EQUIPO = ?";
 
         try {
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, equipo.getCodigo_bien());
             ps.setString(2, equipo.getDescripcion());
@@ -112,29 +124,39 @@ public class EquipoDaoImpl implements IEquipoDao {
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if(con != null){
+                con.close();
+            }
         }
     }
 
     @Override
     public void delete(Equipo equipo) throws Exception {
+        Connection con = null;
         String sql = "UPDATE EQUIPO SET DISPONIBLE = '0' WHERE ID_EQUIPO = ?";
 
         try {
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, equipo.getId_equipo());
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if(con != null){
+                con.close();
+            }
         }
     }
 
     @Override
-    public int totalEquipos()  {
+    public int totalEquipos()  throws Exception{
+        Connection con = null;
         int total_equipos = 0;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO";
         try{
-            Connection con= ConnectionBD.getConnection();
+            con= ConnectionBD.getConnection();
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
             if(rs.next()){
@@ -144,16 +166,21 @@ public class EquipoDaoImpl implements IEquipoDao {
         }
         catch(Exception e){
             throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
         return total_equipos;
     }
 
     @Override
-    public int equiposDisponibles()  {
+    public int equiposDisponibles()  throws Exception{
+        Connection con = null;
         int equiposDispo = 0;
         String sql = "SELECT COUNT(ID_EQUIPO) FROM EQUIPO WHERE DISPONIBLE = 1";
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
@@ -163,12 +190,17 @@ public class EquipoDaoImpl implements IEquipoDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
         return equiposDispo;
     }
 
     @Override
-    public int totalStockBajo()  {
+    public int totalStockBajo()   throws Exception{
+        Connection con = null;
         int totalStock = 0;
         String sql = "SELECT COUNT(*) AS total_tipos_bajo_stock\n" +
                 "FROM (\n" +
@@ -179,7 +211,7 @@ public class EquipoDaoImpl implements IEquipoDao {
                 ") sub";
 
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
@@ -187,17 +219,22 @@ public class EquipoDaoImpl implements IEquipoDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
         return totalStock;
     }
 
     @Override
-    public int calcularCantidad(String descripcion) {
+    public int calcularCantidad(String descripcion) throws Exception {
+        Connection con = null;
         int cantidad = 0;
         String sql = "SELECT COUNT(id_equipo) FROM EQUIPO WHERE DESCRIPCION = ?";
 
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, descripcion);
             ResultSet rs = ps.executeQuery();
@@ -206,17 +243,22 @@ public class EquipoDaoImpl implements IEquipoDao {
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
 
         return cantidad;
     }
 
     @Override
-    public int equiposActivos(){
+    public int equiposActivos() throws  Exception{
+        Connection con = null;
         int equiposActivos = 0;
         String sql = "SELECT COUNT (*) AS TOTAL FROM EQUIPO WHERE DISPONIBLE = '1'";
         try{
-            Connection con = ConnectionBD.getConnection();
+            con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
@@ -224,6 +266,10 @@ public class EquipoDaoImpl implements IEquipoDao {
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
         return  equiposActivos;
     }

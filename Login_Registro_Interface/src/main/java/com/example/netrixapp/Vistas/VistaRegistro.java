@@ -1,4 +1,4 @@
-package com.example.netrixapp.Vistas;
+/*package com.example.netrixapp.Vistas;
 
 import com.example.netrixapp.Controladores.ControladorRegistro;
 import com.example.netrixapp.Modelos.Usuario;
@@ -265,10 +265,7 @@ public class VistaRegistro {
         gridCampos.add(campoLada,1,3);
         gridCampos.add(campoTelefono,2,3);
         gridCampos.add(campofecha, 3,3);
-        gridCampos.add(campoEdad,4,3);*/
-
-
-
+        gridCampos.add(campoEdad,4,3);
 
         panelIzquierdo.getChildren().add(contenedorVertical);
         panelDerecho.getChildren().addAll(titulo, gridCampos,buttons);
@@ -279,7 +276,246 @@ public class VistaRegistro {
         ventanaRegistro.setTitle("Registrarse");
         ventanaRegistro.show();
     }
+}*/
 
 
+package com.example.netrixapp.Vistas;
 
+import com.example.netrixapp.Controladores.ControladorRegistro;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+import java.time.Period;
+
+public class VistaRegistro {
+    // Campos de texto y controles (mantener los mismos)
+    private TextField campoNombre, campoApellidos, campoCorreo, campoCalle, campoLada, campoTelefono, campoEdad, matricula;
+    private DatePicker campoFecha;
+    private ComboBox<String> comboRol;
+    private PasswordField campoContrasena, campoConfirmar;
+    private Button botonContinuar;
+
+    // Getters (mantener los mismos)
+    public String getNombre() { return campoNombre.getText().trim(); }
+    public String getApellidos() { return campoApellidos.getText().trim(); }
+    public String getCorreo() { return campoCorreo.getText().trim().toLowerCase(); }
+    public String getCalle() { return campoCalle.getText().trim(); }
+    public String getLada() { return campoLada.getText().trim(); }
+    public String getTelefono() { return campoTelefono.getText().trim(); }
+    public LocalDate getFecha() { return campoFecha.getValue(); }
+    public int getEdad() { return Integer.parseInt(campoEdad.getText().trim()); }
+    public String getRol() { return comboRol.getSelectionModel().getSelectedItem().trim().toUpperCase(); }
+    public String getmatricula() { return matricula.getText().trim().toLowerCase(); }
+    public String getPassword() { return campoContrasena.getText().trim(); }
+    public String getConfirmarPassword() { return campoConfirmar.getText().trim(); }
+    public Button getBotonContinuar() { return botonContinuar; }
+
+    public void start(Stage ventanaRegistro) {
+        // Configuración de ventana maximizada
+        ventanaRegistro.setMaximized(true);
+        ventanaRegistro.setTitle("Registro - NetrixApp");
+
+        // Contenedor principal con scroll
+        ScrollPane scrollPrincipal = new ScrollPane();
+        scrollPrincipal.setFitToWidth(true);
+        scrollPrincipal.setFitToHeight(true);
+        scrollPrincipal.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPrincipal.setStyle("-fx-background: #f5f7fa;");
+
+        // Contenedor de una sola columna
+        VBox contenedorPrincipal = new VBox();
+        contenedorPrincipal.setAlignment(Pos.TOP_CENTER);
+        contenedorPrincipal.setStyle("-fx-background-color: #f5f7fa;");
+        contenedorPrincipal.setSpacing(20);
+        contenedorPrincipal.setPadding(new Insets(20));
+
+        // Logo en la parte superior
+        ImageView logoUtezV = new ImageView(new Image(getClass().getResourceAsStream("/imagenes/logo_utez.png")));
+        logoUtezV.setPreserveRatio(true);
+        logoUtezV.setFitWidth(200);
+        logoUtezV.setEffect(new DropShadow(10, Color.BLACK));
+
+        HBox logoContainer = new HBox(logoUtezV);
+        logoContainer.setAlignment(Pos.CENTER);
+
+        // Panel del formulario
+        VBox panelFormulario = new VBox(20);
+        panelFormulario.setAlignment(Pos.TOP_CENTER);
+        panelFormulario.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        panelFormulario.setPadding(new Insets(30));
+        panelFormulario.setMaxWidth(800);
+
+        // Título del formulario
+        Label titulo = new Label("Registro de Usuario");
+        titulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
+        titulo.setTextFill(Color.web("#333333"));
+
+        // GridPane para el formulario (ahora de una sola columna)
+        GridPane gridCampos = new GridPane();
+        gridCampos.setHgap(20);
+        gridCampos.setVgap(15);
+        gridCampos.setAlignment(Pos.TOP_CENTER);
+        gridCampos.setPadding(new Insets(20, 40, 20, 40));
+
+        // Configuración de columnas responsivas (ahora solo una columna)
+        ColumnConstraints colLabel = new ColumnConstraints();
+        colLabel.setHgrow(Priority.NEVER);
+        ColumnConstraints colField = new ColumnConstraints();
+        colField.setHgrow(Priority.ALWAYS);
+        colField.setFillWidth(true);
+        gridCampos.getColumnConstraints().addAll(colLabel, colField);
+
+        // Sección de Información Personal
+        Label infoPersonal = createSectionLabel("Información Personal");
+        gridCampos.add(infoPersonal, 0, 0, 2, 1);
+
+        // Campos de información personal (ahora en una columna)
+        addFormField(gridCampos, "Nombre:", campoNombre = new TextField(), 0, 1);
+        addFormField(gridCampos, "Apellidos:", campoApellidos = new TextField(), 0, 3);
+        addFormField(gridCampos, "Correo institucional:", campoCorreo = new TextField(), 0, 5);
+        addFormField(gridCampos, "Calle:", campoCalle = new TextField(), 0, 7);
+
+        // Fila para Lada y Teléfono
+        HBox telefonoBox = new HBox(10);
+        telefonoBox.setAlignment(Pos.CENTER_LEFT);
+
+        campoLada = new TextField();
+        campoLada.setPromptText("Lada");
+        campoLada.setPrefWidth(60);
+        campoLada.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
+
+        campoTelefono = new TextField();
+        campoTelefono.setPromptText("Teléfono");
+        campoTelefono.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
+        HBox.setHgrow(campoTelefono, Priority.ALWAYS);
+
+        telefonoBox.getChildren().addAll(new Label("Teléfono:"), campoLada, campoTelefono);
+        gridCampos.add(telefonoBox, 0, 9, 2, 1);
+
+        // Fecha de nacimiento y edad
+        HBox fechaEdadBox = new HBox(10);
+        fechaEdadBox.setAlignment(Pos.CENTER_LEFT);
+
+        campoFecha = new DatePicker();
+        campoFecha.setPrefWidth(200);
+        campoFecha.setStyle("-fx-font-size: 14;");
+
+        campoEdad = new TextField();
+        campoEdad.setEditable(false);
+        campoEdad.setStyle("-fx-font-size: 14; -fx-background-color: #f0f0f0;");
+        campoEdad.setPrefWidth(60);
+
+        fechaEdadBox.getChildren().addAll(
+                new Label("Fecha de nacimiento:"), campoFecha,
+                new Label("Edad:"), campoEdad
+        );
+        gridCampos.add(fechaEdadBox, 0, 11, 2, 1);
+
+        // Listener para calcular edad automáticamente
+        campoFecha.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                int edad = Period.between(newVal, LocalDate.now()).getYears();
+                campoEdad.setText(String.valueOf(edad));
+            } else {
+                campoEdad.clear();
+            }
+        });
+
+        // Sección de Información Académica
+        Label infoAcademica = createSectionLabel("Información Académica");
+        gridCampos.add(infoAcademica, 0, 13, 2, 1);
+
+        // Rol
+        addFormField(gridCampos, "Rol:", comboRol = new ComboBox<>(), 0, 15);
+        comboRol.getItems().addAll("Alumno", "Docente", "Administrativo");
+        comboRol.setStyle("-fx-font-size: 14;");
+        comboRol.setPrefWidth(Double.MAX_VALUE);
+
+        // Matrícula
+        addFormField(gridCampos, "Matrícula:", matricula = new TextField(), 0, 17);
+
+        // Sección de Credenciales
+        Label infoCredenciales = createSectionLabel("Credenciales de Acceso");
+        gridCampos.add(infoCredenciales, 0, 19, 2, 1);
+
+        // Contraseñas
+        addFormField(gridCampos, "Contraseña:", campoContrasena = new PasswordField(), 0, 21);
+        addFormField(gridCampos, "Confirmar contraseña:", campoConfirmar = new PasswordField(), 0, 23);
+
+        // Botones en la parte inferior
+        HBox panelBotones = new HBox(20);
+        panelBotones.setAlignment(Pos.CENTER);
+        panelBotones.setStyle("-fx-padding: 20 0 0 0;");
+
+        botonContinuar = createActionButton("Continuar", "#009475");
+        Button botonCancelar = createActionButton("Regresar", "#005994");
+
+        botonCancelar.setOnAction(e -> {
+            VistaLogin regresar = new VistaLogin();
+            regresar.start(ventanaRegistro);
+        });
+
+        panelBotones.getChildren().addAll(botonContinuar, botonCancelar);
+
+        // Ensamblar la interfaz
+        panelFormulario.getChildren().addAll(titulo, gridCampos, panelBotones);
+        contenedorPrincipal.getChildren().addAll(logoContainer, panelFormulario);
+        scrollPrincipal.setContent(contenedorPrincipal);
+
+        // Configurar escena
+        Scene escena = new Scene(scrollPrincipal);
+        ventanaRegistro.setScene(escena);
+
+        // Inicializar controlador
+        new ControladorRegistro(this);
+
+        ventanaRegistro.show();
+    }
+
+    // Métodos auxiliares
+    private Label createSectionLabel(String text) {
+        Label label = new Label(text);
+        label.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        label.setTextFill(Color.web("#009475"));
+        label.setPadding(new Insets(10, 0, 5, 0));
+        return label;
+    }
+
+    private void addFormField(GridPane grid, String labelText, Control field, int col, int row) {
+        Label label = new Label(labelText);
+        label.setFont(Font.font("Segoe UI", 14));
+        label.setTextFill(Color.web("#444444"));
+        grid.add(label, col, row);
+
+        field.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
+        field.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(field, Priority.ALWAYS);
+        grid.add(field, col, row + 1, 2, 1);
+    }
+
+    private Button createActionButton(String text, String color) {
+        Button button = new Button(text);
+        button.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+        button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-background-radius: 4;");
+        button.setPrefHeight(40);
+        button.setPrefWidth(200);
+
+        // Efecto hover
+        button.setOnMouseEntered(e -> button.setStyle(
+                "-fx-background-color: derive(" + color + ", -20%); -fx-text-fill: white; -fx-background-radius: 4;"));
+        button.setOnMouseExited(e -> button.setStyle(
+                "-fx-background-color: " + color + "; -fx-text-fill: white; -fx-background-radius: 4;"));
+
+        return button;
+    }
 }

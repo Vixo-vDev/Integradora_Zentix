@@ -2,6 +2,7 @@ package Dao;
 
 import com.example.netrixapp.Modelos.Usuario;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IUsuarioDao {
@@ -14,6 +15,6 @@ public interface IUsuarioDao {
     void create(Usuario user) throws Exception;
     void update(Usuario user, int id) throws Exception;
     void delete(Usuario user) throws Exception;
-    int totalUsuarios();
+    int totalUsuarios() throws Exception;
 
 }

@@ -102,9 +102,24 @@ public class VistaInventario {
         HBox filaMetricas = new HBox(15);
         filaMetricas.setAlignment(Pos.TOP_CENTER);
 
-        VBox cardTotal = crearCardMetrica("Total Equipos", String.valueOf(equipoDao.totalEquipos()), COLOR_PRIMARIO);
-        VBox cardStockBajo = crearCardMetrica("Stock Bajo", String.valueOf(equipoDao.totalStockBajo()), COLOR_ADVERTENCIA);
-        VBox cardDisponibles = crearCardMetrica("Disponibles", String.valueOf(equipoDao.equiposDisponibles()), COLOR_EXITO);
+        VBox cardTotal = null;
+        try {
+            cardTotal = crearCardMetrica("Total Equipos", String.valueOf(equipoDao.totalEquipos()), COLOR_PRIMARIO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        VBox cardStockBajo = null;
+        try {
+            cardStockBajo = crearCardMetrica("Stock Bajo", String.valueOf(equipoDao.totalStockBajo()), COLOR_ADVERTENCIA);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        VBox cardDisponibles = null;
+        try {
+            cardDisponibles = crearCardMetrica("Disponibles", String.valueOf(equipoDao.equiposDisponibles()), COLOR_EXITO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         filaMetricas.getChildren().addAll(cardTotal, cardStockBajo, cardDisponibles);
         contenido.getChildren().add(filaMetricas);

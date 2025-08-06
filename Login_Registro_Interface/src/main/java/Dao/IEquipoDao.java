@@ -7,13 +7,13 @@ public interface IEquipoDao {
 
     List<Equipo> findAll() throws Exception;
     List<Equipo> tipoEquipo(int idTipoEquipo) throws Exception;
-    int totalEquipos();
-    int equiposDisponibles();
-    int totalStockBajo();
-    int calcularCantidad(String descripcion);
+    int totalEquipos() throws Exception;
+    int equiposDisponibles() throws Exception;
+    int totalStockBajo() throws Exception;
+    int calcularCantidad(String descripcion)  throws Exception;
     Equipo getById(int id) throws Exception;
     void create(Equipo equipo) throws Exception;
     void update(Equipo equipo, int id) throws Exception;
     void delete(Equipo equipo) throws Exception;
-    int equiposActivos();
+    int equiposActivos() throws  Exception;
 }
