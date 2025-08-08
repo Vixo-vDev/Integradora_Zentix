@@ -37,7 +37,7 @@ public class ControladorLogin {
 
                 Platform.runLater(() -> {
                     if(user.isEmpty() || pass.isEmpty()){
-                        mostrarAlerta("ERROR", "Ingresa todo lo que se te pide", Alert.AlertType.INFORMATION);
+                        mostrarAlerta("ERROR", "Ingresa todo lo que se te pide.", Alert.AlertType.INFORMATION);
                         restaurarBoton(btn, textoOriginal);
                         return;
                     }
