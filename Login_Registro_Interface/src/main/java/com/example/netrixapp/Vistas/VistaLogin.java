@@ -217,7 +217,7 @@ public class VistaLogin extends Application {
         Scene escena = new Scene(contenedorPrincipal);
         ventanaPrincipal.setScene(escena);
 
-        // Centrar contenido cuando se restaura
+        // Centrar contenido cuando se restaurawaso
         ventanaPrincipal.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
             if (!isNowMaximized) {
                 ventanaPrincipal.centerOnScreen();

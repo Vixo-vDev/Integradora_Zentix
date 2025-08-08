@@ -10,20 +10,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 
 public class VistaPerfil {
-    Usuario usuario = SesionUsuario.getUsuarioActual();
-    private final BorderPane vista;  // Cambiado a BorderPane para mejor organización
-    private final ControladorBarraNavegacion controladorBarra;
 
-    // Colores específicos para esta vista
-    private final String COLOR_ACCION_PRINCIPAL = "#3498DB";
-    private final String COLOR_PELIGRO = "#E74C3C";
-    private final String COLOR_FONDO = "#ECF0F1";
-    private final String COLOR_TEXTO = "#2C3E50";
-    private final String COLOR_BORDE = "#BDC3C7";
+    private final BorderPane vista;
+    private final ControladorBarraNavegacion controladorBarra;
+    private final Usuario usuario = SesionUsuario.getUsuarioActual();
+
+    // Paleta de colores moderna
+    private final String COLOR_PRIMARIO = "#4F46E5";
+    private final String COLOR_SECUNDARIO = "#10B981";
+    private final String COLOR_PELIGRO = "#EF4444";
+    private final String COLOR_TEXTO_OSCURO = "#1F2937";
+    private final String COLOR_TEXTO_NORMAL = "#6B7280";
+    private final String COLOR_BORDE = "#E5E7EB";
+    private final String COLOR_FONDO = "#FFFFFF";
 
     public VistaPerfil(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
@@ -32,39 +34,37 @@ public class VistaPerfil {
     }
 
     private void inicializarUI() {
+        // Configuración del layout principal
         vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+        vista.setTop(controladorBarra.getBarraSuperior());
+        vista.setLeft(controladorBarra.getBarraLateral());
+
+        // Contenedor principal con scroll
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setStyle("-fx-background: " + COLOR_FONDO + ";");
 
         // Panel de contenido principal
-        VBox panelContenido = new VBox(20);
-        panelContenido.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-        panelContenido.setPadding(new Insets(20));
-        VBox.setVgrow(panelContenido, Priority.ALWAYS);
+        VBox panelContenido = new VBox(25);
+        panelContenido.setPadding(new Insets(30));
+        panelContenido.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+        panelContenido.setAlignment(Pos.TOP_CENTER);
 
         // Sección de foto de perfil
         VBox seccionFoto = crearSeccionFoto();
+        panelContenido.getChildren().add(seccionFoto);
 
         // Formulario de perfil
         GridPane formularioPerfil = crearFormularioPerfil();
+        panelContenido.getChildren().add(formularioPerfil);
 
         // Botones de acción
         HBox panelBotones = crearPanelBotonesAccion();
+        panelContenido.getChildren().add(panelBotones);
 
-        panelContenido.getChildren().addAll(seccionFoto, formularioPerfil, panelBotones);
-
-        // ScrollPane para contenido principal
-        ScrollPane scrollPane = new ScrollPane(panelContenido);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-
-        // Construir vista completa
-        vista.setTop(controladorBarra.getBarraSuperior());
-        vista.setLeft(controladorBarra.getBarraLateral());
+        scrollPane.setContent(panelContenido);
         vista.setCenter(scrollPane);
-
-        // Configurar márgenes
-        BorderPane.setMargin(panelContenido, new Insets(20));
-        BorderPane.setMargin(controladorBarra.getBarraLateral(), new Insets(0, 20, 0, 0));
     }
 
     private VBox crearSeccionFoto() {
@@ -74,32 +74,21 @@ public class VistaPerfil {
 
         // Título "Foto de perfil"
         Label lblTitulo = new Label("Foto de perfil");
-        lblTitulo.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: " + COLOR_TEXTO + ";");
+        lblTitulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
 
+        // Imagen de perfil
         ImageView imagenPerfil = new ImageView(new Image("file:src/main/resources/imagenes/perfil-default.png"));
         imagenPerfil.setPreserveRatio(true);
-        imagenPerfil.setFitWidth(120);
-        imagenPerfil.setFitHeight(120);
-        imagenPerfil.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);");
+        imagenPerfil.setFitWidth(150);
+        imagenPerfil.setFitHeight(150);
+        imagenPerfil.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
 
-        HBox botonesFoto = new HBox(10);
+        // Botones de acción para la foto
+        HBox botonesFoto = new HBox(15);
         botonesFoto.setAlignment(Pos.CENTER);
 
-        Button btnEliminarFoto = new Button("Eliminar foto");
-        btnEliminarFoto.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_PELIGRO + "; " +
-                "-fx-border-color: " + COLOR_PELIGRO + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 5 10;");
-
-        Button btnCambiarFoto = new Button("Cambiar foto");
-        btnCambiarFoto.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_ACCION_PRINCIPAL + "; " +
-                "-fx-border-color: " + COLOR_ACCION_PRINCIPAL + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 5 10;");
+        Button btnEliminarFoto = crearBotonSecundario("Eliminar foto", COLOR_PELIGRO);
+        Button btnCambiarFoto = crearBotonSecundario("Cambiar foto", COLOR_PRIMARIO);
 
         btnCambiarFoto.setOnAction(e -> cambiarFotoPerfil(imagenPerfil));
         btnEliminarFoto.setOnAction(e -> imagenPerfil.setImage(new Image("file:src/main/resources/imagenes/perfil-default.png")));
@@ -126,14 +115,18 @@ public class VistaPerfil {
         GridPane formularioPerfil = new GridPane();
         formularioPerfil.setHgap(20);
         formularioPerfil.setVgap(15);
-        formularioPerfil.setPadding(new Insets(5, 0, 20, 0));
+        formularioPerfil.setPadding(new Insets(20));
+        formularioPerfil.setStyle("-fx-background-color: " + COLOR_FONDO + "; " +
+                "-fx-border-color: " + COLOR_BORDE + "; " +
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 8;");
 
-        // Configurar columnas con porcentajes
-        ColumnConstraints col1 = new ColumnConstraints();
-        col1.setPercentWidth(20);
-        ColumnConstraints col2 = new ColumnConstraints();
-        col2.setPercentWidth(20);
-        formularioPerfil.getColumnConstraints().addAll(col1, col2);
+        // Configuración de columnas
+        ColumnConstraints colLabel = new ColumnConstraints();
+        colLabel.setPrefWidth(150);
+        ColumnConstraints colField = new ColumnConstraints();
+        colField.setHgrow(Priority.ALWAYS);
+        formularioPerfil.getColumnConstraints().addAll(colLabel, colField);
 
         // Campos del formulario
         agregarCampoFormulario(formularioPerfil, "Nombre:", new TextField(usuario.getNombre()), 0);
@@ -144,13 +137,7 @@ public class VistaPerfil {
         agregarCampoFormulario(formularioPerfil, "Teléfono:", new TextField(usuario.getTelefono()), 5);
 
         // Botón cambiar contraseña
-        Button btnCambiarContrasena = new Button("Cambiar Contraseña");
-        btnCambiarContrasena.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_ACCION_PRINCIPAL + "; " +
-                "-fx-border-color: " + COLOR_ACCION_PRINCIPAL + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 5 10;");
+        Button btnCambiarContrasena = crearBotonSecundario("Cambiar Contraseña", COLOR_PRIMARIO);
         formularioPerfil.add(btnCambiarContrasena, 1, 6);
 
         return formularioPerfil;
@@ -158,36 +145,69 @@ public class VistaPerfil {
 
     private void agregarCampoFormulario(GridPane formulario, String etiqueta, Control control, int fila) {
         Label label = new Label(etiqueta);
-        label.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold;");
+        label.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-font-weight: bold;");
         formulario.add(label, 0, fila);
 
-        control.setStyle("-fx-pref-height: 35; -fx-padding: 0 10; -fx-border-color: " + COLOR_BORDE + "; " +
-                "-fx-border-width: 1; -fx-border-radius: 3; -fx-min-width: 200;");
-        HBox.setHgrow(control, Priority.ALWAYS);
+        control.setStyle("-fx-font-size: 14px; -fx-padding: 8 12; -fx-background-radius: 6;");
+        control.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(control, Priority.ALWAYS);
         formulario.add(control, 1, fila);
     }
 
     private HBox crearPanelBotonesAccion() {
-        HBox panelBotones = new HBox(15);
-        panelBotones.setAlignment(Pos.CENTER_RIGHT);
+        HBox panelBotones = new HBox(20);
+        panelBotones.setAlignment(Pos.CENTER);
         panelBotones.setPadding(new Insets(20, 0, 0, 0));
 
-        Button btnCancelar = new Button("Cancelar");
-        btnCancelar.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_TEXTO + "; " +
-                "-fx-border-color: " + COLOR_TEXTO + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 3; " +
-                "-fx-padding: 8 20;");
-
-        Button btnGuardar = new Button("Guardar Cambios");
-        btnGuardar.setStyle("-fx-background-color: " + COLOR_ACCION_PRINCIPAL + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-padding: 8 20; " +
-                "-fx-border-radius: 3;");
+        Button btnCancelar = crearBotonSecundario("Cancelar", COLOR_TEXTO_NORMAL);
+        Button btnGuardar = crearBotonPrimario("Guardar Cambios");
 
         panelBotones.getChildren().addAll(btnCancelar, btnGuardar);
         return panelBotones;
+    }
+
+    private Button crearBotonPrimario(String texto) {
+        Button boton = new Button(texto);
+        boton.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10 25; " +
+                "-fx-background-radius: 6;");
+        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #0D9488; " +
+                "-fx-text-fill: white; " +
+                "-fx-padding: 10 25; " +
+                "-fx-background-radius: 6;"));
+        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
+                "-fx-text-fill: white; " +
+                "-fx-padding: 10 25; " +
+                "-fx-background-radius: 6;"));
+        return boton;
+    }
+
+    private Button crearBotonSecundario(String texto, String color) {
+        Button boton = new Button(texto);
+        boton.setStyle("-fx-background-color: transparent; " +
+                "-fx-text-fill: " + color + "; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 6;");
+        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: rgba(0,0,0,0.05); " +
+                "-fx-text-fill: " + color + "; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 6;"));
+        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; " +
+                "-fx-text-fill: " + color + "; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 6;"));
+        return boton;
     }
 
     public BorderPane getVista() {

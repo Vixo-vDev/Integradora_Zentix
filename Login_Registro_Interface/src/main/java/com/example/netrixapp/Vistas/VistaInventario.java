@@ -9,10 +9,12 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VistaInventario {
+    private static final Logger logger = Logger.getLogger(VistaInventario.class.getName());
     private final EquipoDaoImpl equipoDao = new EquipoDaoImpl();
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
@@ -21,260 +23,214 @@ public class VistaInventario {
     private List<Equipo> todosLosEquipos;
     private static final int FILAS_POR_PAGINA = 50;
 
-    // Paleta de colores moderna
+    // Colores
     private final String COLOR_PRIMARIO = "#4F46E5";
     private final String COLOR_SECUNDARIO = "#10B981";
     private final String COLOR_ADVERTENCIA = "#F59E0B";
-    private final String COLOR_PELIGRO = "#EF4444";
     private final String COLOR_TEXTO_OSCURO = "#1F2937";
     private final String COLOR_TEXTO_NORMAL = "#6B7280";
-    private final String COLOR_BORDE = "#E5E7EB";
     private final String COLOR_FONDO = "#FFFFFF";
 
     public VistaInventario(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
         this.vista = new BorderPane();
-        inicializarUI();
+        try {
+            inicializarUI();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al inicializar la interfaz de inventario", e);
+            mostrarError("Error al cargar el inventario");
+        }
     }
 
-    private void inicializarUI() {
-        // Configuración del layout principal
-        vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
-        vista.setTop(controladorBarra.getBarraSuperior());
-        vista.setLeft(controladorBarra.getBarraLateral());
+    private void inicializarUI() throws Exception {
+        try {
+            vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+            vista.setTop(controladorBarra.getBarraSuperior());
+            vista.setLeft(controladorBarra.getBarraLateral());
 
-        // Contenedor principal con scroll
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setStyle("-fx-background: " + COLOR_FONDO + "; -fx-border-color: " + COLOR_FONDO + ";");
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setFitToWidth(true);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scrollPane.setStyle("-fx-background: " + COLOR_FONDO + ";");
 
-        VBox contenido = new VBox(25);
-        contenido.setPadding(new Insets(30));
-        contenido.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
-        contenido.setAlignment(Pos.TOP_CENTER);
+            VBox contenido = new VBox(20);
+            contenido.setPadding(new Insets(30));
+            contenido.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+            contenido.setAlignment(Pos.TOP_CENTER);
 
-        // Título de la página
-        Label tituloPagina = new Label("Gestión de Inventario");
-        tituloPagina.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
-        contenido.getChildren().add(tituloPagina);
+            // Panel de métricas
+            HBox panelMetricas = crearPanelMetricas();
+            contenido.getChildren().add(panelMetricas);
 
-        // Panel de métricas
-        HBox panelMetricas = crearPanelMetricas();
-        contenido.getChildren().add(panelMetricas);
+            // Tabla
+            tablaEquipos = new TableView<>();
+            tablaEquipos.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+            configurarColumnasTabla();
 
-        // Separador
-        Separator separator = new Separator();
-        separator.setStyle("-fx-background-color: " + COLOR_BORDE + ";");
-        separator.setPadding(new Insets(20, 0, 20, 0));
-        contenido.getChildren().add(separator);
+            // Paginación
+            paginador = new Pagination();
+            paginador.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+            paginador.setPageFactory(this::crearPagina);
 
-        // Panel de búsqueda y acciones
-        HBox panelAcciones = crearPanelAcciones();
-        contenido.getChildren().add(panelAcciones);
+            contenido.getChildren().addAll(tablaEquipos, paginador);
+            scrollPane.setContent(contenido);
+            vista.setCenter(scrollPane);
 
-        // Configuración de la tabla
-        tablaEquipos = new TableView<>();
-        tablaEquipos.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
-        configurarColumnasTabla();
-
-        // Paginación
-        paginador = new Pagination();
-        paginador.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
-        paginador.setPageFactory(this::crearPagina);
-
-        VBox contenedorTabla = new VBox(15, tablaEquipos, paginador);
-        contenedorTabla.setPadding(new Insets(10, 0, 0, 0));
-        contenido.getChildren().add(contenedorTabla);
-
-        scrollPane.setContent(contenido);
-        vista.setCenter(scrollPane);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error en inicializarUI", e);
+            throw e;
+        }
     }
 
     private HBox crearPanelMetricas() {
         HBox panelMetricas = new HBox(20);
         panelMetricas.setAlignment(Pos.TOP_CENTER);
 
-        VBox cardTotal = null;
         try {
-            cardTotal = crearCardMetrica("Total de Artículos",
+            VBox cardTotal = crearCardMetrica("Total Equipos",
                     String.valueOf(equipoDao.totalEquipos()),
-                    COLOR_PRIMARIO, "📦");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                    COLOR_PRIMARIO);
 
-        VBox cardStockBajo = null;
-        try {
-            cardStockBajo = crearCardMetrica("Stock Bajo",
+            VBox cardStockBajo = crearCardMetrica("Stock Bajo",
                     String.valueOf(equipoDao.totalStockBajo()),
-                    COLOR_ADVERTENCIA, "⚠️");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                    COLOR_ADVERTENCIA);
 
-        VBox cardDisponibles = null;
-        try {
-            cardDisponibles = crearCardMetrica("Disponibles",
+            VBox cardDisponibles = crearCardMetrica("Disponibles",
                     String.valueOf(equipoDao.equiposDisponibles()),
-                    COLOR_SECUNDARIO, "✔️");
+                    COLOR_SECUNDARIO);
+
+            panelMetricas.getChildren().addAll(cardTotal, cardStockBajo, cardDisponibles);
+
+            for (Node card : panelMetricas.getChildren()) {
+                HBox.setHgrow(card, Priority.ALWAYS);
+                ((VBox) card).setMaxWidth(Double.MAX_VALUE);
+            }
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        panelMetricas.getChildren().addAll(cardTotal, cardStockBajo, cardDisponibles);
-
-        // Hacer que las cards se expandan
-        for (Node card : panelMetricas.getChildren()) {
-            HBox.setHgrow(card, Priority.ALWAYS);
-            ((VBox) card).setMaxWidth(Double.MAX_VALUE);
+            logger.log(Level.SEVERE, "Error al crear métricas", e);
+            mostrarError("Error al cargar métricas");
         }
 
         return panelMetricas;
     }
 
-    private VBox crearCardMetrica(String titulo, String valor, String color, String emoji) {
-        VBox card = new VBox(10);
+    private VBox crearCardMetrica(String titulo, String valor, String color) {
+        VBox card = new VBox(8);
         card.setStyle("-fx-background-color: " + COLOR_FONDO + "; " +
-                "-fx-border-color: " + COLOR_BORDE + "; " +
+                "-fx-border-color: #E5E7EB; " +
                 "-fx-border-width: 1; " +
-                "-fx-border-radius: 10; " +
-                "-fx-padding: 20;");
+                "-fx-border-radius: 8; " +
+                "-fx-padding: 0;"); // quitamos padding para manejarlo internamente
         card.setAlignment(Pos.CENTER);
 
-        // Encabezado con emoji
-        HBox encabezado = new HBox(8);
-        encabezado.setAlignment(Pos.CENTER);
+        // Franja superior de color
+        Region barraSuperior = new Region();
+        barraSuperior.setPrefHeight(6); // Grosor del borde superior
+        barraSuperior.setStyle("-fx-background-color: " + color + "; " +
+                "-fx-background-radius: 8 8 0 0;"); // esquinas superiores redondeadas
 
-        Label lblEmoji = new Label(emoji);
-        lblEmoji.setStyle("-fx-font-size: 24px;");
+        VBox contenidoCard = new VBox(8);
+        contenidoCard.setAlignment(Pos.CENTER);
+        contenidoCard.setPadding(new Insets(16));
 
         Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 16px; -fx-text-fill: " + COLOR_TEXTO_NORMAL + ";");
+        lblTitulo.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO_NORMAL + ";");
 
-        encabezado.getChildren().addAll(lblEmoji, lblTitulo);
-
-        // Valor
         Label lblValor = new Label(valor);
-        lblValor.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: " + color + ";");
+        lblValor.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: " + color + ";");
 
-        card.getChildren().addAll(encabezado, lblValor);
+        contenidoCard.getChildren().addAll(lblTitulo, lblValor);
+
+        card.getChildren().addAll(barraSuperior, contenidoCard);
         return card;
     }
 
-    private HBox crearPanelAcciones() {
-        HBox panelAcciones = new HBox(15);
-        panelAcciones.setAlignment(Pos.CENTER_LEFT);
-
-        // Campo de búsqueda
-        TextField campoBusqueda = new TextField();
-        campoBusqueda.setPromptText("Buscar equipo...");
-        campoBusqueda.setStyle("-fx-font-size: 14px; -fx-padding: 8 12; -fx-background-radius: 6;");
-        campoBusqueda.setPrefWidth(300);
-
-        // Botón de búsqueda
-        Button btnBuscar = new Button("Buscar");
-        btnBuscar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-padding: 8 16; " +
-                "-fx-background-radius: 6;");
-        btnBuscar.setOnMouseEntered(e -> btnBuscar.setStyle("-fx-background-color: #4338CA; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
-        btnBuscar.setOnMouseExited(e -> btnBuscar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
-
-        // Botón de agregar
-        Button btnAgregar = new Button("Agregar Equipo");
-        btnAgregar.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-padding: 8 16; " +
-                "-fx-background-radius: 6;");
-        btnAgregar.setOnMouseEntered(e -> btnAgregar.setStyle("-fx-background-color: #0D9488; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
-        btnAgregar.setOnMouseExited(e -> btnAgregar.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
-
-        panelAcciones.getChildren().addAll(campoBusqueda, btnBuscar, btnAgregar);
-        return panelAcciones;
-    }
-
     private void configurarColumnasTabla() {
-        // Estilo base para las columnas
-        String estiloColumna = "-fx-alignment: CENTER-LEFT; -fx-font-size: 14px; -fx-padding: 8 12;";
-        String estiloHeader = "-fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-font-size: 14px;";
+        try {
+            String estiloColumna = "-fx-alignment: CENTER-LEFT; -fx-font-size: 14px; -fx-padding: 8 12;";
 
-        TableColumn<Equipo, Integer> colId = new TableColumn<>("ID");
-        colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
-        colId.setStyle(estiloColumna);
-        colId.setPrefWidth(80);
+            TableColumn<Equipo, Integer> colId = new TableColumn<>("ID");
+            colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
+            colId.setStyle(estiloColumna);
+            colId.setPrefWidth(80);
 
-        TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código Bien");
-        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
-        colCodigo.setStyle(estiloColumna);
+            TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código");
+            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
+            colCodigo.setStyle(estiloColumna);
 
-        TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
-        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        colDescripcion.setStyle(estiloColumna);
+            TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
+            colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+            colDescripcion.setStyle(estiloColumna);
 
-        TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
-        colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
-        colMarca.setStyle(estiloColumna);
+            TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
+            colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+            colMarca.setStyle(estiloColumna);
 
-        TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
-        colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-        colModelo.setStyle(estiloColumna);
+            TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
+            colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+            colModelo.setStyle(estiloColumna);
 
-        TableColumn<Equipo, String> colSerie = new TableColumn<>("N° Serie");
-        colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
-        colSerie.setStyle(estiloColumna);
+            TableColumn<Equipo, String> colSerie = new TableColumn<>("N° Serie");
+            colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
+            colSerie.setStyle(estiloColumna);
 
-        TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
-        colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
-        colDisponible.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setStyle(estiloColumna);
-                } else {
-                    setText(item.toString());
-                    setStyle(estiloColumna + " -fx-text-fill: " + (item > 0 ? COLOR_SECUNDARIO : COLOR_PELIGRO) + ";");
-                }
-            }
-        });
+            TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
+            colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+            colDisponible.setStyle(estiloColumna);
 
-        TableColumn<Equipo, Integer> colTipo = new TableColumn<>("Tipo");
-        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
-        colTipo.setStyle(estiloColumna);
+            TableColumn<Equipo, Integer> colTipo = new TableColumn<>("Tipo");
+            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
+            colTipo.setStyle(estiloColumna);
 
-        // Aplicar estilo a los headers
-        for (TableColumn<Equipo, ?> col : List.of(colId, colCodigo, colDescripcion, colMarca, colModelo, colSerie, colDisponible, colTipo)) {
-            col.setStyle("-fx-alignment: CENTER-LEFT;");
-            col.setReorderable(false);
-            col.setSortable(true);
-            col.getStyleClass().add("table-column");
+            tablaEquipos.getColumns().setAll(colId, colCodigo, colDescripcion, colMarca, colModelo, colSerie, colDisponible, colTipo);
+            tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al configurar columnas", e);
+            mostrarError("Error al configurar la tabla");
         }
-
-        tablaEquipos.getColumns().setAll(colId, colCodigo, colDescripcion, colMarca, colModelo, colSerie, colDisponible, colTipo);
-        tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     public VBox crearPagina(int pageIndex) {
-        int fromIndex = pageIndex * FILAS_POR_PAGINA;
-        int toIndex = Math.min(fromIndex + FILAS_POR_PAGINA, todosLosEquipos.size());
+        try {
+            if (todosLosEquipos == null || todosLosEquipos.isEmpty()) {
+                return new VBox(new Label("No hay datos disponibles"));
+            }
 
-        tablaEquipos.getItems().setAll(todosLosEquipos.subList(fromIndex, toIndex));
+            int fromIndex = pageIndex * FILAS_POR_PAGINA;
+            int toIndex = Math.min(fromIndex + FILAS_POR_PAGINA, todosLosEquipos.size());
 
-        VBox pagina = new VBox(tablaEquipos);
-        pagina.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
-        return pagina;
+            tablaEquipos.getItems().setAll(todosLosEquipos.subList(fromIndex, toIndex));
+
+            VBox pagina = new VBox(tablaEquipos);
+            pagina.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
+            return pagina;
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al crear página", e);
+            return new VBox(new Label("Error al cargar los datos"));
+        }
     }
 
     public void mostrarEquipos(List<Equipo> equipos) {
-        this.todosLosEquipos = equipos;
-        int totalPaginas = (int) Math.ceil((double) equipos.size() / FILAS_POR_PAGINA);
-        paginador.setPageCount(totalPaginas);
-        paginador.setCurrentPageIndex(0);
-        paginador.setPageFactory(this::crearPagina);
+        try {
+            this.todosLosEquipos = equipos;
+            int totalPaginas = (int) Math.ceil((double) equipos.size() / FILAS_POR_PAGINA);
+            paginador.setPageCount(totalPaginas);
+            paginador.setCurrentPageIndex(0);
+            paginador.setPageFactory(this::crearPagina);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al mostrar equipos", e);
+            mostrarError("Error al cargar el inventario");
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     public BorderPane getVista() {
