@@ -88,7 +88,7 @@ public class VistaHistorial {
         panelFiltros.setVgap(15);
         panelFiltros.setPadding(new Insets(10));
         panelFiltros.setAlignment(Pos.CENTER_LEFT);
-        panelFiltros.setStyle("-fx-background-color: " + COLOR_FONDO + ";"); // sin bordes
+        panelFiltros.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
 
         // Estado
         Label lblEstado = new Label("Estado:");
@@ -99,38 +99,52 @@ public class VistaHistorial {
         comboEstado.setValue("Todos");
         comboEstado.setStyle("-fx-font-size: 14px; -fx-pref-width: 180px;");
 
-        // Botón Aplicar (color #009475)
+        // Fecha inicio
+        Label lblInicio = new Label("Desde:");
+        lblInicio.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+
+        datePickerInicio = new DatePicker();
+        datePickerInicio.setStyle("-fx-font-size: 14px; -fx-pref-width: 150px;");
+
+        // Fecha fin
+        Label lblFin = new Label("Hasta:");
+        lblFin.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+
+        datePickerFin = new DatePicker();
+        datePickerFin.setStyle("-fx-font-size: 14px; -fx-pref-width: 150px;");
+
+        // Botones
         btnAplicar = new Button("Aplicar Filtros");
-        btnAplicar.setStyle("-fx-background-color: #009475; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-padding: 8 16; " +
-                "-fx-background-radius: 6;");
+        btnAplicar.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 6;");
         btnAplicar.setOnMouseEntered(e -> btnAplicar.setStyle("-fx-background-color: #007A62; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
         btnAplicar.setOnMouseExited(e -> btnAplicar.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;"));
 
-        // Botón Limpiar
         btnLimpiar = new Button("Limpiar");
-        btnLimpiar.setStyle("-fx-background-color: " + COLOR_BORDE + "; " +
-                "-fx-text-fill: " + COLOR_TEXTO_OSCURO + "; " +
-                "-fx-font-weight: bold; " +
-                "-fx-padding: 8 16; " +
-                "-fx-background-radius: 6;");
+        btnLimpiar.setStyle("-fx-background-color: " + COLOR_BORDE + "; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 6;");
         btnLimpiar.setOnMouseEntered(e -> btnLimpiar.setStyle("-fx-background-color: #D1D5DB; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-padding: 8 16; -fx-background-radius: 6;"));
         btnLimpiar.setOnMouseExited(e -> btnLimpiar.setStyle("-fx-background-color: " + COLOR_BORDE + "; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-padding: 8 16; -fx-background-radius: 6;"));
 
-        // Agrupar botones
         HBox boxBotones = new HBox(10, btnAplicar, btnLimpiar);
         boxBotones.setAlignment(Pos.CENTER_LEFT);
 
-        // Distribución
+        // Distribución en el grid
         panelFiltros.add(lblEstado, 0, 0);
         panelFiltros.add(comboEstado, 1, 0);
-        panelFiltros.add(boxBotones, 2, 0);
+        panelFiltros.add(lblInicio, 0, 1);
+        panelFiltros.add(datePickerInicio, 1, 1);
+        panelFiltros.add(lblFin, 2, 1);
+        panelFiltros.add(datePickerFin, 3, 1);
+        panelFiltros.add(boxBotones, 0, 2, 4, 1); // botones ocupan 4 columnas
 
         return panelFiltros;
     }
 
+
+    public void limpiarFiltros() {
+        comboEstado.setValue("Todos");
+        if (datePickerInicio != null) datePickerInicio.setValue(null);
+        if (datePickerFin != null) datePickerFin.setValue(null);
+    }
 
     private void configurarColumnasTabla() {
         // Estilo base para las columnas

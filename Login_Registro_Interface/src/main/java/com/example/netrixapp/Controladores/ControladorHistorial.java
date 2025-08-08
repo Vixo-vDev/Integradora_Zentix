@@ -24,6 +24,8 @@ public class ControladorHistorial {
     private void inicializarEventos() {
         vista.getBtnAplicar().setOnAction(e -> aplicarFiltros());
         vista.getBtnLimpiar().setOnAction(e -> cargarHistorial());
+        vista.limpiarFiltros();
+        cargarHistorial();
     }
 
     private void cargarHistorial() {

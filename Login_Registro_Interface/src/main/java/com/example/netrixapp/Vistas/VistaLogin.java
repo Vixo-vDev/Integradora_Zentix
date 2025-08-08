@@ -65,7 +65,7 @@ public class VistaLogin extends Application {
         contenedorFormulario.setAlignment(Pos.TOP_CENTER);
         contenedorFormulario.setPadding(new Insets(40, 60, 40, 60));
         contenedorFormulario.setMaxWidth(450);
-        contenedorFormulario.setMaxHeight(600);  // <--- Limita altura para no ocupar toda la pantalla
+        contenedorFormulario.setMaxHeight(600);
         contenedorFormulario.setStyle("-fx-background-color: rgba(255, 255, 255, 0.95); -fx-background-radius: 10;");
         contenedorFormulario.setEffect(new DropShadow(15, Color.rgb(0, 0, 0, 0.3)));
 
@@ -78,7 +78,7 @@ public class VistaLogin extends Application {
         logo.setFitWidth(150);
         logo.setEffect(new DropShadow(5, Color.BLACK));
 
-        Label titulo = new Label("INICIAR SESIÓN");
+        Label titulo = new Label("Iniciar sesión");
         titulo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         titulo.setTextFill(Color.web("#333333"));
 
@@ -116,7 +116,7 @@ public class VistaLogin extends Application {
         campoUsuario.setPrefWidth(300);
         campoUsuario.setPrefHeight(40);
         campoUsuario.setStyle("-fx-font-size: 14; -fx-padding: 0 10; -fx-background-radius: 4; -fx-border-color: #ccc; -fx-border-radius: 4;");
-        campoUsuario.setPromptText("Ingrese su usuario");
+        campoUsuario.setPromptText("Ingrese su correo");
 
         // Campo de contraseña
         Label etiquetaContrasena = new Label("Contraseña:");
@@ -132,13 +132,13 @@ public class VistaLogin extends Application {
         // Botón de confirmar
         btnConfirmar = new Button("Iniciar");
         btnConfirmar.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        btnConfirmar.setStyle("-fx-background-color: #0066cc; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;");
+        btnConfirmar.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;");
         btnConfirmar.setPrefWidth(300);
         btnConfirmar.setPrefHeight(45);
 
         // Efecto hover para el botón
-        btnConfirmar.setOnMouseEntered(e -> btnConfirmar.setStyle("-fx-background-color: #0055aa; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;"));
-        btnConfirmar.setOnMouseExited(e -> btnConfirmar.setStyle("-fx-background-color: #0066cc; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;"));
+        btnConfirmar.setOnMouseEntered(e -> btnConfirmar.setStyle("-fx-background-color: #009475; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;"));
+        btnConfirmar.setOnMouseExited(e -> btnConfirmar.setStyle("-fx-background-color: #008B6A; -fx-text-fill: white; -fx-background-radius: 4; -fx-cursor: hand;"));
 
         // Etiqueta y enlace para registro
         Label etiquetaSinCuenta = new Label("¿No tienes una cuenta?");
@@ -189,11 +189,11 @@ public class VistaLogin extends Application {
         pane.setPrefSize(screenBounds.getWidth(), screenBounds.getHeight());
 
         Color[] colores = {
-                Color.web("#D9D9D9", 0.4),
-                Color.web("#E0E0E0", 0.4),
-                Color.web("#D0D0D0", 0.4),
-                Color.web("#D9E0E0", 0.4),
-                Color.web("#E0D9D9", 0.4)
+                Color.web("#D9D9D9", 0.3),
+                Color.web("#E0E0E0", 0.3),
+                Color.web("#D0D0D0", 0.3),
+                Color.web("#D9E0E0", 0.3),
+                Color.web("#E0D9D9", 0.3)
         };
 
         for (int i = 0; i < 20; i++) {

@@ -437,7 +437,7 @@ public class VistaRegistro {
 
         // Rol
         addFormField(gridCampos, "Rol:", comboRol = new ComboBox<>(), 0, 15);
-        comboRol.getItems().addAll("Alumno", "Docente", "Administrativo");
+        comboRol.getItems().addAll("Alumno", "Docente");
         comboRol.setStyle("-fx-font-size: 14;");
         comboRol.setPrefWidth(Double.MAX_VALUE);
 
