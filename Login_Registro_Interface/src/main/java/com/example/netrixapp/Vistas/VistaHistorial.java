@@ -147,25 +147,22 @@ public class VistaHistorial {
     }
 
     private void configurarColumnasTabla() {
-        // Estilo base para las columnas
-        String estiloColumna = "-fx-alignment: CENTER-LEFT; -fx-font-size: 14px; -fx-padding: 10 15;";
+        tablaHistorial.getStylesheets().add(
+                getClass().getResource("/css/tabla.css").toExternalForm()
+        );
 
         TableColumn<Solicitud, Integer> colId = new TableColumn<>("ID");
         colId.setCellValueFactory(new PropertyValueFactory<>("id_solicitud"));
-        colId.setStyle(estiloColumna);
         colId.setPrefWidth(80);
 
         TableColumn<Solicitud, String> colArticulo = new TableColumn<>("Artículo");
         colArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
-        colArticulo.setStyle(estiloColumna);
 
         TableColumn<Solicitud, Integer> colCantidad = new TableColumn<>("Cantidad");
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        colCantidad.setStyle(estiloColumna);
 
         TableColumn<Solicitud, String> colFecha = new TableColumn<>("Fecha");
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha_solicitud"));
-        colFecha.setStyle(estiloColumna);
 
         TableColumn<Solicitud, String> colEstado = new TableColumn<>("Estado");
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
@@ -174,11 +171,10 @@ public class VistaHistorial {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
-                    setText(null);
-                    setStyle(estiloColumna);
+                    setText(null);;
                 } else {
                     setText(item);
-                    setStyle(estiloColumna + " -fx-text-fill: " + getColorPorEstado(item) + "; -fx-font-weight: bold;");
+                    setStyle(" -fx-text-fill: " + getColorPorEstado(item) + "; -fx-font-weight: bold;");
                 }
             }
         });

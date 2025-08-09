@@ -147,42 +147,22 @@ public class VistaInventario {
 
     private void configurarColumnasTabla() {
         try {
-            String estiloColumna = "-fx-alignment: CENTER-LEFT; -fx-font-size: 14px; -fx-padding: 8 12;";
-
-            TableColumn<Equipo, Integer> colId = new TableColumn<>("ID");
-            colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
-            colId.setStyle(estiloColumna);
-            colId.setPrefWidth(80);
-
-            TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código");
-            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
-            colCodigo.setStyle(estiloColumna);
-
+            tablaEquipos.getStylesheets().add(
+                    getClass().getResource("/css/tabla.css").toExternalForm()
+            );
             TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
             colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-            colDescripcion.setStyle(estiloColumna);
 
             TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
             colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
-            colMarca.setStyle(estiloColumna);
 
             TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
             colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-            colModelo.setStyle(estiloColumna);
 
             TableColumn<Equipo, String> colSerie = new TableColumn<>("N° Serie");
             colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
-            colSerie.setStyle(estiloColumna);
 
-            TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
-            colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
-            colDisponible.setStyle(estiloColumna);
-
-            TableColumn<Equipo, Integer> colTipo = new TableColumn<>("Tipo");
-            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
-            colTipo.setStyle(estiloColumna);
-
-            tablaEquipos.getColumns().setAll(colId, colCodigo, colDescripcion, colMarca, colModelo, colSerie, colDisponible, colTipo);
+            tablaEquipos.getColumns().setAll(colDescripcion, colMarca, colModelo, colSerie);
             tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         } catch (Exception e) {

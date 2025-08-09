@@ -73,25 +73,42 @@ public class ControladorBarraNavegacion {
         lblMenu.setStyle("-fx-text-fill: " + COLOR_TEXTO_CLARO + "; -fx-font-weight: bold; -fx-font-size: 18px;");
 
         // Botones de navegación
-        btnDashboard = crearBotonLateral("Dashboard", "📊");
-        btnInventario = crearBotonLateral("Inventario", "📦");
-        btnHistorial = crearBotonLateral("Historial", "🕒");
-        btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
-        btnPerfil = crearBotonLateral("Perfil", "📝");
+        btnDashboard = crearBotonLateral("Dashboard", "📊", true);
+        btnInventario = crearBotonLateral("Inventario", "📦", true);
+        btnHistorial = crearBotonLateral("Historial", "🕒", true);
+        btnSolicitudes = crearBotonLateral("Solicitudes", "📋", true);
+        btnPerfil = crearBotonLateral("Perfil", "📝", true);
 
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);
 
-        btnSalir = crearBotonLateral("Salir", "🚪");
-        btnSalir.setStyle("-fx-background-color: " + COLOR_SALIR + "; -fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
-                "-fx-font-weight: bold; -fx-background-radius: 8px;");
+        btnSalir = crearBotonLateral("Salir", "🚪", false);
+        // Estilo personalizado para el botón Salir (más ancho y con cursor)
+        String estiloSalir = "-fx-background-color: " + COLOR_SALIR + "; " +
+                "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8px; " +
+                "-fx-min-width: 200px; " +       // 200px de ancho (vs 180px de los demás)
+                "-fx-cursor: hand;";             // Cursor de mano (pointer)
+
+        btnSalir.setStyle(estiloSalir);
+
+// Opcional: Añadir transición suave al hover (sin cambiar color)
+        btnSalir.setOnMouseEntered(e -> {
+            btnSalir.setStyle(estiloSalir +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);");
+        });
+
+        btnSalir.setOnMouseExited(e -> {
+            btnSalir.setStyle(estiloSalir);
+        });
 
         barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnHistorial,
                 btnSolicitudes, btnPerfil, espaciador, btnSalir);
         return barra;
     }
 
-    private Button crearBotonLateral(String texto, String emoji) {
+    private Button crearBotonLateral(String texto, String emoji, boolean conHover) {
         Button btn = new Button(texto + "  " + emoji);
 
         String estiloBase = "-fx-background-color: transparent; " +
@@ -104,16 +121,15 @@ public class ControladorBarraNavegacion {
                 "-fx-background-radius: 8px; " +
                 "-fx-cursor: hand;";
 
-        // Aplica el estilo base
         btn.setStyle(estiloBase);
 
-        // Al entrar el mouse, solo cambia color de fondo y texto
-        btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
-                "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
-                "-fx-text-fill: white;"));
+        if (conHover) {
+            btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
+                    "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
+                    "-fx-text-fill: white;"));
 
-        // Al salir, restaura el estilo base
-        btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
+            btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
+        }
 
         return btn;
     }
