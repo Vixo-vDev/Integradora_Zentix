@@ -8,6 +8,8 @@ import impl.EquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -147,6 +149,9 @@ public class VistaInventario {
 
 
     private void configurarColumnasTabla() {
+        tablaEquipos.getStylesheets().add(
+                getClass().getResource("/css/tabla.css").toExternalForm()
+        );
         TableColumn<Equipo, Number> colId = new TableColumn<>("ID");
         colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
 
@@ -170,11 +175,26 @@ public class VistaInventario {
 
         TableColumn<Equipo, Void> colAcciones = new TableColumn<>("Acciones");
         colAcciones.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEditar = new Button("Editar");
-            private final Button btnEliminar = new Button("Eliminar");
-            private final HBox cajaBotones = new HBox(5, btnEditar, btnEliminar);
+            private final Button btnEditar = new Button();
+            private final Button btnEliminar = new Button();
 
             {
+
+                ImageView iconoEditView = new ImageView(new Image(getClass().getResourceAsStream("/Imagenes/edit.png")));
+                iconoEditView.setFitWidth(16);
+                iconoEditView.setFitHeight(16);
+                btnEditar.setGraphic(iconoEditView);
+                btnEditar.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+                ImageView iconoDeleteView = new ImageView(new Image(getClass().getResourceAsStream("/Imagenes/delete.png")));
+                iconoDeleteView.setFitWidth(16);
+                iconoDeleteView.setFitHeight(16);
+                btnEliminar.setGraphic(iconoDeleteView);
+                btnEliminar.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+                btnEditar.setStyle("-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-padding: 4 8;");
+                btnEliminar.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-padding: 4 8;");
+
                 btnEditar.setStyle("-fx-background-color: " + COLOR_ADVERTENCIA + "; -fx-text-fill: white; -fx-padding: 4 8;");
                 btnEliminar.setStyle("-fx-background-color: " + COLOR_PELIGRO + "; -fx-text-fill: white; -fx-padding: 4 8;");
 
@@ -185,14 +205,14 @@ public class VistaInventario {
 
                 btnEliminar.setOnAction(e -> {
                     Equipo equipo = getTableView().getItems().get(getIndex());
-                    controladorInventario.eliminarUsuario(equipo);
+                    controladorInventario.eliminarEquipo(equipo);
                 });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : cajaBotones);
+                setGraphic(empty ? null : new HBox(5, btnEditar, btnEliminar));
             }
         });
 

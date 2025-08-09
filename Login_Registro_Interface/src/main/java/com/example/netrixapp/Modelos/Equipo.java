@@ -12,6 +12,7 @@ public class Equipo {
     private String numero_serie;
     private int disponible;
     private int tipo_equipo;
+    private int en_uso;
     //private List<Equipo> equipos;
 
     public Equipo() {
@@ -89,6 +90,14 @@ public class Equipo {
 
     public void setTipo_equipo(int tipo_equipo) {
         this.tipo_equipo = tipo_equipo;
+    }
+
+    public void setEn_uso(int en_uso) {
+        this.en_uso = en_uso;
+    }
+
+    public int getEn_uso(){
+        return en_uso;
     }
 
    /* public List<Equipo> getEquipos() {

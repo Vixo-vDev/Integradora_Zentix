@@ -33,6 +33,7 @@ public class EquipoDaoImpl implements IEquipoDao {
                 equipo.setNumero_serie(rs.getString("NUMERO_SERIE"));
                 equipo.setDisponible(rs.getInt("DISPONIBLE"));
                 equipo.setTipo_equipo(rs.getInt("ID_TIPO_EQUIPO"));
+                equipo.setEn_uso(rs.getInt("EN_USO"));
 
                 equipos.add(equipo);
 
@@ -61,7 +62,7 @@ public class EquipoDaoImpl implements IEquipoDao {
                 "    MIN(ID_TIPO_EQUIPO) AS ID_TIPO_EQUIPO \n" +
                 "FROM \n" +
                 "    EQUIPO\n" +
-                "WHERE ID_TIPO_EQUIPO = ?\n" +
+                "WHERE ID_TIPO_EQUIPO = ? AND DISPONIBLE = 1\n" +
                 "GROUP BY \n" +
                 "    DESCRIPCION\n" +
                 "ORDER BY \n" +

@@ -236,6 +236,7 @@ public class ControladorPrincipal {
         VistaInventario vistaInventario = new VistaInventario(controladorBarra);
         new ControladorInventario(vistaInventario);
         vista.getRaiz().setCenter(vistaInventario.getVista());
+
     }
 
     public void mostrarHistorial() {

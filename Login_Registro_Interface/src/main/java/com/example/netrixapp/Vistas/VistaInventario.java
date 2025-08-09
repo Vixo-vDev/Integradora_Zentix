@@ -3,12 +3,16 @@ package com.example.netrixapp.Vistas;
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
 import com.example.netrixapp.Modelos.Equipo;
 import impl.EquipoDaoImpl;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +26,8 @@ public class VistaInventario {
     private Pagination paginador;
     private List<Equipo> todosLosEquipos;
     private static final int FILAS_POR_PAGINA = 50;
+
+
 
     // Colores
     private final String COLOR_PRIMARIO = "#4F46E5";
@@ -43,6 +49,7 @@ public class VistaInventario {
     }
 
     private void inicializarUI() throws Exception {
+
         try {
             vista.setStyle("-fx-background-color: " + COLOR_FONDO + ";");
             vista.setTop(controladorBarra.getBarraSuperior());
@@ -147,42 +154,77 @@ public class VistaInventario {
 
     private void configurarColumnasTabla() {
         try {
-            String estiloColumna = "-fx-alignment: CENTER-LEFT; -fx-font-size: 14px; -fx-padding: 8 12;";
-
-            TableColumn<Equipo, Integer> colId = new TableColumn<>("ID");
-            colId.setCellValueFactory(new PropertyValueFactory<>("id_equipo"));
-            colId.setStyle(estiloColumna);
-            colId.setPrefWidth(80);
-
-            TableColumn<Equipo, String> colCodigo = new TableColumn<>("Código");
-            colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo_bien"));
-            colCodigo.setStyle(estiloColumna);
-
+            tablaEquipos.getStylesheets().add(
+                    getClass().getResource("/css/tabla.css").toExternalForm()
+            );
             TableColumn<Equipo, String> colDescripcion = new TableColumn<>("Descripción");
             colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-            colDescripcion.setStyle(estiloColumna);
 
             TableColumn<Equipo, String> colMarca = new TableColumn<>("Marca");
             colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
-            colMarca.setStyle(estiloColumna);
 
             TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
             colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-            colModelo.setStyle(estiloColumna);
 
-            TableColumn<Equipo, String> colSerie = new TableColumn<>("N° Serie");
-            colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
-            colSerie.setStyle(estiloColumna);
 
-            TableColumn<Equipo, Integer> colDisponible = new TableColumn<>("Disponible");
-            colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
-            colDisponible.setStyle(estiloColumna);
+            TableColumn<Equipo, Integer> colEstado = new TableColumn<>("Estado");
+            colEstado.setCellValueFactory(new PropertyValueFactory<>("en_uso")); // Asume getEnUso() retorna int
 
-            TableColumn<Equipo, Integer> colTipo = new TableColumn<>("Tipo");
-            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo_equipo"));
-            colTipo.setStyle(estiloColumna);
+            colEstado.setCellFactory(column -> new TableCell<Equipo, Integer>() {
+                private final StackPane pill = new StackPane();
+                private final Label lblEstado = new Label();
 
-            tablaEquipos.getColumns().setAll(colId, colCodigo, colDescripcion, colMarca, colModelo, colSerie, colDisponible, colTipo);
+                {
+                    // Estilo base para la píldora
+                    pill.getChildren().add(lblEstado);
+                    pill.setStyle("-fx-padding: 3px 12px; -fx-background-radius: 15; -fx-border-radius: 15;");
+                    lblEstado.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+                }
+
+                @Override
+                protected void updateItem(Integer estado, boolean empty) {
+                    super.updateItem(estado, empty);
+
+                    if (empty || estado == null) {
+                        setGraphic(null);
+                    } else {
+                        switch (estado) {
+                            case 1 -> { // En Uso
+                                lblEstado.setText("EN USO");
+                                pill.setStyle(pill.getStyle() +
+                                        "-fx-background-color: #FFEBEE; " +
+                                        "-fx-text-fill: #C62828; " +
+                                        "-fx-border-color: #EF9A9A; " +
+                                        "-fx-border-width: 1;");
+                                lblEstado.setTextFill(Color.valueOf("#C62828"));
+                            }
+                            case 0 -> { // Disponible
+                                lblEstado.setText("DISPONIBLE");
+                                pill.setStyle(pill.getStyle() +
+                                        "-fx-background-color: #E8F5E9; " +
+                                        "-fx-text-fill: #2E7D32; " +
+                                        "-fx-border-color: #A5D6A7; " +
+                                        "-fx-border-width: 1;");
+                                lblEstado.setTextFill(Color.valueOf("#2E7D32"));
+                            }
+                            default -> { // Otros valores (por si acaso)
+                                lblEstado.setText("DESCONOCIDO");
+                                pill.setStyle(pill.getStyle() +
+                                        "-fx-background-color: #E3F2FD; " +
+                                        "-fx-text-fill: #1565C0; " +
+                                        "-fx-border-color: #90CAF9; " +
+                                        "-fx-border-width: 1;");
+                                lblEstado.setTextFill(Color.valueOf("#1565C0"));
+                            }
+                        }
+
+                        setGraphic(pill);
+                        setAlignment(Pos.CENTER);
+                    }
+                }
+            });
+
+            tablaEquipos.getColumns().setAll(colDescripcion, colMarca, colModelo, colEstado);
             tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         } catch (Exception e) {
@@ -190,6 +232,7 @@ public class VistaInventario {
             mostrarError("Error al configurar la tabla");
         }
     }
+
 
     public VBox crearPagina(int pageIndex) {
         try {
@@ -209,6 +252,22 @@ public class VistaInventario {
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error al crear página", e);
             return new VBox(new Label("Error al cargar los datos"));
+        }
+    }
+
+    public void refrescarTabla() {
+        if (tablaEquipos != null) {
+            tablaEquipos.setItems(null);
+            tablaEquipos.layout();
+            tablaEquipos.setItems(FXCollections.observableList(todosLosEquipos));
+
+            Platform.runLater(() -> {
+                for (TableColumn<Equipo, ?> col : tablaEquipos.getColumns()) {
+                    col.setVisible(false);
+                    col.setVisible(true);
+                }
+                tablaEquipos.refresh();
+            });
         }
     }
 

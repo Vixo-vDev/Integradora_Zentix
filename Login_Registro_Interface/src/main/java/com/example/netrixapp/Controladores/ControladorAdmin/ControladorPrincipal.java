@@ -45,7 +45,10 @@ public class ControladorPrincipal {
                 mostrarConLoading(controladorBarra.getBtnUsuarios(), this::mostrarUsuarios));
         controladorBarra.getBtnSolicitudes().setOnAction(e ->
                 mostrarConLoading(controladorBarra.getBtnSolicitudes(), this::mostrarSolicitudes));
+        controladorBarra.getBtnPrestamos().setOnAction(e ->
+                mostrarConLoading(controladorBarra.getBtnPrestamos(), this::mostrarPrestamos));
         controladorBarra.getBtnSalir().setOnAction(e -> confirmarCierreSesion());
+
     }
 
     private void mostrarConLoading(Button boton, Runnable accion) {
@@ -106,6 +109,8 @@ public class ControladorPrincipal {
 
             // Card de Solicitudes Recientes
             VBox cardRecientes = crearCardMetrica("Recientes", String.valueOf(solicitudDao.solicitudesRecientes().size()), "🆕");
+
+
 
             filaCards.getChildren().addAll(cardUsuarios, cardActivos, cardPendientes, cardRecientes);
 
@@ -253,6 +258,12 @@ public class ControladorPrincipal {
         vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
         vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
         vista.getRaiz().setCenter(new VistaSolicitudes(controladorBarra).getVista());
+    }
+
+    public void mostrarPrestamos() {
+        vista.getRaiz().setTop(controladorBarra.getBarraSuperior());
+        vista.getRaiz().setLeft(controladorBarra.getBarraLateral());
+        vista.getRaiz().setCenter(new VistaPrestamos(controladorBarra).getVista());
     }
 
     private void confirmarCierreSesion() {

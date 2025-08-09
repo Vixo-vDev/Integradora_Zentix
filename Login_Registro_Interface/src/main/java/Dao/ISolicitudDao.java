@@ -12,6 +12,7 @@ public interface ISolicitudDao {
     List<Solicitud> findAll(int id_usuario) throws Exception;
     List<Solicitud> findAllAdmin() throws Exception;
     List<Solicitud> findByFilters(int id_usuario, String estado, LocalDate desde, LocalDate hasta) throws Exception;
+    List<Solicitud> findUso() throws Exception;
     int create(Solicitud solicitud) throws Exception;
     int totalSolicitudes(int id_usuario) throws Exception;
     int totalRechazados(int id_usuario) throws Exception;
@@ -23,6 +24,7 @@ public interface ISolicitudDao {
     List<Object[]> findEquiposMasSolicitadosSinFiltro(int limite) throws Exception ;
     int total_pendientesAdmin() throws  Exception;
     List<Solicitud >solicitudesRecientes();
+
 
 
 }

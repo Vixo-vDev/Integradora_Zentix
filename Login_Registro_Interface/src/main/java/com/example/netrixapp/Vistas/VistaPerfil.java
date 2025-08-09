@@ -5,6 +5,7 @@ import com.example.netrixapp.Controladores.SesionUsuario;
 import com.example.netrixapp.Modelos.Usuario;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -168,25 +169,54 @@ public class VistaPerfil {
 
     private Button crearBotonPrimario(String texto) {
         Button boton = new Button(texto);
-        boton.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
-                "-fx-text-fill: white; " +
+
+        // Estilo INICIAL (sin hover)
+        boton.setStyle("-fx-background-color: transparent; " +  // Fondo transparente inicial
+                "-fx-text-fill: " + COLOR_SECUNDARIO + "; " +  // Texto en color primario
                 "-fx-font-weight: bold; " +
                 "-fx-font-size: 14px; " +
                 "-fx-padding: 10 25; " +
-                "-fx-background-radius: 6;");
-        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #0D9488; " +
-                "-fx-text-fill: white; " +
-                "-fx-padding: 10 25; " +
-                "-fx-background-radius: 6;"));
-        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-padding: 10 25; " +
-                "-fx-background-radius: 6;"));
+                "-fx-border-color: " + COLOR_SECUNDARIO + "; " +  // Borde del color primario
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 6;");
+
+        // Al pasar el mouse: Relleno de color + texto blanco
+        boton.setOnMouseEntered(e -> {
+            boton.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +  // Relleno al hover
+                    "-fx-text-fill: white; " +  // Texto blanco
+                    "-fx-font-weight: bold; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: " + COLOR_SECUNDARIO + "; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 6;");
+            boton.setCursor(Cursor.HAND);  // Cursor de mano
+        });
+
+        // Al salir el mouse: Vuelve al estado inicial (transparente)
+        boton.setOnMouseExited(e -> {
+            boton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: " + COLOR_SECUNDARIO + "; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: " + COLOR_SECUNDARIO + "; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 6;");
+            boton.setCursor(Cursor.DEFAULT);  // Cursor normal
+        });
+
+        // Eliminamos cualquier efecto al hacer clic
+        boton.setOnMousePressed(null);
+        boton.setOnMouseReleased(null);
+
         return boton;
     }
 
     private Button crearBotonSecundario(String texto, String color) {
         Button boton = new Button(texto);
+
+        // Estilo INICIAL (sin hover)
         boton.setStyle("-fx-background-color: transparent; " +
                 "-fx-text-fill: " + color + "; " +
                 "-fx-font-weight: bold; " +
@@ -195,18 +225,37 @@ public class VistaPerfil {
                 "-fx-border-color: " + color + "; " +
                 "-fx-border-width: 1; " +
                 "-fx-border-radius: 6;");
-        boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: rgba(0,0,0,0.05); " +
-                "-fx-text-fill: " + color + "; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 6;"));
-        boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + color + "; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 6;"));
+
+        // Al pasar el mouse: Relleno de color + texto blanco
+        boton.setOnMouseEntered(e -> {
+            boton.setStyle("-fx-background-color: " + color + "; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: " + color + "; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 6;");
+            boton.setCursor(Cursor.HAND);  // Cursor de mano
+        });
+
+        // Al salir el mouse: Vuelve al estado inicial (transparente)
+        boton.setOnMouseExited(e -> {
+            boton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: " + color + "; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: " + color + "; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 6;");
+            boton.setCursor(Cursor.DEFAULT);  // Cursor normal
+        });
+
+        // Eliminamos cualquier efecto al hacer clic
+        boton.setOnMousePressed(null);
+        boton.setOnMouseReleased(null);
+
         return boton;
     }
 

@@ -15,6 +15,7 @@ public class Solicitud {
     private String razon;
     private String estado;
     private String nombreUsuario;
+    private int en_uso;
 
     public Solicitud() {
 
@@ -117,5 +118,13 @@ public class Solicitud {
 
     public void setNombreUsuario(String nombreUsario) {
         this.nombreUsuario = nombreUsario;
+    }
+
+    public int getEn_uso() {
+        return en_uso;
+    }
+
+    public void setEn_uso(int en_uso) {
+        this.en_uso = en_uso;
     }
 }

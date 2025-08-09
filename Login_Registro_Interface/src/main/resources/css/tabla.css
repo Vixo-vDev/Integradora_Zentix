@@ -1,0 +1,81 @@
+/* Estilo principal de la tabla */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 0;
+}
+
+/* Encabezados de columna */
+.column-header {
+    -fx-background-color: #009475;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 15;
+    -fx-border-width: 0;
+}
+
+/* Texto del encabezado */
+.column-header .label {
+    -fx-text-fill: white;
+}
+
+/* Celdas */
+.table-cell {
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15;
+    -fx-border-width: 0;
+    -fx-text-fill: #374151;
+}
+
+/* Filas pares */
+.table-row-cell:even {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Filas impares */
+.table-row-cell:odd {
+    -fx-background-color: #F9FAFB;
+}
+
+/* Efecto hover */
+.table-row-cell:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+/* Selección */
+.table-row-cell:selected {
+    -fx-background-color: #00947520; /* Verde con 20% de opacidad */
+}
+
+/* Scrollbar vertical */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #D1D5DB;
+    -fx-background-radius: 4;
+}
+
+/* Scrollbar horizontal */
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #D1D5DB;
+    -fx-background-radius: 4;
+}
+
+.table-row-cell {
+    -fx-border-color: #E5E7EB;  /* Color gris claro */
+    -fx-border-width: 0 0 1 0;  /* Solo borde inferior */
+    -fx-border-style: solid;
+    -fx-background-insets: 0;
+}
+
+.table-row-cell:empty {
+    -fx-border-width: 0;  /* Elimina bordes en filas vacías */
+}

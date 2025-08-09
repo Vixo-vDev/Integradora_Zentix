@@ -3,7 +3,12 @@ package com.example.netrixapp.Vistas.VistasAdmin;
 import com.example.netrixapp.Controladores.ControladorAdmin.ControladorBarraNavegacion;
 import com.example.netrixapp.Controladores.ControladorAdmin.ControladorEstadisticas;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -16,7 +21,7 @@ public class VistaEstadisticas {
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
     private final VBox contenedorMasSolicitados;
-    private final VBox contenedorMenosSolicitados;
+    private final VBox contenedorGrafico;
     private final TableView<Object[]> tablaMasSolicitados;
     private final TableView<Object[]> tablaMenosSolicitados;
 
@@ -28,7 +33,7 @@ public class VistaEstadisticas {
         this.tablaMasSolicitados = new TableView<>();
         this.tablaMenosSolicitados = new TableView<>();
         this.contenedorMasSolicitados = new VBox(10);
-        this.contenedorMenosSolicitados = new VBox(10);
+        this.contenedorGrafico = new VBox(10);
         this.controlador = new ControladorEstadisticas(this); // Instancia del controlador
         inicializarUI();
     }
@@ -37,6 +42,16 @@ public class VistaEstadisticas {
         vista.setTop(controladorBarra.getBarraSuperior());
         vista.setLeft(controladorBarra.getBarraLateral());
         vista.setStyle("-fx-background-color: #ECF0F1;");
+        contenedorGrafico.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 15;");
+
+        // Cargar gráfico inicial
+        List<ControladorEstadisticas.EquipoChartData> datos = null;
+        try {
+            datos = controlador.getDatosParaGrafico(10);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        mostrarGraficoBarras(datos);
 
         VBox contenidoPrincipal = new VBox(20);
         contenidoPrincipal.setPadding(new Insets(20));
@@ -79,17 +94,23 @@ public class VistaEstadisticas {
         contenedorMasSolicitados.setPadding(new Insets(15));
 
         // Etiqueta para tabla menos solicitados con texto oscuro
-        Label lblMenos = new Label("Equipos Menos Solicitados");
-        lblMenos.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
-        contenedorMenosSolicitados.getChildren().addAll(lblMenos, tablaMenosSolicitados);
-        contenedorMenosSolicitados.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #BDC3C7; -fx-border-radius: 8;");
-        contenedorMenosSolicitados.setPadding(new Insets(15));
+        Label tituloGrafico = new Label("Gráfico de Barras");
+        tituloGrafico.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
 
+        BarChart<String, Number> grafico = null;
+        try {
+            grafico = crearGraficoBarras(controlador.getDatosParaGrafico(10));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        contenedorGrafico.getChildren().clear();
+        contenedorGrafico.getChildren().addAll(tituloGrafico, grafico);
         // Separador para separar visualmente las tablas
         Separator separator = new Separator();
         separator.setPadding(new Insets(10, 0, 10, 0));
 
-        contenidoPrincipal.getChildren().addAll(lblTitulo, filtroBox, contenedorMasSolicitados, separator, contenedorMenosSolicitados);
+        contenidoPrincipal.getChildren().addAll(lblTitulo, filtroBox, contenedorMasSolicitados, separator, contenedorGrafico);
 
         ScrollPane scrollPane = new ScrollPane(contenidoPrincipal);
         scrollPane.setFitToWidth(true);
@@ -100,6 +121,10 @@ public class VistaEstadisticas {
     }
 
     private void configurarTabla(TableView<Object[]> tabla, String[] columnas) {
+        tabla.getStylesheets().add(
+                getClass().getResource("/css/tabla.css").toExternalForm()
+        );
+
         tabla.getColumns().clear();
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tabla.setStyle("-fx-font-size: 14px;");
@@ -129,15 +154,68 @@ public class VistaEstadisticas {
         tabla.setPlaceholder(new Label("No hay datos disponibles."));
     }
 
+    private BarChart<String, Number> crearGraficoBarras(List<ControladorEstadisticas.EquipoChartData> datos) {
+        // 1. Configurar ejes
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Equipos");
+        yAxis.setLabel("Cantidad de Solicitudes");
+
+        // 2. Crear gráfico
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Distribución de Solicitudes por Equipo");
+        barChart.setLegendVisible(false);
+        barChart.setStyle("-fx-font-size: 14px; -fx-title-fill: #2C3E50;");
+
+        // 3. Paleta de colores para las barras
+        String[] colores = {"#009475", "#4F46E5", "#10B981", "#F59E0B", "#EC4899"};
+
+        // 4. Preparar datos
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (int i = 0; i < datos.size(); i++) {
+            ControladorEstadisticas.EquipoChartData item = datos.get(i);
+            XYChart.Data<String, Number> data = new XYChart.Data<>(item.getNombreEquipo(), item.getCantidad());
+            series.getData().add(data);
+
+            int finalI = i;
+            data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                if (newNode != null) {
+                    // Color diferente para cada barra (cíclico)
+                    String color = colores[finalI % colores.length];
+                    newNode.setStyle("-fx-bar-fill: " + color + ";");
+
+                    // Etiqueta interna
+                    StackPane stackPane = (StackPane) newNode;
+                    Label label = new Label(item.getNombreEquipo() + ": " + item.getCantidad());
+                    label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
+                    stackPane.getChildren().add(label);
+                }
+            });
+        }
+
+        barChart.getData().add(series);
+
+        // 6. Ajustes finales
+        xAxis.setTickLabelRotation(-45); // Rotar nombres largos
+        barChart.setCategoryGap(20);     // Espacio entre barras
+
+        return barChart;
+    }
+
+    public void mostrarGraficoBarras(List<ControladorEstadisticas.EquipoChartData> datos) {
+        BarChart<String, Number> grafico = crearGraficoBarras(datos);
+        contenedorGrafico.getChildren().clear();
+        contenedorGrafico.getChildren().addAll(
+                new Label("Distribución de Solicitudes"), // Título del gráfico
+                grafico
+        );
+    }
+
     public void mostrarEquiposMasSolicitados(List<Object[]> datos) {
         tablaMasSolicitados.getItems().clear();
         tablaMasSolicitados.getItems().addAll(datos);
     }
 
-    public void mostrarEquiposMenosSolicitados(List<Object[]> datos) {
-        tablaMenosSolicitados.getItems().clear();
-        tablaMenosSolicitados.getItems().addAll(datos);
-    }
 
     public BorderPane getVista() {
         return vista;

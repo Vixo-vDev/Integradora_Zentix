@@ -91,7 +91,9 @@ public class VistaSolicitudes {
     }
         // Tabla de solicitudes
        private void configurarColumnasTabla(){
-
+           tablaSolicitudes.getStylesheets().add(
+                   getClass().getResource("/css/tabla.css").toExternalForm()
+           );
            // Columnas
 
            TableColumn<Solicitud, String> colUsuario = new TableColumn<>("Usuario");

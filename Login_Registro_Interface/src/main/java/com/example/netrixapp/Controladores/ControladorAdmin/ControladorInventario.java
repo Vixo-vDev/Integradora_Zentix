@@ -79,7 +79,7 @@ public class ControladorInventario {
             }
         }
     }
-        public void eliminarUsuario(Equipo equipo) {
+        public void eliminarEquipo(Equipo equipo) {
             Alert alerta = vista.confirmareliminarEquipo(equipo);
             Optional<ButtonType> resultado = alerta.showAndWait();
 

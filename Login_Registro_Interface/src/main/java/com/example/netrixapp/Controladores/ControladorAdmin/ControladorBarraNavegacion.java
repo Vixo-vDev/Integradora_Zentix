@@ -30,7 +30,7 @@ public class ControladorBarraNavegacion {
     private Button btnEstadisticas;
     private Button btnUsuarios;
     private Button btnSolicitudes;
-    private Button btnNotificaciones;
+    private Button btnPrestamos;
     private Button btnSalir;
 
     public ControladorBarraNavegacion() {
@@ -73,25 +73,41 @@ public class ControladorBarraNavegacion {
         lblMenu.setStyle("-fx-text-fill: " + COLOR_TEXTO_CLARO + "; -fx-font-weight: bold; -fx-font-size: 18px;");
 
         // Botones de navegación
-        btnDashboard = crearBotonLateral("Dashboard", "📊");
-        btnInventario = crearBotonLateral("Inventario", "📦");
-        btnEstadisticas = crearBotonLateral("Estadísticas", "📈");
-        btnUsuarios = crearBotonLateral("Usuarios", "👥");
-        btnSolicitudes = crearBotonLateral("Solicitudes", "📋");
+        btnDashboard = crearBotonLateral("Dashboard", "📊", true);
+        btnInventario = crearBotonLateral("Inventario", "📦", true);
+        btnEstadisticas = crearBotonLateral("Estadísticas", "📈", true);
+        btnUsuarios = crearBotonLateral("Usuarios", "👥",  true);
+        btnSolicitudes = crearBotonLateral("Solicitudes", "📋", true);
+        btnPrestamos = crearBotonLateral("Prestamos", "📝", true);
 
         Pane espaciador = new Pane();
         VBox.setVgrow(espaciador, Priority.ALWAYS);
 
-        btnSalir = crearBotonLateral("Salir", "🚪");
-        btnSalir.setStyle("-fx-background-color: " + COLOR_SALIR + "; -fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
-                "-fx-font-weight: bold; -fx-background-radius: 8px;");
+        btnSalir = crearBotonLateral("Salir", "🚪", false);
+        // Estilo personalizado para el botón Salir (más ancho y con cursor)
+        String estiloSalir = "-fx-background-color: " + COLOR_SALIR + "; " +
+                "-fx-text-fill: " + COLOR_TEXTO_CLARO + "; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8px; " +
+                "-fx-min-width: 200px; " +       // 200px de ancho (vs 180px de los demás)
+                "-fx-cursor: hand;";             // Cursor de mano (pointer)
+
+        btnSalir.setStyle(estiloSalir);
+        btnSalir.setOnMouseEntered(e -> {
+            btnSalir.setStyle(estiloSalir +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);");
+        });
+
+        btnSalir.setOnMouseExited(e -> {
+            btnSalir.setStyle(estiloSalir);
+        });
 
         barra.getChildren().addAll(lblMenu, btnDashboard, btnInventario, btnEstadisticas,
-                btnUsuarios, btnSolicitudes, espaciador, btnSalir);
+                btnUsuarios, btnSolicitudes, btnPrestamos, espaciador, btnSalir);
         return barra;
     }
 
-    private Button crearBotonLateral(String texto, String emoji) {
+    private Button crearBotonLateral(String texto, String emoji, boolean hover) {
         Button btn = new Button(texto + "  " + emoji);
 
         String estiloBase = "-fx-background-color: transparent; " +
@@ -106,11 +122,13 @@ public class ControladorBarraNavegacion {
 
         btn.setStyle(estiloBase);
 
-        btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
-                "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
-                "-fx-text-fill: white;"));
+        if(hover) {
+            btn.setOnMouseEntered(e -> btn.setStyle(estiloBase +
+                    "-fx-background-color: " + COLOR_BOTON_HOVER + "; " +
+                    "-fx-text-fill: white;"));
 
-        btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
+            btn.setOnMouseExited(e -> btn.setStyle(estiloBase));
+        }
 
         return btn;
     }
@@ -121,7 +139,7 @@ public class ControladorBarraNavegacion {
     public Button getBtnEstadisticas() { return btnEstadisticas; }
     public Button getBtnUsuarios() { return btnUsuarios; }
     public Button getBtnSolicitudes() { return btnSolicitudes; }
-    public Button getBtnNotificaciones() { return btnNotificaciones; }
+    public Button getBtnPrestamos() { return btnPrestamos; }
     public Button getBtnSalir() { return btnSalir; }
 
     // Getters para las barras

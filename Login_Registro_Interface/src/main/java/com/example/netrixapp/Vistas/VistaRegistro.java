@@ -393,11 +393,13 @@ public class VistaRegistro {
         campoLada.setPromptText("Lada");
         campoLada.setPrefWidth(60);
         campoLada.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
+        verificarCampo(campoLada, 3);
 
         campoTelefono = new TextField();
         campoTelefono.setPromptText("Teléfono");
         campoTelefono.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
         HBox.setHgrow(campoTelefono, Priority.ALWAYS);
+        verificarCampo(campoTelefono, 7);
 
         telefonoBox.getChildren().addAll(new Label("Teléfono:"), campoLada, campoTelefono);
         gridCampos.add(telefonoBox, 0, 9, 2, 1);
@@ -409,6 +411,22 @@ public class VistaRegistro {
         campoFecha = new DatePicker();
         campoFecha.setPrefWidth(200);
         campoFecha.setStyle("-fx-font-size: 14;");
+        LocalDate hoy = LocalDate.now();
+        campoFecha.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(
+                        date.isAfter(hoy) || // No fechas futuras
+                                date.isBefore(hoy.minusYears(100)) // No más de 100 años atrás
+                );
+                if (date.isAfter(hoy)) {
+                    setTooltip(new Tooltip("No se permiten fechas futuras"));
+                } else if (date.isBefore(hoy.minusYears(100))) {
+                    setTooltip(new Tooltip("La fecha no puede ser mayor a 100 años"));
+                }
+            }
+        });
 
         campoEdad = new TextField();
         campoEdad.setEditable(false);
@@ -517,5 +535,16 @@ public class VistaRegistro {
                 "-fx-background-color: " + color + "; -fx-text-fill: white; -fx-background-radius: 4;"));
 
         return button;
+    }
+
+    public void verificarCampo(TextField campo, int limite){
+        campo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > limite) {
+                campo.setText(oldValue);
+            }
+            if (!newValue.matches("\\d*")) { // Solo dígitos
+                campo.setText(oldValue); // Revierte al valor anterior
+            }
+        });
     }
 }
