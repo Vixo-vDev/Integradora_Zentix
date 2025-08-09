@@ -16,4 +16,5 @@ public interface IEquipoDao {
     void update(Equipo equipo, int id) throws Exception;
     void delete(Equipo equipo) throws Exception;
     int equiposActivos() throws  Exception;
+    void setUso(int id_equipo, String estado) throws Exception;
 }

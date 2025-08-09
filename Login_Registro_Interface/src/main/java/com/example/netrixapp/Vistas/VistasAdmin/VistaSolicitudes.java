@@ -150,17 +150,17 @@ public class VistaSolicitudes {
 
                    btnAprobar.setOnAction(e ->{
                            Solicitud solicitud = getTableView().getItems().get(getIndex());
-                   controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "aprobado");
+                   controladorSolicitudes.actualizarEstadoSolicitud(solicitud, "aprobado");
                });
 
                    btnRechazar.setOnAction(e -> {
                        Solicitud solicitud = getTableView().getItems().get(getIndex());
-                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "rechazado");
+                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud, "rechazado");
                    });
 
                    btnPendiente.setOnAction(e -> {
                        Solicitud solicitud = getTableView().getItems().get(getIndex());
-                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud.getId_solicitud(), "pendiente");
+                       controladorSolicitudes.actualizarEstadoSolicitud(solicitud, "pendiente");
                    });
                }
 

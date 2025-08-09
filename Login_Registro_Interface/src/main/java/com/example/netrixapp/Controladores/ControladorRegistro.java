@@ -55,18 +55,15 @@ public class ControladorRegistro {
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Registro exitoso");
-
                 ButtonType btnConfirmar = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
                 alert.getButtonTypes().setAll(btnConfirmar);
 
-                /*if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
-                    if (alert.showAndWait().orElse(btnCancelar) == btnConfirmar) {
+                    if (alert.showAndWait().orElse(btnConfirmar) == btnConfirmar) {
 
                         Stage stage = (Stage) vista.getBotonContinuar().getScene().getWindow();
                         VistaLogin siguienteVentana = new VistaLogin();
                         siguienteVentana.start(stage);
                     }
-                }*/
             }
             else{
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);

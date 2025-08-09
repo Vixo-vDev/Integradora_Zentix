@@ -465,7 +465,7 @@ public class VistaRegistro {
             regresar.start(ventanaRegistro);
         });
 
-        panelBotones.getChildren().addAll(botonContinuar, botonCancelar);
+        panelBotones.getChildren().addAll(botonCancelar, botonContinuar);
 
         // Ensamblar la interfaz
         panelFormulario.getChildren().addAll(titulo, gridCampos, panelBotones);

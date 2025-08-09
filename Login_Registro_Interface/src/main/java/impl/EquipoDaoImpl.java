@@ -55,20 +55,37 @@ public class EquipoDaoImpl implements IEquipoDao {
         Connection con = null;
         List<Equipo> equipos= new ArrayList<>();
 
-        String sql = "SELECT DISTINCT DESCRIPCION FROM EQUIPO WHERE ID_TIPO_EQUIPO = ?";
+        String sql = "SELECT \n" +
+                "    MIN(ID_EQUIPO) AS ID_EQUIPO,\n" +
+                "    DESCRIPCION,\n" +
+                "    MIN(ID_TIPO_EQUIPO) AS ID_TIPO_EQUIPO \n" +
+                "FROM \n" +
+                "    EQUIPO\n" +
+                "WHERE ID_TIPO_EQUIPO = ?\n" +
+                "GROUP BY \n" +
+                "    DESCRIPCION\n" +
+                "ORDER BY \n" +
+                "    DESCRIPCION";
+        try{
+            con= ConnectionBD.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1, idTipoEquipo);
+            ResultSet rs = ps.executeQuery();
 
-        con= ConnectionBD.getConnection();
-        PreparedStatement ps=con.prepareStatement(sql);
-        ps.setInt(1, idTipoEquipo);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Equipo equipo = new Equipo();
-            equipo.setDescripcion(rs.getString("DESCRIPCION"));
-            equipos.add(equipo);
+            while (rs.next()) {
+                Equipo equipo = new Equipo();
+                equipo.setDescripcion(rs.getString("DESCRIPCION"));
+                equipo.setId_equipo(rs.getInt("ID_EQUIPO"));
+                equipos.add(equipo);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
         }
 
-        con.close();
         return equipos;
     }
 
@@ -231,7 +248,7 @@ public class EquipoDaoImpl implements IEquipoDao {
     public int calcularCantidad(String descripcion) throws Exception {
         Connection con = null;
         int cantidad = 0;
-        String sql = "SELECT COUNT(id_equipo) FROM EQUIPO WHERE DESCRIPCION = ?";
+        String sql = "SELECT COUNT(id_equipo) FROM EQUIPO WHERE DESCRIPCION = ? AND EN_USO = 0";
 
         try{
             con = ConnectionBD.getConnection();
@@ -272,6 +289,33 @@ public class EquipoDaoImpl implements IEquipoDao {
             }
         }
         return  equiposActivos;
+    }
+
+    @Override
+    public void setUso(int id_equipo, String estado) throws Exception{
+        Connection con = null;
+        String sql = "";
+
+        if(estado.equals("aprobado")){
+            sql = "UPDATE EQUIPO SET EN_USO = 1 WHERE ID_EQUIPO = ?";
+        }
+        else if(estado.equals("rechazado") || estado.equals("pendiente")) {
+            sql = "UPDATE EQUIPO SET EN_USO = 0 WHERE ID_EQUIPO = ?";
+        }
+
+        try{
+            con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id_equipo);
+            ps.executeUpdate();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally {
+            if(con != null){
+                con.close();
+            }
+        }
+
     }
 
 }

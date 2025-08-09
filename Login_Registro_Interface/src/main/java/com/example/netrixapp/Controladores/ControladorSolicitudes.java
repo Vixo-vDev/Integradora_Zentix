@@ -28,7 +28,6 @@ public class ControladorSolicitudes {
 
 
     private void enviarSolicitud() {
-        System.out.println("olaaaa");
         try {
             int idTipoEquipo = vista.getIdTipoEquipoSeleccionado();
             Equipo equipoSeleccionado = vista.getEquipoSeleccionado();
@@ -70,13 +69,13 @@ public class ControladorSolicitudes {
             System.out.println("Razon: " + razon);
             System.out.println("Estado: pendiente");
 
-            int id_equipo1 = vista.getIdTipoEquipoSeleccionado();
+            int id_equipo = equipoSeleccionado.getId_equipo();
             int idSolicitud = solicitudDao.create(solicitud);
 
             System.out.println("Solicitud creada con ID: " + idSolicitud);
 
             DetalleSolicitud detalleSolicitud = new DetalleSolicitud(
-                    idTipoEquipo,
+                    id_equipo,
                     idTipoEquipo,
                     idSolicitud,
                     cantidadSolicitud
