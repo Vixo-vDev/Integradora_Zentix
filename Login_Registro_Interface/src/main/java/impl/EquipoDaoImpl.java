@@ -15,7 +15,7 @@ public class EquipoDaoImpl implements IEquipoDao {
     @Override
     public List<Equipo> findAll() throws Exception {
         Connection con = null;
-        String sql="SELECT * FROM EQUIPO WHERE DISPONIBLE = '1' ORDER BY ID_EQUIPO ASC";
+        String sql="SELECT * FROM EQUIPO WHERE DISPONIBLE = '1' AND EN_USO = 0 ORDER BY ID_EQUIPO ASC";
         List<Equipo> equipos= new ArrayList<>();
 
         try {
