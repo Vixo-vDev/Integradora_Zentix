@@ -166,7 +166,6 @@ public class VistaInventario {
             TableColumn<Equipo, String> colModelo = new TableColumn<>("Modelo");
             colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
 
-<<<<<<< HEAD
 
             TableColumn<Equipo, Integer> colEstado = new TableColumn<>("Estado");
             colEstado.setCellValueFactory(new PropertyValueFactory<>("en_uso")); // Asume getEnUso() retorna int
@@ -226,12 +225,6 @@ public class VistaInventario {
             });
 
             tablaEquipos.getColumns().setAll(colDescripcion, colMarca, colModelo, colEstado);
-=======
-            TableColumn<Equipo, String> colSerie = new TableColumn<>("N° Serie");
-            colSerie.setCellValueFactory(new PropertyValueFactory<>("numero_serie"));
-
-            tablaEquipos.getColumns().setAll(colDescripcion, colMarca, colModelo, colSerie);
->>>>>>> c4e46915467ebcc5ebd0ab320c76cedc9f8c1f61
             tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         } catch (Exception e) {

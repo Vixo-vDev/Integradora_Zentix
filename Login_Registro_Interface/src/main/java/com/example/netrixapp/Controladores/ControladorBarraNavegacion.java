@@ -92,11 +92,7 @@ public class ControladorBarraNavegacion {
                 "-fx-cursor: hand;";             // Cursor de mano (pointer)
 
         btnSalir.setStyle(estiloSalir);
-<<<<<<< HEAD
-=======
 
-// Opcional: Añadir transición suave al hover (sin cambiar color)
->>>>>>> c4e46915467ebcc5ebd0ab320c76cedc9f8c1f61
         btnSalir.setOnMouseEntered(e -> {
             btnSalir.setStyle(estiloSalir +
                     "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);");
