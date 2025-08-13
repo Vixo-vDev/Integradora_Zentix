@@ -16,6 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public class VistaHistorial {
 
@@ -55,6 +58,7 @@ public class VistaHistorial {
     private final String COLOR_FONDO = "#FFFFFF";
     private final String COLOR_FONDO_SECUNDARIO = "#F8FAFC";
     private final String COLOR_SOMBRA = "rgba(0, 0, 0, 0.1)";
+    private final String COLOR_FONDO_CARD = "#F3F4F6";
 
     public VistaHistorial(ControladorBarraNavegacion controladorBarra) {
         this.controladorBarra = controladorBarra;
@@ -462,16 +466,25 @@ public class VistaHistorial {
         HBox footer = new HBox(10);
         footer.setAlignment(Pos.CENTER_RIGHT);
 
-        // Botón de detalles (placeholder para futuras funcionalidades)
-        Button btnDetalles = new Button("Ver Detalles");
-        btnDetalles.setStyle("-fx-background-color: transparent; " +
-                "-fx-text-fill: " + COLOR_PRIMARIO + "; " +
+        // Botón de detalles con funcionalidad completa
+        Button btnDetalles = new Button("🔍 Ver Detalles");
+        btnDetalles.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; " +
+                "-fx-text-fill: white; " +
                 "-fx-border-color: " + COLOR_PRIMARIO + "; " +
                 "-fx-border-width: 1; " +
                 "-fx-background-radius: 6; " +
-                "-fx-padding: 6 12; " +
-                "-fx-font-size: 11px; " +
-                "-fx-cursor: hand;");
+                "-fx-padding: 8 16; " +
+                "-fx-font-size: 12px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 1);");
+        
+        // Efectos hover para el botón
+        btnDetalles.setOnMouseEntered(e -> btnDetalles.setStyle(btnDetalles.getStyle().replace(COLOR_PRIMARIO, "#4338CA")));
+        btnDetalles.setOnMouseExited(e -> btnDetalles.setStyle(btnDetalles.getStyle().replace("#4338CA", COLOR_PRIMARIO)));
+        
+        // Agregar funcionalidad al botón
+        btnDetalles.setOnAction(e -> mostrarDetallesCompletos(solicitud));
 
         footer.getChildren().add(btnDetalles);
 
@@ -483,6 +496,128 @@ public class VistaHistorial {
         if (fecha == null) return "N/A";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return fecha.format(formatter);
+    }
+
+    /**
+     * Muestra un diálogo modal con todos los detalles de la solicitud
+     */
+    private void mostrarDetallesCompletos(Solicitud solicitud) {
+        // Crear el diálogo principal
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(vista.getScene().getWindow());
+        dialogStage.setTitle("📋 Detalles Completos de la Solicitud #" + solicitud.getId_solicitud());
+        dialogStage.setResizable(false);
+
+        // Contenedor principal del diálogo
+        VBox dialogContent = new VBox(25);
+        dialogContent.setPadding(new Insets(30));
+        dialogContent.setStyle("-fx-background-color: " + COLOR_FONDO + "; " +
+                "-fx-background-radius: 16; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);");
+
+        // Header del diálogo
+        VBox headerDialog = new VBox(10);
+        headerDialog.setAlignment(Pos.CENTER);
+        
+        Label lblTituloDialog = new Label("📋 SOLICITUD #" + solicitud.getId_solicitud());
+        lblTituloDialog.setFont(Font.font("System", FontWeight.BOLD, 24));
+        lblTituloDialog.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+        
+        // Badge de estado prominente
+        Label lblEstadoDialog = new Label(solicitud.getEstado());
+        lblEstadoDialog.setFont(Font.font("System", FontWeight.BOLD, 16));
+        lblEstadoDialog.setStyle("-fx-text-fill: " + getColorPorEstado(solicitud.getEstado()) + "; " +
+                "-fx-background-color: " + getColorPorEstado(solicitud.getEstado()) + "20; " +
+                "-fx-background-radius: 20; " +
+                "-fx-padding: 8 20; " +
+                "-fx-border-color: " + getColorPorEstado(solicitud.getEstado()) + "; " +
+                "-fx-border-width: 2; " +
+                "-fx-border-radius: 20;");
+        
+        headerDialog.getChildren().addAll(lblTituloDialog, lblEstadoDialog);
+
+        // Información principal organizada en secciones
+        VBox infoPrincipal = new VBox(20);
+        
+        // Sección 1: Información de la Solicitud
+        VBox seccionSolicitud = crearSeccionDetalle("📋 INFORMACIÓN DE LA SOLICITUD", 
+            "📦 Artículo solicitado: " + solicitud.getArticulo(),
+            "🔢 Cantidad: " + solicitud.getCantidad() + " unidades",
+            "⏱️ Tiempo de uso: " + (solicitud.getTiempo_uso() != null && !solicitud.getTiempo_uso().isEmpty() ? solicitud.getTiempo_uso() + " horas" : "No especificado"),
+            "📝 Razón: " + (solicitud.getRazon() != null && !solicitud.getRazon().isEmpty() ? solicitud.getRazon() : "No especificada")
+        );
+        
+        // Sección 2: Fechas
+        VBox seccionFechas = crearSeccionDetalle("📅 FECHAS",
+            "📝 Fecha de solicitud: " + formatearFecha(solicitud.getFecha_solicitud()),
+            "📦 Fecha de recibo: " + formatearFecha(solicitud.getFecha_recibo())
+        );
+        
+        // Sección 3: Estado
+        VBox seccionEstado = crearSeccionDetalle("🏷️ ESTADO",
+            "📊 Estado actual: " + solicitud.getEstado()
+        );
+        
+        infoPrincipal.getChildren().addAll(seccionSolicitud, seccionFechas, seccionEstado);
+
+        // Botón de cerrar
+        Button btnCerrar = new Button("✅ Cerrar");
+        btnCerrar.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-size: 14px; " +
+                "-fx-padding: 12 30; " +
+                "-fx-background-radius: 8; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);");
+        
+        btnCerrar.setOnMouseEntered(e -> btnCerrar.setStyle(btnCerrar.getStyle().replace(COLOR_SECUNDARIO, "#059669")));
+        btnCerrar.setOnMouseExited(e -> btnCerrar.setStyle(btnCerrar.getStyle().replace("#059669", COLOR_SECUNDARIO)));
+        btnCerrar.setOnAction(e -> dialogStage.close());
+
+        // Agregar todo al contenido del diálogo
+        dialogContent.getChildren().addAll(headerDialog, infoPrincipal, btnCerrar);
+        dialogContent.setAlignment(Pos.CENTER);
+
+        // Crear la escena y mostrar el diálogo
+        Scene dialogScene = new Scene(dialogContent);
+        dialogStage.setScene(dialogScene);
+        dialogStage.showAndWait();
+    }
+
+    /**
+     * Crea una sección de detalle con título y campos
+     */
+    private VBox crearSeccionDetalle(String titulo, String... campos) {
+        VBox seccion = new VBox(12);
+        seccion.setPadding(new Insets(20));
+        seccion.setStyle("-fx-background-color: " + COLOR_FONDO_CARD + "; " +
+                "-fx-background-radius: 12; " +
+                "-fx-border-color: " + COLOR_BORDE + "; " +
+                "-fx-border-width: 1; " +
+                "-fx-border-radius: 12; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);");
+
+        // Título de la sección
+        Label lblTituloSeccion = new Label(titulo);
+        lblTituloSeccion.setFont(Font.font("System", FontWeight.BOLD, 16));
+        lblTituloSeccion.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + "; " +
+                "-fx-padding: 0 0 10 0;");
+        
+        seccion.getChildren().add(lblTituloSeccion);
+
+        // Campos de la sección
+        for (String campo : campos) {
+            Label lblCampo = new Label(campo);
+            lblCampo.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-padding: 5 0;");
+            lblCampo.setWrapText(true);
+            seccion.getChildren().add(lblCampo);
+        }
+
+        return seccion;
     }
 
     public void mostrarHistorial(List<Solicitud> solicitudes) {
