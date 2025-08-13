@@ -38,7 +38,6 @@ com\example\netrixapp\Controladores\ControladorPerfil.class
 impl\TipoEquipoDaoImpl.class
 com\example\netrixapp\Vistas\VistaPrincipal.class
 config\ConnectionBD.class
-com\example\netrixapp\Vistas\VistaSolicitudes.class
 com\example\netrixapp\Controladores\ControladorAdmin\ControladorSolicitudes.class
 com\example\netrixapp\Vistas\VistasAdmin\VistaPrincipal.class
 com\example\netrixapp\Vistas\VistasAdmin\VistaPrestamos.class
@@ -63,7 +62,6 @@ com\example\netrixapp\Vistas\VistaHistorial.class
 com\example\netrixapp\Vistas\VistasAdmin\VistaPerfil.class
 com\example\netrixapp\Vistas\VistaLogin.class
 com\example\netrixapp\Vistas\VistasAdmin\VistaUsuarios$1.class
-com\example\netrixapp\Controladores\ControladorSolicitudes.class
 com\example\netrixapp\Vistas\VistaRegistro$1.class
 com\example\netrixapp\Vistas\VistasAdmin\VistaPrestamos$1.class
 com\example\netrixapp\Controladores\ControladorAdmin\ControladorInventario.class

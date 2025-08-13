@@ -47,10 +47,7 @@ public class ControladorSolicitudes {
                 return;
             }
 
-            // Mostrar resumen de la solicitud para confirmación
-            if (!mostrarResumenSolicitud()) {
-                return;
-            }
+            // La validación de anticipación ya se realizó arriba, continuar con el envío
 
             int idUsuario = SesionUsuario.getUsuarioActual().getId_usuario();
             LocalDate fechaSolicitud = LocalDate.now();
