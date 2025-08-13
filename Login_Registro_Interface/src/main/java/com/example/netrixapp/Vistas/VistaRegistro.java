@@ -135,8 +135,32 @@ public class VistaRegistro {
         lblCorreo.setWrapText(true);
         campoCorreo = new TextField();
         GridPane.setHgrow(campoCorreo, Priority.ALWAYS);
+        
+        // Agregar tooltip explicativo
+        Tooltip tooltipCorreo = new Tooltip(
+            "Ingresa tu correo institucional de UTEZ\n" +
+            "Formato: usuario@utez.edu.mx\n" +
+            "Ejemplo: juan.perez@utez.edu.mx"
+        );
+        tooltipCorreo.setStyle("-fx-font-size: 11px;");
+        campoCorreo.setTooltip(tooltipCorreo);
+        
+        // Agregar placeholder text
+        campoCorreo.setPromptText("usuario@utez.edu.mx");
+        
+        // Indicador de validación del correo
+        Label lblValidacionCorreo = new Label();
+        lblValidacionCorreo.setStyle("-fx-font-size: 11px; -fx-font-style: italic;");
+        lblValidacionCorreo.setPadding(new Insets(-5, 0, 5, 0));
+        
+        // Validación en tiempo real del correo
+        campoCorreo.textProperty().addListener((observable, oldValue, newValue) -> {
+            validarCorreoTiempoReal(newValue, lblValidacionCorreo);
+        });
+        
         gridCampos.add(lblCorreo, 3, 1, 2, 1);
         gridCampos.add(campoCorreo, 3, 2, 2, 1);
+        gridCampos.add(lblValidacionCorreo, 3, 3, 2, 1);
 
         // Línea 2: Calle, Lada, Teléfono, Fecha de nacimiento, Edad
         Label lblCalle = new Label("Calle:");
@@ -275,8 +299,7 @@ public class VistaRegistro {
         ventanaRegistro.setScene(escena);
         ventanaRegistro.setTitle("Registrarse");
         ventanaRegistro.show();
-    }
-}*/
+    }*/
 
 
 package com.example.netrixapp.Vistas;
@@ -468,7 +491,33 @@ public class VistaRegistro {
 
         // Contraseñas
         addFormField(gridCampos, "Contraseña:", campoContrasena = new PasswordField(), 0, 21);
-        addFormField(gridCampos, "Confirmar contraseña:", campoConfirmar = new PasswordField(), 0, 23);
+        
+        // Nota sobre requisitos de contraseña
+        Label lblRequisitosContrasena = new Label(
+            "La contraseña debe contener al menos:\n" +
+            "• 8 caracteres\n" +
+            "• Una letra\n" +
+            "• Un número\n" +
+            "• Un carácter especial (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+        );
+        lblRequisitosContrasena.setStyle("-fx-font-size: 11px; -fx-text-fill: #666666; -fx-font-style: italic;");
+        lblRequisitosContrasena.setWrapText(true);
+        lblRequisitosContrasena.setPadding(new Insets(5, 0, 10, 0));
+        gridCampos.add(lblRequisitosContrasena, 0, 22, 2, 1);
+        
+        // Indicador de validación de contraseña
+        Label lblValidacionContrasena = new Label();
+        lblValidacionContrasena.setStyle("-fx-font-size: 11px; -fx-font-style: italic;");
+        lblValidacionContrasena.setPadding(new Insets(-5, 0, 5, 0));
+        
+        // Validación en tiempo real de la contraseña
+        campoContrasena.textProperty().addListener((observable, oldValue, newValue) -> {
+            validarContrasenaTiempoReal(newValue, lblValidacionContrasena);
+        });
+        
+        gridCampos.add(lblValidacionContrasena, 0, 23, 2, 1);
+        
+        addFormField(gridCampos, "Confirmar contraseña:", campoConfirmar = new PasswordField(), 0, 25);
 
         // Botones en la parte inferior
         HBox panelBotones = new HBox(20);
@@ -546,5 +595,91 @@ public class VistaRegistro {
                 campo.setText(oldValue); // Revierte al valor anterior
             }
         });
+    }
+
+    /**
+     * Valida en tiempo real si el correo ingresado es un correo institucional válido
+     */
+    private void validarCorreoTiempoReal(String correo, Label lblValidacion) {
+        if (correo == null || correo.trim().isEmpty()) {
+            lblValidacion.setText("");
+            lblValidacion.setStyle("-fx-text-fill: #7F8C8D; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        String correoLower = correo.trim().toLowerCase();
+        
+        if (!correoLower.endsWith("@utez.edu.mx")) {
+            lblValidacion.setText("❌ Solo se permiten correos @utez.edu.mx");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        String parteLocal = correoLower.substring(0, correoLower.indexOf('@'));
+        if (parteLocal.isEmpty()) {
+            lblValidacion.setText("❌ El correo debe tener un nombre de usuario");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        if (correoLower.contains(" ")) {
+            lblValidacion.setText("❌ El correo no puede contener espacios");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        if (!parteLocal.matches("^[a-zA-Z0-9._-]+$")) {
+            lblValidacion.setText("❌ Solo se permiten letras, números, puntos, guiones y guiones bajos");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        lblValidacion.setText("✅ Correo institucional válido");
+        lblValidacion.setStyle("-fx-text-fill: #27AE60; -fx-font-size: 11px; -fx-font-style: italic;");
+    }
+
+    /**
+     * Valida en tiempo real si la contraseña cumple con los requisitos de seguridad
+     */
+    private void validarContrasenaTiempoReal(String contrasena, Label lblValidacion) {
+        if (contrasena == null || contrasena.isEmpty()) {
+            lblValidacion.setText("");
+            lblValidacion.setStyle("-fx-text-fill: #7F8C8D; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        // Verificar longitud mínima
+        if (contrasena.length() < 8) {
+            lblValidacion.setText("❌ Mínimo 8 caracteres");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        // Verificar que contenga al menos una letra
+        boolean tieneLetra = contrasena.matches(".*[a-zA-Z].*");
+        if (!tieneLetra) {
+            lblValidacion.setText("❌ Debe contener al menos una letra");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        // Verificar que contenga al menos un número
+        boolean tieneNumero = contrasena.matches(".*\\d.*");
+        if (!tieneNumero) {
+            lblValidacion.setText("❌ Debe contener al menos un número");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        // Verificar que contenga al menos un carácter especial
+        boolean tieneCaracterEspecial = contrasena.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*");
+        if (!tieneCaracterEspecial) {
+            lblValidacion.setText("❌ Debe contener al menos un carácter especial");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        lblValidacion.setText("✅ Contraseña segura");
+        lblValidacion.setStyle("-fx-text-fill: #27AE60; -fx-font-size: 11px; -fx-font-style: italic;");
     }
 }

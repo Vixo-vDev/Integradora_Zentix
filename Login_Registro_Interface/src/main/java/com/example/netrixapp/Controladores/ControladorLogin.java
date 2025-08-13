@@ -42,6 +42,13 @@ public class ControladorLogin {
                         return;
                     }
 
+                    // Validar formato de correo institucional
+                    if (!validarCorreoInstitucional(user)) {
+                        mostrarAlerta("ERROR", "Solo se permiten correos institucionales que terminen con @utez.edu.mx", Alert.AlertType.WARNING);
+                        restaurarBoton(btn, textoOriginal);
+                        return;
+                    }
+
                     if(usuario != null){
                         if(user.equals("veronicasanchez@utez.edu.mx") || pass.equals("adminveronica")){
                             SesionUsuario.setUsuarioActual(usuario);
@@ -97,5 +104,37 @@ public class ControladorLogin {
     private void restaurarBoton(Button btn, String textoOriginal) {
         btn.setText(textoOriginal);
         btn.setDisable(false);
+    }
+
+    private boolean validarCorreoInstitucional(String correo) {
+        if (correo == null || correo.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Convertir a minúsculas para la validación
+        String correoLower = correo.trim().toLowerCase();
+        
+        // Verificar que termine con @utez.edu.mx
+        if (!correoLower.endsWith("@utez.edu.mx")) {
+            return false;
+        }
+        
+        // Verificar que tenga al menos un carácter antes del @
+        String parteLocal = correoLower.substring(0, correoLower.indexOf('@'));
+        if (parteLocal.isEmpty()) {
+            return false;
+        }
+        
+        // Verificar que no contenga espacios
+        if (correoLower.contains(" ")) {
+            return false;
+        }
+        
+        // Verificar que solo contenga caracteres válidos (letras, números, puntos, guiones bajos)
+        if (!parteLocal.matches("^[a-zA-Z0-9._-]+$")) {
+            return false;
+        }
+        
+        return true;
     }
 }

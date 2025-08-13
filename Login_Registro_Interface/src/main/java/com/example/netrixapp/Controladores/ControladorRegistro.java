@@ -39,6 +39,24 @@ public class ControladorRegistro {
             String confirmarPassword = vista.getConfirmarPassword();
             String passwordConfirmar = vista.getConfirmarPassword();
 
+            // Validar formato de correo institucional
+            if (!validarCorreoInstitucional(correo)) {
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+                alerta.setHeaderText("Correo inválido");
+                alerta.setContentText("Solo se permiten correos institucionales que terminen con @utez.edu.mx");
+                alerta.showAndWait();
+                return;
+            }
+
+            // Validar contraseña segura
+            if (!validarContrasenaSegura(password)) {
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+                alerta.setHeaderText("Contraseña insegura");
+                alerta.setContentText("La contraseña debe contener al menos:\n• 8 caracteres\n• Una letra\n• Un número\n• Un carácter especial");
+                alerta.showAndWait();
+                return;
+            }
+
             Usuario usuario = new Usuario(nombre, apellidos, correo, calle, lada, telefono, date, edad, rol, matricula, password, "ACTIVO");
 
 
@@ -85,4 +103,62 @@ public class ControladorRegistro {
 
     }
 
+    /**
+     * Valida que el correo electrónico sea un correo institucional válido de UTEZ
+     * @param correo El correo a validar
+     * @return true si el correo es válido, false en caso contrario
+     */
+    private boolean validarCorreoInstitucional(String correo) {
+        if (correo == null || correo.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Convertir a minúsculas para la validación
+        String correoLower = correo.trim().toLowerCase();
+        
+        // Verificar que termine con @utez.edu.mx
+        if (!correoLower.endsWith("@utez.edu.mx")) {
+            return false;
+        }
+        
+        // Verificar que tenga al menos un carácter antes del @
+        String parteLocal = correoLower.substring(0, correoLower.indexOf('@'));
+        if (parteLocal.isEmpty()) {
+            return false;
+        }
+        
+        // Verificar que no contenga espacios
+        if (correoLower.contains(" ")) {
+            return false;
+        }
+        
+        // Verificar que solo contenga caracteres válidos (letras, números, puntos, guiones bajos)
+        if (!parteLocal.matches("^[a-zA-Z0-9._-]+$")) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Valida que la contraseña cumpla con los requisitos de seguridad
+     * @param contrasena La contraseña a validar
+     * @return true si la contraseña es segura, false en caso contrario
+     */
+    private boolean validarContrasenaSegura(String contrasena) {
+        if (contrasena == null || contrasena.length() < 8) {
+            return false;
+        }
+        
+        // Verificar que contenga al menos una letra
+        boolean tieneLetra = contrasena.matches(".*[a-zA-Z].*");
+        
+        // Verificar que contenga al menos un número
+        boolean tieneNumero = contrasena.matches(".*\\d.*");
+        
+        // Verificar que contenga al menos un carácter especial
+        boolean tieneCaracterEspecial = contrasena.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*");
+        
+        return tieneLetra && tieneNumero && tieneCaracterEspecial;
+    }
 }

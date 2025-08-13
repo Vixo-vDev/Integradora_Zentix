@@ -107,3 +107,5 @@ if (hora < 7 || hora > 20) {
 - **Validación robusta**: Maneja casos edge como fechas pasadas y horas fuera de rango
 - **Interfaz responsiva**: Se actualiza en tiempo real según las selecciones del usuario
 - **Código limpio**: Implementación modular y bien documentada
+
+

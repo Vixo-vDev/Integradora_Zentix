@@ -116,7 +116,26 @@ public class VistaLogin extends Application {
         campoUsuario.setPrefWidth(300);
         campoUsuario.setPrefHeight(40);
         campoUsuario.setStyle("-fx-font-size: 14; -fx-padding: 0 10; -fx-background-radius: 4; -fx-border-color: #ccc; -fx-border-radius: 4;");
-        campoUsuario.setPromptText("Ingrese su correo");
+        campoUsuario.setPromptText("usuario@utez.edu.mx");
+        
+        // Agregar tooltip explicativo
+        Tooltip tooltipUsuario = new Tooltip(
+            "Ingresa tu correo institucional de UTEZ\n" +
+            "Formato: usuario@utez.edu.mx\n" +
+            "Ejemplo: juan.perez@utez.edu.mx"
+        );
+        tooltipUsuario.setStyle("-fx-font-size: 11px;");
+        campoUsuario.setTooltip(tooltipUsuario);
+        
+        // Indicador de validación del correo
+        Label lblValidacionCorreo = new Label();
+        lblValidacionCorreo.setStyle("-fx-font-size: 11px; -fx-font-style: italic;");
+        lblValidacionCorreo.setPadding(new Insets(-5, 0, 5, 0));
+        
+        // Validación en tiempo real del correo
+        campoUsuario.textProperty().addListener((observable, oldValue, newValue) -> {
+            validarCorreoTiempoReal(newValue, lblValidacionCorreo);
+        });
 
         // Campo de contraseña
         Label etiquetaContrasena = new Label("Contraseña:");
@@ -175,9 +194,10 @@ public class VistaLogin extends Application {
         // Añadimos todo al grid
         gridCampos.add(etiquetaUsuario, 0, 0);
         gridCampos.add(campoUsuario, 0, 1);
-        gridCampos.add(etiquetaContrasena, 0, 2);
-        gridCampos.add(campoPassword, 0, 3);
-        gridCampos.add(contenedorBotonYRegistro, 0, 4);
+        gridCampos.add(lblValidacionCorreo, 0, 2); // Agregar el indicador de validación
+        gridCampos.add(etiquetaContrasena, 0, 3);
+        gridCampos.add(campoPassword, 0, 4);
+        gridCampos.add(contenedorBotonYRegistro, 0, 5);
 
         return gridCampos;
     }
@@ -252,6 +272,47 @@ public class VistaLogin extends Application {
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.setStyle("-fx-font-family: 'Arial'; -fx-font-size: 14;");
         alert.showAndWait();
+    }
+
+    /**
+     * Valida en tiempo real si el correo ingresado es un correo institucional válido
+     */
+    private void validarCorreoTiempoReal(String correo, Label lblValidacion) {
+        if (correo == null || correo.trim().isEmpty()) {
+            lblValidacion.setText("");
+            lblValidacion.setStyle("-fx-text-fill: #7F8C8D; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        String correoLower = correo.trim().toLowerCase();
+        
+        if (!correoLower.endsWith("@utez.edu.mx")) {
+            lblValidacion.setText("❌ Solo se permiten correos @utez.edu.mx");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        String parteLocal = correoLower.substring(0, correoLower.indexOf('@'));
+        if (parteLocal.isEmpty()) {
+            lblValidacion.setText("❌ El correo debe tener un nombre de usuario");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        if (correoLower.contains(" ")) {
+            lblValidacion.setText("❌ El correo no puede contener espacios");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        if (!parteLocal.matches("^[a-zA-Z0-9._-]+$")) {
+            lblValidacion.setText("❌ Solo se permiten letras, números, puntos, guiones y guiones bajos");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        lblValidacion.setText("✅ Correo institucional válido");
+        lblValidacion.setStyle("-fx-text-fill: #27AE60; -fx-font-size: 11px; -fx-font-style: italic;");
     }
 
     public static void main(String[] args) {

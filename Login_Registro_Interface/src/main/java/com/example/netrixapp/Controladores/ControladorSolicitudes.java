@@ -193,41 +193,4 @@ public class ControladorSolicitudes {
         
         return true;
     }
-
-    /**
-     * Muestra un resumen de la solicitud para confirmación del usuario
-     * @return true si el usuario confirma, false si cancela
-     */
-    private boolean mostrarResumenSolicitud() {
-        Equipo equipoSeleccionado = vista.getEquipoSeleccionado();
-        LocalDate fechaRecibo = vista.getFechaRecibo();
-        LocalTime horaEntrega = vista.getHoraEntrega();
-        int cantidad = vista.getCantidad();
-        int tiempoUso = vista.getTiempoUso();
-        String nota = vista.getNota();
-        
-        String resumen = String.format(
-            "Resumen de la solicitud:\n\n" +
-            "Equipo: %s\n" +
-            "Cantidad: %d\n" +
-            "Fecha de entrega: %s\n" +
-            "Hora de entrega: %s\n" +
-            "Tiempo de uso: %d horas\n" +
-            "Nota adicional: %s\n\n" +
-            "¿Confirmas que deseas enviar esta solicitud?",
-            equipoSeleccionado.getDescripcion(),
-            cantidad,
-            fechaRecibo.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            horaEntrega.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")),
-            tiempoUso,
-            nota.isEmpty() ? "Sin nota" : nota
-        );
-        
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setHeaderText("Confirmar solicitud");
-        alerta.setContentText(resumen);
-        alerta.setTitle("Confirmación");
-        
-        return alerta.showAndWait().orElse(null) == javafx.scene.control.ButtonType.OK;
-    }
 }
