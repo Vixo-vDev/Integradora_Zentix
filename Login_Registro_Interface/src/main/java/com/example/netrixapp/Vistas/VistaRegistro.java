@@ -304,21 +304,36 @@ public class VistaRegistro {
 
 package com.example.netrixapp.Vistas;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import com.example.netrixapp.Controladores.ControladorRegistro;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.time.LocalDate;
-import java.time.Period;
 
 public class VistaRegistro {
     // Campos de texto y controles (mantener los mismos)
@@ -492,23 +507,19 @@ public class VistaRegistro {
         // Contraseñas
         addFormField(gridCampos, "Contraseña:", campoContrasena = new PasswordField(), 0, 21);
         
-        // Nota sobre requisitos de contraseña
+        // Nota sobre requisitos de contraseña (POSICIONADA ARRIBA DEL CAMPO)
         Label lblRequisitosContrasena = new Label(
-            "La contraseña debe contener al menos:\n" +
-            "• 8 caracteres\n" +
-            "• Una letra\n" +
-            "• Un número\n" +
-            "• Un carácter especial (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+            "La contraseña debe contener al menos: 8 caracteres, una letra, un número, un carácter especial"
         );
         lblRequisitosContrasena.setStyle("-fx-font-size: 11px; -fx-text-fill: #666666; -fx-font-style: italic;");
         lblRequisitosContrasena.setWrapText(true);
-        lblRequisitosContrasena.setPadding(new Insets(5, 0, 10, 0));
-        gridCampos.add(lblRequisitosContrasena, 0, 22, 2, 1);
+        lblRequisitosContrasena.setPadding(new Insets(5, 0, 5, 0));
+        gridCampos.add(lblRequisitosContrasena, 0, 20, 2, 1);
         
-        // Indicador de validación de contraseña
+        // Indicador de validación de contraseña (POSICIONADO ABAJO DEL CAMPO)
         Label lblValidacionContrasena = new Label();
         lblValidacionContrasena.setStyle("-fx-font-size: 11px; -fx-font-style: italic;");
-        lblValidacionContrasena.setPadding(new Insets(-5, 0, 5, 0));
+        lblValidacionContrasena.setPadding(new Insets(5, 0, 5, 0));
         
         // Validación en tiempo real de la contraseña
         campoContrasena.textProperty().addListener((observable, oldValue, newValue) -> {
