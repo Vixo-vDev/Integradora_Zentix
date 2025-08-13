@@ -10,6 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.SpinnerValueFactory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ControladorSolicitudes {
 
@@ -37,6 +39,16 @@ public class ControladorSolicitudes {
                 alerta.setHeaderText("Campos incompletos");
                 alerta.setContentText("Por favor selecciona un tipo de equipo y un equipo válido.");
                 alerta.showAndWait();
+                return;
+            }
+
+            // Validar anticipación de 4 horas
+            if (!validarAnticipacion4Horas()) {
+                return;
+            }
+
+            // Mostrar resumen de la solicitud para confirmación
+            if (!mostrarResumenSolicitud()) {
                 return;
             }
 
@@ -90,6 +102,7 @@ public class ControladorSolicitudes {
             detalleSolicitudDao.create(detalleSolicitud);
             vista.getTfNota().clear();
             vista.getDpFecha_recibo().setValue(null);
+            vista.getCbHoraEntrega().setValue(null);
 
             SpinnerValueFactory.IntegerSpinnerValueFactory tiempoUsoFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) vista.getSpTiempoUso().getValueFactory();
             tiempoUsoFactory.setValue(tiempoUsoFactory.getMin());
@@ -116,5 +129,105 @@ public class ControladorSolicitudes {
             alerta.setContentText("No se pudo enviar la solicitud: " + ex.getMessage());
             alerta.showAndWait();
         }
+    }
+
+    /**
+     * Valida que la solicitud se realice con al menos 4 horas de anticipación
+     * @return true si la solicitud cumple con la anticipación requerida, false en caso contrario
+     */
+    private boolean validarAnticipacion4Horas() {
+        LocalDate fechaRecibo = vista.getFechaRecibo();
+        LocalTime horaEntrega = vista.getHoraEntrega();
+        
+        if (fechaRecibo == null || horaEntrega == null) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setHeaderText("Campos incompletos");
+            alerta.setContentText("Por favor selecciona una fecha y hora de entrega válidas.");
+            alerta.showAndWait();
+            return false;
+        }
+
+        // Crear LocalDateTime para la fecha y hora de entrega solicitada
+        LocalDateTime fechaHoraEntrega = LocalDateTime.of(fechaRecibo, horaEntrega);
+        
+        // Obtener fecha y hora actual
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+        
+        // Verificar que la fecha de entrega no sea en el pasado
+        if (fechaHoraEntrega.isBefore(fechaHoraActual)) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setHeaderText("Fecha inválida");
+            alerta.setContentText("No puedes solicitar equipos para fechas y horas en el pasado.\n\n" +
+                    "Fecha y hora actual: " + fechaHoraActual.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                    "Fecha y hora solicitada: " + fechaHoraEntrega.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            alerta.showAndWait();
+            return false;
+        }
+        
+        // Verificar que la hora esté dentro del rango permitido (7:00 AM a 8:00 PM)
+        int hora = horaEntrega.getHour();
+        if (hora < 7 || hora > 20) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setHeaderText("Hora fuera de rango");
+            alerta.setContentText("Solo se permiten solicitudes entre las 7:00 AM y las 8:00 PM.\n\n" +
+                    "Hora seleccionada: " + horaEntrega.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")));
+            alerta.showAndWait();
+            return false;
+        }
+        
+        // Calcular la diferencia en horas
+        long horasDiferencia = java.time.Duration.between(fechaHoraActual, fechaHoraEntrega).toHours();
+        
+        // Verificar si hay al menos 4 horas de anticipación
+        if (horasDiferencia < 4) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setHeaderText("Anticipación insuficiente");
+            alerta.setContentText("Solo se admiten solicitudes con 4 horas de anticipación.\n\n" +
+                    "Fecha y hora actual: " + fechaHoraActual.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                    "Fecha y hora solicitada: " + fechaHoraEntrega.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                    "Anticipación actual: " + horasDiferencia + " horas\n\n" +
+                    "Por favor, selecciona una fecha y hora que permita al menos 4 horas de anticipación.");
+            alerta.showAndWait();
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Muestra un resumen de la solicitud para confirmación del usuario
+     * @return true si el usuario confirma, false si cancela
+     */
+    private boolean mostrarResumenSolicitud() {
+        Equipo equipoSeleccionado = vista.getEquipoSeleccionado();
+        LocalDate fechaRecibo = vista.getFechaRecibo();
+        LocalTime horaEntrega = vista.getHoraEntrega();
+        int cantidad = vista.getCantidad();
+        int tiempoUso = vista.getTiempoUso();
+        String nota = vista.getNota();
+        
+        String resumen = String.format(
+            "Resumen de la solicitud:\n\n" +
+            "Equipo: %s\n" +
+            "Cantidad: %d\n" +
+            "Fecha de entrega: %s\n" +
+            "Hora de entrega: %s\n" +
+            "Tiempo de uso: %d horas\n" +
+            "Nota adicional: %s\n\n" +
+            "¿Confirmas que deseas enviar esta solicitud?",
+            equipoSeleccionado.getDescripcion(),
+            cantidad,
+            fechaRecibo.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+            horaEntrega.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")),
+            tiempoUso,
+            nota.isEmpty() ? "Sin nota" : nota
+        );
+        
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setHeaderText("Confirmar solicitud");
+        alerta.setContentText(resumen);
+        alerta.setTitle("Confirmación");
+        
+        return alerta.showAndWait().orElse(null) == javafx.scene.control.ButtonType.OK;
     }
 }

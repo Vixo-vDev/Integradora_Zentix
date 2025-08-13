@@ -18,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +30,13 @@ public class VistaSolicitudes {
     private Button btnEnviar;
     private TextField tfNota;
     private DatePicker dpFecha_recibo;
+    private ComboBox<String> cbHoraEntrega;
     private Spinner<Integer> spTiempoUso;
     private ComboBox<String> cbTipoEquipo;
     private ComboBox<Equipo> cbEquipos;
     private Spinner<Integer> spCantidad;
     private Label lblDisponibilidad;
+    private Label lblValidacionAnticipacion;
 
     private final BorderPane vista;
     private final ControladorBarraNavegacion controladorBarra;
@@ -122,6 +126,63 @@ public class VistaSolicitudes {
         dpFecha_recibo.setStyle("-fx-font-size: 13px; -fx-text-fill: " + COLOR_TEXTO + "; " +
                 "-fx-background-radius: 4; -fx-border-radius: 4;");
         dpFecha_recibo.setPrefWidth(280);
+        
+        // Establecer fecha mínima como la fecha actual
+        dpFecha_recibo.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffebee;");
+                }
+            }
+        });
+
+        // Agregar tooltip explicativo para fecha
+        Tooltip tooltipFecha = new Tooltip(
+            "Selecciona la fecha en que deseas recibir el equipo.\n" +
+            "La fecha debe ser futura y permitir al menos 4 horas de anticipación."
+        );
+        tooltipFecha.setStyle("-fx-font-size: 11px;");
+        dpFecha_recibo.setTooltip(tooltipFecha);
+
+        Label lblHoraEntrega = new Label("Hora de entrega:");
+        lblHoraEntrega.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold; -fx-font-size: 13px;");
+        cbHoraEntrega = new ComboBox<>();
+        cbHoraEntrega.setStyle("-fx-font-size: 13px; -fx-text-fill: " + COLOR_TEXTO + "; " +
+                "-fx-background-radius: 4; -fx-border-radius: 4;");
+        cbHoraEntrega.setPrefWidth(280);
+        cbHoraEntrega.setEditable(false);
+        
+        // Llenar el ComboBox con horas disponibles (de 7:00 AM a 8:00 PM)
+        for (int hora = 7; hora <= 20; hora++) {
+            String horaFormateada = String.format("%02d:00", hora);
+            cbHoraEntrega.getItems().add(horaFormateada);
+        }
+        // Establecer hora por defecto (hora actual + 1)
+        LocalTime horaActual = LocalTime.now();
+        int horaPorDefecto = Math.min(horaActual.getHour() + 1, 20);
+        cbHoraEntrega.setValue(String.format("%02d:00", horaPorDefecto));
+
+        // Agregar tooltip explicativo
+        Tooltip tooltipHora = new Tooltip(
+            "Selecciona la hora en que deseas recibir el equipo.\n" +
+            "Recuerda que solo se permiten solicitudes con al menos 4 horas de anticipación.\n" +
+            "Horario disponible: 7:00 AM a 8:00 PM"
+        );
+        tooltipHora.setStyle("-fx-font-size: 11px;");
+        cbHoraEntrega.setTooltip(tooltipHora);
+
+        // Mensaje informativo sobre la regla de 4 horas
+        Label lblInfoAnticipacion = new Label("ℹ️ Solo se admiten solicitudes con 4 horas de anticipación");
+        lblInfoAnticipacion.setStyle("-fx-text-fill: " + COLOR_INFO + "; -fx-font-size: 11px; -fx-font-style: italic;");
+        lblInfoAnticipacion.setPadding(new Insets(-5, 0, 5, 5));
+
+        // Indicador de validación de anticipación
+        lblValidacionAnticipacion = new Label();
+        lblValidacionAnticipacion.setStyle("-fx-font-size: 11px; -fx-font-style: italic;");
+        lblValidacionAnticipacion.setPadding(new Insets(-5, 0, 5, 5));
 
         Label lblTiempoUso = new Label("Tiempo de uso (horas):");
         lblTiempoUso.setStyle("-fx-text-fill: " + COLOR_TEXTO + "; -fx-font-weight: bold; -fx-font-size: 13px;");
@@ -166,6 +227,9 @@ public class VistaSolicitudes {
                 lblCantidad, spCantidad,
                 lblNota, tfNota,
                 lblFecha, dpFecha_recibo,
+                lblHoraEntrega, cbHoraEntrega,
+                lblInfoAnticipacion,
+                lblValidacionAnticipacion,
                 lblTiempoUso, spTiempoUso,
                 botones
         );
@@ -199,6 +263,46 @@ public class VistaSolicitudes {
                 spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxCantidad, 1));
             }
         });
+
+        // Validación en tiempo real de la anticipación
+        dpFecha_recibo.setOnAction(e -> validarAnticipacionTiempoReal(lblValidacionAnticipacion));
+        cbHoraEntrega.setOnAction(e -> validarAnticipacionTiempoReal(lblValidacionAnticipacion));
+        
+        // Validación inicial
+        validarAnticipacionTiempoReal(lblValidacionAnticipacion);
+    }
+
+    /**
+     * Valida en tiempo real si la fecha y hora seleccionadas cumplen con la regla de 4 horas
+     */
+    private void validarAnticipacionTiempoReal(Label lblValidacion) {
+        LocalDate fechaRecibo = dpFecha_recibo.getValue();
+        LocalTime horaEntrega = getHoraEntrega();
+        
+        if (fechaRecibo == null || horaEntrega == null) {
+            lblValidacion.setText("");
+            lblValidacion.setStyle("-fx-text-fill: " + COLOR_INFO + "; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+
+        LocalDateTime fechaHoraEntrega = LocalDateTime.of(fechaRecibo, horaEntrega);
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+        
+        if (fechaHoraEntrega.isBefore(fechaHoraActual)) {
+            lblValidacion.setText("❌ Fecha y hora en el pasado");
+            lblValidacion.setStyle("-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-style: italic;");
+            return;
+        }
+        
+        long horasDiferencia = java.time.Duration.between(fechaHoraActual, fechaHoraEntrega).toHours();
+        
+        if (horasDiferencia < 4) {
+            lblValidacion.setText("⚠️ Anticipación insuficiente: " + horasDiferencia + " horas (mínimo 4)");
+            lblValidacion.setStyle("-fx-text-fill: #F39C12; -fx-font-size: 11px; -fx-font-style: italic;");
+        } else {
+            lblValidacion.setText("✅ Anticipación válida: " + horasDiferencia + " horas");
+            lblValidacion.setStyle("-fx-text-fill: #27AE60; -fx-font-size: 11px; -fx-font-style: italic;");
+        }
     }
 
     private void cargarTiposEquipo() {
@@ -249,6 +353,28 @@ public class VistaSolicitudes {
 
     public LocalDate getFechaRecibo() {
         return dpFecha_recibo.getValue();
+    }
+
+    public LocalTime getHoraEntrega() {
+        String horaSeleccionada = cbHoraEntrega.getValue();
+        if (horaSeleccionada != null && !horaSeleccionada.isEmpty()) {
+            String[] partes = horaSeleccionada.split(":");
+            int hora = Integer.parseInt(partes[0]);
+            return LocalTime.of(hora, 0);
+        }
+        return LocalTime.of(8, 0); // Hora por defecto si no hay selección
+    }
+
+    public ComboBox<String> getCbHoraEntrega() {
+        return cbHoraEntrega;
+    }
+
+    public void setCbHoraEntrega(ComboBox<String> cbHoraEntrega) {
+        this.cbHoraEntrega = cbHoraEntrega;
+    }
+
+    public Label getLblValidacionAnticipacion() {
+        return lblValidacionAnticipacion;
     }
 
     public int getTiempoUso() {
