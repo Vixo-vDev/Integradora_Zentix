@@ -14,6 +14,7 @@ public interface IUsuarioDao {
     Usuario getById(int id) throws Exception;
     void create(Usuario user) throws Exception;
     void update(Usuario user, int id) throws Exception;
+    void updatePerfil(Usuario user, int id) throws Exception;
     void delete(Usuario user) throws Exception;
     int totalUsuarios() throws Exception;
 

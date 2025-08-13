@@ -120,7 +120,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             ps.setString(9,user.getRol());
             ps.setString(10, user.getMatricula());
             ps.setString(11,user.getPassword());
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }finally{
@@ -152,6 +152,34 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             ps.setString(9,user.getRol());
             ps.setString(10,user.getMatricula());
             ps.setInt(11,id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }finally{
+            if(con != null){
+                con.close();
+            }
+        }
+    }
+
+    @Override
+    public void updatePerfil(Usuario user, int id) throws Exception {
+        Connection con = null;
+        String sql = "UPDATE USUARIO SET NOMBRE = ?, APELLIDOS = ?, " +
+                "CORREO_INSTITUCIONAL = ?, DOMICILIO = ?, LADA = ?, " +
+                "TELEFONO = ? " +
+                "WHERE ID_USUARIO = ?";
+
+        try {
+            con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1,user.getNombre());
+            ps.setString(2,user.getApellidos());
+            ps.setString(3,user.getCorreo());
+            ps.setString(4,user.getDireccion());
+            ps.setString(5,user.getLada());
+            ps.setString(6,user.getTelefono());
+            ps.setInt(7,id);
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);

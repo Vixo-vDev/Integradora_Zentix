@@ -8,4 +8,12 @@ public class ControladorPerfil {
     public ControladorPerfil(VistaPerfil vista) {
         this.vista = vista;
     }
+
+    public VistaPerfil getVista() {
+        return vista;
+    }
+
+    public void setVista(VistaPerfil vista) {
+        this.vista = vista;
+    }
 }
