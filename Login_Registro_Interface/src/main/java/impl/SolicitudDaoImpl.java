@@ -32,9 +32,29 @@ public class SolicitudDaoImpl implements ISolicitudDao {
                 Solicitud solicitud =new Solicitud();
 
                 solicitud.setId_solicitud(rs.getInt("ID_SOLICITUD"));
+                solicitud.setId_usuario(rs.getInt("ID_USUARIO"));
                 solicitud.setFecha_solicitud(LocalDate.parse(rs.getDate("FECHA_SOLICITUD").toString()));
                 solicitud.setArticulo(rs.getString("ARTICULO"));
                 solicitud.setCantidad(rs.getInt("CANTIDAD"));
+                
+                // Obtener fecha de recibo (puede ser null)
+                java.sql.Date fechaRecibo = rs.getDate("FECHA_RECIBO");
+                if (fechaRecibo != null) {
+                    solicitud.setFecha_recibo(LocalDate.parse(fechaRecibo.toString()));
+                }
+                
+                // Obtener tiempo de uso (puede ser null)
+                String tiempoUso = rs.getString("TIEMPO_USO");
+                if (tiempoUso != null) {
+                    solicitud.setTiempo_uso(tiempoUso);
+                }
+                
+                // Obtener razón de uso (puede ser null)
+                String razon = rs.getString("RAZON_USO");
+                if (razon != null) {
+                    solicitud.setRazon(razon);
+                }
+                
                 solicitud.setEstado(rs.getString("ESTADO"));
                 solicitudes.add(solicitud);
 
@@ -174,9 +194,29 @@ public class SolicitudDaoImpl implements ISolicitudDao {
             while (rs.next()) {
                 Solicitud s = new Solicitud();
                 s.setId_solicitud(rs.getInt("id_solicitud"));
+                s.setId_usuario(rs.getInt("id_usuario"));
                 s.setFecha_solicitud(rs.getDate("fecha_solicitud").toLocalDate());
                 s.setArticulo(rs.getString("articulo"));
                 s.setCantidad(rs.getInt("cantidad"));
+                
+                // Obtener fecha de recibo (puede ser null)
+                java.sql.Date fechaRecibo = rs.getDate("fecha_recibo");
+                if (fechaRecibo != null) {
+                    s.setFecha_recibo(fechaRecibo.toLocalDate());
+                }
+                
+                // Obtener tiempo de uso (puede ser null)
+                String tiempoUso = rs.getString("tiempo_uso");
+                if (tiempoUso != null) {
+                    s.setTiempo_uso(tiempoUso);
+                }
+                
+                // Obtener razón de uso (puede ser null)
+                String razon = rs.getString("razon_uso");
+                if (razon != null) {
+                    s.setRazon(razon);
+                }
+                
                 s.setEstado(rs.getString("estado"));
                 solicitudes.add(s);
             }

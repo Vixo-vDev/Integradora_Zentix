@@ -1,24 +1,35 @@
 package com.example.netrixapp.Vistas;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
 import com.example.netrixapp.Controladores.ControladorHistorial;
 import com.example.netrixapp.Modelos.Solicitud;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 public class VistaHistorial {
 
@@ -334,7 +345,7 @@ public class VistaHistorial {
         colFechaRecibo.setCellValueFactory(new PropertyValueFactory<>("fecha_recibo"));
 
         TableColumn<Solicitud, String> colTiempo = new TableColumn<>("Tiempo Uso");
-        colFechaRecibo.setCellValueFactory(new PropertyValueFactory<>("tiempo_uso"));
+        colTiempo.setCellValueFactory(new PropertyValueFactory<>("tiempo_uso"));
 
         TableColumn<Solicitud, String> colRazon = new TableColumn<>("Razón");
         colRazon.setCellValueFactory(new PropertyValueFactory<>("razon"));
@@ -403,7 +414,7 @@ public class VistaHistorial {
 
         // ID y estado
         VBox infoPrincipal = new VBox(5);
-        Label lblId = new Label("Solicitud #" + solicitud.getId_solicitud());
+        Label lblId = new Label("Solicitud: " + solicitud.getArticulo());
         lblId.setFont(Font.font("System", FontWeight.BOLD, 16));
         lblId.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
 
@@ -420,12 +431,9 @@ public class VistaHistorial {
         Label lblFechaSolicitud = new Label("Solicitado: " + formatearFecha(solicitud.getFecha_solicitud()));
         lblFechaSolicitud.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
         
-        if (solicitud.getFecha_recibo() != null) {
-            Label lblFechaRecibo = new Label("Recibo: " + formatearFecha(solicitud.getFecha_recibo()));
-            lblFechaRecibo.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
-            infoFecha.getChildren().add(lblFechaRecibo);
-        }
-        infoFecha.getChildren().add(lblFechaSolicitud);
+        Label lblFechaRecibo = new Label("Recibo: " + (solicitud.getFecha_recibo() != null ? formatearFecha(solicitud.getFecha_recibo()) : "No especificada"));
+        lblFechaRecibo.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
+        infoFecha.getChildren().addAll(lblFechaRecibo, lblFechaSolicitud);
 
         header.getChildren().addAll(infoPrincipal, infoFecha);
 
@@ -446,19 +454,15 @@ public class VistaHistorial {
         infoArticulo.getChildren().addAll(lblArticulo, lblCantidad);
 
         // Tiempo de uso
-        if (solicitud.getTiempo_uso() != null && !solicitud.getTiempo_uso().isEmpty()) {
-            Label lblTiempo = new Label("⏱️ Tiempo: " + solicitud.getTiempo_uso() + " horas");
-            lblTiempo.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
-            contenido.getChildren().add(lblTiempo);
-        }
+        Label lblTiempo = new Label("⏱️ Tiempo: " + (solicitud.getTiempo_uso() != null && !solicitud.getTiempo_uso().isEmpty() ? solicitud.getTiempo_uso() + " horas" : "No especificado"));
+        lblTiempo.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
+        contenido.getChildren().add(lblTiempo);
 
         // Razón
-        if (solicitud.getRazon() != null && !solicitud.getRazon().isEmpty()) {
-            Label lblRazon = new Label("📝 " + solicitud.getRazon());
-            lblRazon.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
-            lblRazon.setWrapText(true);
-            contenido.getChildren().add(lblRazon);
-        }
+        Label lblRazon = new Label("📝 " + (solicitud.getRazon() != null && !solicitud.getRazon().isEmpty() ? solicitud.getRazon() : "No especificada"));
+        lblRazon.setStyle("-fx-text-fill: " + COLOR_TEXTO_NORMAL + "; -fx-font-size: 12px;");
+        lblRazon.setWrapText(true);
+        contenido.getChildren().add(lblRazon);
 
         contenido.getChildren().add(infoArticulo);
 
@@ -493,7 +497,7 @@ public class VistaHistorial {
     }
 
     private String formatearFecha(LocalDate fecha) {
-        if (fecha == null) return "N/A";
+        if (fecha == null) return "No especificada";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return fecha.format(formatter);
     }
@@ -520,7 +524,7 @@ public class VistaHistorial {
         VBox headerDialog = new VBox(10);
         headerDialog.setAlignment(Pos.CENTER);
         
-        Label lblTituloDialog = new Label("📋 SOLICITUD #" + solicitud.getId_solicitud());
+        Label lblTituloDialog = new Label("📋 SOLICITUD: " + solicitud.getArticulo());
         lblTituloDialog.setFont(Font.font("System", FontWeight.BOLD, 24));
         lblTituloDialog.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
         
@@ -562,7 +566,7 @@ public class VistaHistorial {
         infoPrincipal.getChildren().addAll(seccionSolicitud, seccionFechas, seccionEstado);
 
         // Botón de cerrar
-        Button btnCerrar = new Button("✅ Cerrar");
+        Button btnCerrar = new Button("Cerrar");
         btnCerrar.setStyle("-fx-background-color: " + COLOR_SECUNDARIO + "; " +
                 "-fx-text-fill: white; " +
                 "-fx-font-weight: bold; " +

@@ -31,6 +31,21 @@ public class ControladorHistorial {
     private void cargarHistorial() {
         try {
             List<Solicitud> lista = solicitudDao.findAll(id_usuario);
+            
+            // Depuración: mostrar información de las solicitudes
+            System.out.println("=== DEPURACIÓN: Datos obtenidos del historial ===");
+            for (Solicitud s : lista) {
+                System.out.println("Solicitud ID: " + s.getId_solicitud());
+                System.out.println("  - Artículo: " + s.getArticulo());
+                System.out.println("  - Cantidad: " + s.getCantidad());
+                System.out.println("  - Fecha Solicitud: " + s.getFecha_solicitud());
+                System.out.println("  - Fecha Recibo: " + s.getFecha_recibo());
+                System.out.println("  - Tiempo Uso: " + s.getTiempo_uso());
+                System.out.println("  - Razón: " + s.getRazon());
+                System.out.println("  - Estado: " + s.getEstado());
+                System.out.println("---");
+            }
+            
             vista.mostrarHistorial(lista);
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,6 +59,21 @@ public class ControladorHistorial {
             LocalDate hasta = vista.getdateFin() != null ? LocalDate.parse(vista.getdateFin()) : null;
 
             List<Solicitud> lista = solicitudDao.findByFilters(id_usuario, estado, desde, hasta);
+            
+            // Depuración: mostrar información de las solicitudes filtradas
+            System.out.println("=== DEPURACIÓN: Datos filtrados del historial ===");
+            for (Solicitud s : lista) {
+                System.out.println("Solicitud ID: " + s.getId_solicitud());
+                System.out.println("  - Artículo: " + s.getArticulo());
+                System.out.println("  - Cantidad: " + s.getCantidad());
+                System.out.println("  - Fecha Solicitud: " + s.getFecha_solicitud());
+                System.out.println("  - Fecha Recibo: " + s.getFecha_recibo());
+                System.out.println("  - Tiempo Uso: " + s.getTiempo_uso());
+                System.out.println("  - Razón: " + s.getRazon());
+                System.out.println("  - Estado: " + s.getEstado());
+                System.out.println("---");
+            }
+            
             vista.mostrarHistorial(lista);
         } catch (Exception e) {
             e.printStackTrace();
