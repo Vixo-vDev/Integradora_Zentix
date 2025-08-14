@@ -32,6 +32,8 @@ public class VistaInventario {
     private TextField tfModelo = new TextField();
     private TextField tfNumeroSerie = new TextField();
     private Spinner<Integer> spinnerTipoEquipo = new Spinner<>(1, 10, 1);
+    private TextField tfBusqueda = new TextField();
+    private Label lblResultados = new Label();
 
     private final EquipoDaoImpl equipoDao = new EquipoDaoImpl();
     private static final int FILAS_POR_PAGINA = 10;
@@ -132,17 +134,51 @@ public class VistaInventario {
 
         Label lblTablaTitulo = new Label("Lista de Equipos");
         lblTablaTitulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+        
+        // Configurar label para mostrar cantidad de resultados
+        lblResultados.setStyle("-fx-font-size: 12px; -fx-text-fill: " + COLOR_TEXTO_NORMAL + ";");
+        
+        // Barra de búsqueda
+        HBox barraBusqueda = new HBox(10);
+        barraBusqueda.setAlignment(Pos.CENTER_LEFT);
+        
+        Label lblBusqueda = new Label("🔍 Buscar:");
+        lblBusqueda.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+        
+        tfBusqueda.setPromptText("Buscar por código, descripción, marca, modelo...");
+        tfBusqueda.setStyle("-fx-font-size: 14px; -fx-pref-width: 300px; -fx-background-radius: 6; -fx-padding: 8 12;");
+        tfBusqueda.setPrefHeight(35);
+        
+        // Búsqueda en tiempo real
+        tfBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.trim().isEmpty()) {
+                filtrarEquipos();
+            } else if (newValue != null && newValue.trim().isEmpty()) {
+                limpiarBusqueda();
+            }
+        });
+        
+        Button btnBuscar = new Button("Buscar");
+        btnBuscar.setStyle("-fx-background-color: " + COLOR_PRIMARIO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 6;");
+        btnBuscar.setOnAction(e -> filtrarEquipos());
+        
+        Button btnLimpiar = new Button("Limpiar");
+        btnLimpiar.setStyle("-fx-background-color: " + COLOR_TEXTO_NORMAL + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 6;");
+        btnLimpiar.setOnAction(e -> limpiarBusqueda());
+        
+        barraBusqueda.getChildren().addAll(lblBusqueda, tfBusqueda, btnBuscar, btnLimpiar);
+        
+        seccionTabla.getChildren().addAll(lblTablaTitulo, barraBusqueda, lblResultados);
 
         tablaEquipos = new TableView<>();
         tablaEquipos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         configurarColumnasTabla();
 
         paginador = new Pagination();
-
-        paginador = new Pagination();
         paginador.setPageFactory(this::crearPagina);
-
-        contenido.getChildren().addAll(tablaEquipos, paginador);
+        
+        seccionTabla.getChildren().addAll(tablaEquipos, paginador);
+        contenido.getChildren().add(seccionTabla);
 
         vista.setCenter(contenido);
     }
@@ -228,6 +264,18 @@ public class VistaInventario {
 
     public void mostrarEquipos(List<Equipo> equipos) {
         this.todosLosEquipos = equipos;
+        
+        // Actualizar contador de resultados
+        if (tfBusqueda.getText().trim().isEmpty()) {
+            // Mostrar total de equipos
+            try {
+                int totalEquipos = equipoDao.totalEquipos();
+                lblResultados.setText("Mostrando " + equipos.size() + " de " + totalEquipos + " equipos");
+            } catch (Exception e) {
+                lblResultados.setText("Mostrando " + equipos.size() + " equipos");
+            }
+        }
+        
         int totalPaginas = (int) Math.ceil((double) todosLosEquipos.size() / FILAS_POR_PAGINA);
         if (totalPaginas == 0) totalPaginas = 1;
         paginador.setPageCount(totalPaginas);
@@ -370,5 +418,53 @@ public class VistaInventario {
 
     public BorderPane getVista() {
         return vista;
+    }
+    
+    private void filtrarEquipos() {
+        String textoBusqueda = tfBusqueda.getText().trim().toLowerCase();
+        if (textoBusqueda.isEmpty()) {
+            // Si no hay texto de búsqueda, mostrar todos los equipos
+            if (todosLosEquipos != null) {
+                mostrarEquipos(todosLosEquipos);
+            }
+            return;
+        }
+        
+        // Filtrar equipos que coincidan con la búsqueda
+        List<Equipo> equiposFiltrados = todosLosEquipos.stream()
+            .filter(equipo -> 
+                (equipo.getCodigo_bien() != null && equipo.getCodigo_bien().toLowerCase().contains(textoBusqueda)) ||
+                (equipo.getDescripcion() != null && equipo.getDescripcion().toLowerCase().contains(textoBusqueda)) ||
+                (equipo.getMarca() != null && equipo.getMarca().toLowerCase().contains(textoBusqueda)) ||
+                (equipo.getModelo() != null && equipo.getModelo().toLowerCase().contains(textoBusqueda)) ||
+                (equipo.getNumero_serie() != null && equipo.getNumero_serie().toLowerCase().contains(textoBusqueda))
+            )
+            .toList();
+        
+        if (equiposFiltrados.isEmpty()) {
+            // Mostrar mensaje de "no se encontraron resultados"
+            mostrarEquipos(new ArrayList<>());
+            lblResultados.setText("No se encontraron equipos para: '" + textoBusqueda + "'");
+        } else {
+            mostrarEquipos(equiposFiltrados);
+            lblResultados.setText("Se encontraron " + equiposFiltrados.size() + " equipos para: '" + textoBusqueda + "'");
+        }
+    }
+    
+    private void limpiarBusqueda() {
+        tfBusqueda.clear();
+        if (todosLosEquipos != null) {
+            mostrarEquipos(todosLosEquipos);
+            try {
+                int totalEquipos = equipoDao.totalEquipos();
+                lblResultados.setText("Mostrando " + todosLosEquipos.size() + " de " + totalEquipos + " equipos");
+            } catch (Exception e) {
+                lblResultados.setText("Mostrando " + todosLosEquipos.size() + " equipos");
+            }
+        }
+    }
+    
+    public String getTextoBusqueda() {
+        return tfBusqueda.getText().trim();
     }
 }

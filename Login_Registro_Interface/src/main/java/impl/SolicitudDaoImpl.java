@@ -76,7 +76,7 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         Connection con = null;
         String sql="SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
                 "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO\n" +
-                "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO ORDER BY ID_SOLICITUD ASC";
+                "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO ORDER BY S.FECHA_SOLICITUD DESC";
         List<Solicitud> solicitudes= new ArrayList<>();
 
         try {
@@ -375,7 +375,7 @@ public class SolicitudDaoImpl implements ISolicitudDao {
         String sql = "SELECT S.ID_SOLICITUD, S.ID_USUARIO, U.NOMBRE, S.FECHA_SOLICITUD, S.ARTICULO, " +
                 "S.CANTIDAD, S.FECHA_RECIBO, S.TIEMPO_USO, S.RAZON_USO, S.ESTADO " +
                 "FROM SOLICITUD S INNER JOIN USUARIO U ON S.ID_USUARIO = U.ID_USUARIO " +
-                "WHERE S.ESTADO = ? ORDER BY ID_SOLICITUD ASC";
+                "WHERE S.ESTADO = ? ORDER BY S.FECHA_SOLICITUD DESC";
 
         try {
             con = ConnectionBD.getConnection();
