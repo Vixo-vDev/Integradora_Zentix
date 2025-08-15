@@ -164,10 +164,7 @@ public class VistaHistorial {
                 "-fx-background-radius: 12; " +
                 "-fx-effect: dropshadow(three-pass-box, " + COLOR_SOMBRA + ", 8, 0, 0, 2);");
 
-        // Título de filtros
-        Label lblTituloFiltros = new Label("🔍 Filtros de Búsqueda");
-        lblTituloFiltros.setFont(Font.font("System", FontWeight.BOLD, 16));
-        lblTituloFiltros.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + ";");
+
 
         // Primera fila de filtros
         HBox filtrosFila1 = new HBox(20);
@@ -187,7 +184,7 @@ public class VistaHistorial {
         Label lblEstado = new Label("Estado:");
         lblEstado.setStyle("-fx-font-size: 13px; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-font-weight: bold;");
         comboEstado = new ComboBox<>();
-        comboEstado.getItems().addAll("Todos", "Aprobado", "Pendiente", "Rechazado", "En Uso", "Completado");
+        comboEstado.getItems().addAll("Todos", "Aprobado", "Pendiente", "Rechazado");
         comboEstado.setValue("Todos");
         comboEstado.setStyle("-fx-font-size: 13px; -fx-pref-width: 150px; -fx-background-radius: 6;");
         filtroEstado.getChildren().addAll(lblEstado, comboEstado);
@@ -202,7 +199,7 @@ public class VistaHistorial {
         comboOrdenamiento.setStyle("-fx-font-size: 13px; -fx-pref-width: 180px; -fx-background-radius: 6;");
         filtroOrden.getChildren().addAll(lblOrden, comboOrdenamiento);
 
-        filtrosFila1.getChildren().addAll(filtroBusqueda, filtroEstado, filtroOrden);
+        filtrosFila1.getChildren().addAll( filtroEstado);
 
         // Segunda fila de filtros
         HBox filtrosFila2 = new HBox(20);
@@ -235,7 +232,7 @@ public class VistaHistorial {
 
         botones.getChildren().addAll(btnLimpiar, btnAplicar);
 
-        panelFiltros.getChildren().addAll(lblTituloFiltros, filtrosFila1, filtrosFila2, botones);
+        panelFiltros.getChildren().addAll(filtrosFila1, filtrosFila2, botones);
         return panelFiltros;
     }
 
