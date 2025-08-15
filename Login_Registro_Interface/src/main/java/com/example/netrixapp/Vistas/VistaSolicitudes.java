@@ -1,29 +1,37 @@
 package com.example.netrixapp.Vistas;
 
-import com.example.netrixapp.Controladores.ControladorRegistro;
-import com.example.netrixapp.Controladores.ControladorSolicitudes;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.example.netrixapp.Controladores.ControladorBarraNavegacion;
+import com.example.netrixapp.Controladores.ControladorSolicitudes;
 import com.example.netrixapp.Modelos.Equipo;
 import com.example.netrixapp.Modelos.TipoEquipo;
-import com.example.netrixapp.Modelos.Solicitud;
+
 import impl.EquipoDaoImpl;
 import impl.TipoEquipoDaoImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class VistaSolicitudes {
 
@@ -270,7 +278,7 @@ public class VistaSolicitudes {
 
         // Fecha de recibo
         VBox filtroFecha = new VBox(10);
-        Label lblFecha = new Label("Fecha de recibo:");
+        Label lblFecha = new Label("Fecha a usar:");
         lblFecha.setStyle("-fx-text-fill: " + COLOR_TEXTO_OSCURO + "; -fx-font-weight: bold; -fx-font-size: 14px;");
         dpFecha_recibo = new DatePicker(LocalDate.now());
         dpFecha_recibo.setStyle("-fx-font-size: 14px; -fx-text-fill: " + COLOR_TEXTO_OSCURO + "; " +
