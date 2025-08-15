@@ -437,7 +437,7 @@ public class VistaRegistro {
         campoTelefono.setPromptText("Teléfono");
         campoTelefono.setStyle("-fx-font-size: 14; -fx-padding: 5 10; -fx-background-radius: 4;");
         HBox.setHgrow(campoTelefono, Priority.ALWAYS);
-        verificarCampo(campoTelefono, 7);
+        verificarCampo(campoTelefono, 8);
 
         telefonoBox.getChildren().addAll(new Label("Teléfono:"), campoLada, campoTelefono);
         gridCampos.add(telefonoBox, 0, 9, 2, 1);
