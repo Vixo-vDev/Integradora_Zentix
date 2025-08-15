@@ -1,16 +1,16 @@
 package com.example.netrixapp.Controladores;
 
-import com.example.netrixapp.HelloApplication;
+import java.time.LocalDate;
+
 import com.example.netrixapp.Modelos.Usuario;
 import com.example.netrixapp.Vistas.VistaLogin;
 import com.example.netrixapp.Vistas.VistaRegistro;
+
 import impl.UsuarioDaoImpl;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-
-import java.time.LocalDate;
 
 public class ControladorRegistro {
 
@@ -43,7 +43,7 @@ public class ControladorRegistro {
             if (!validarCorreoInstitucional(correo)) {
                 Alert alerta = new Alert(Alert.AlertType.WARNING);
                 alerta.setHeaderText("Correo inválido");
-                alerta.setContentText("Solo se permiten correos institucionales que terminen con @utez.edu.mx");
+                alerta.setContentText("Solo se permiten correos institucionales '@utez.edu.mx'");
                 alerta.showAndWait();
                 return;
             }
