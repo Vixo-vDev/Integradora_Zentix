@@ -209,9 +209,12 @@ public class VistaEstadisticas {
             Tooltip tooltip = new Tooltip("Equipo: " + nombreCompleto + 
                                         "\nCantidad: " + item.getCantidad() + 
                                         "\nPorcentaje: " + String.format("%.1f", item.getPorcentaje()) + "%");
-            tooltip.setShowDelay(Duration.millis(1500));
+            tooltip.setShowDelay(Duration.ZERO);
             tooltip.setStyle("-fx-font-size: 12px; -fx-background-color: #2C3E50; -fx-text-fill: white; -fx-border-color: #E5E7EB;");
-            Tooltip.install(barraIndividual, tooltip);
+            
+            // Instalar tooltip solo en el nombre y en la barra visible (no en el espacio vacío)
+            Tooltip.install(labelNombre, tooltip);
+            Tooltip.install(barra, tooltip);
 
             // Agregar la barra individual al contenedor horizontal
             contenedorBarras.getChildren().add(barraIndividual);
