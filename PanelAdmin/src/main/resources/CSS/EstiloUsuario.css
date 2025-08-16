@@ -1,0 +1,68 @@
+/* Estilos generales */
+.contenedor-principal {
+    -fx-padding: 20px;
+    -fx-background-color: #F5F7FA;
+}
+
+/* Encabezado */
+.panel-encabezado {
+    -fx-padding: 0 0 15px 0;
+}
+
+.titulo-principal {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.boton-primario {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+}
+
+/* Filtros */
+.panel-filtros {
+    -fx-padding: 0 0 15px 0;
+}
+
+/* Tabla */
+.tabla-usuarios {
+    -fx-font-size: 14px;
+}
+
+.tabla-usuarios .column-header {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tabla-usuarios .table-row-cell:even {
+    -fx-background-color: #F8F9F9;
+}
+
+.tabla-usuarios .table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+.tabla-usuarios .table-row-cell:hover {
+    -fx-background-color: #E3F2FD;
+}
+
+/* Estados */
+.estado-activo {
+    -fx-text-fill: #2ECC71;
+    -fx-font-weight: bold;
+}
+
+.estado-inactivo {
+    -fx-text-fill: #95A5A6;
+    -fx-font-weight: bold;
+}
+
+.estado-bloqueado {
+    -fx-text-fill: #E74C3C;
+    -fx-font-weight: bold;
+}

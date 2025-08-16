@@ -1,0 +1,134 @@
+/* Estilos generales para la vista de estadísticas */
+.raiz-estadisticas {
+    -fx-background-color: #f5f7fa;
+    -fx-padding: 0;
+}
+
+.contenedor-principal {
+    -fx-spacing: 20px;
+    -fx-padding: 20px;
+}
+
+/* Títulos */
+.titulo-principal {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 15px 0;
+}
+
+.titulo-seccion {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #005994;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Contenedores de tablas */
+.contenedor-tabla {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgb(255, 255, 255), 0, 2, 5, 0);
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+}
+
+/* Tablas */
+.tabla-estadisticas {
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.tabla-estadisticas .column-header {
+    -fx-background-color: #005994;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tabla-estadisticas .table-row-cell:even {
+    -fx-background-color: #f8f9f9;
+}
+
+.tabla-estadisticas .table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+.tabla-estadisticas .table-row-cell:hover {
+    -fx-background-color: #e3f2fd;
+}
+
+/* Botones */
+.contenedor-botones {
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+    -fx-padding: 10px 0 0 0;
+}
+
+.boton-operacion {
+    -fx-font-weight: bold;
+    -fx-padding: 5px 15px;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.boton-agregar {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+}
+
+.boton-editar {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+}
+
+.boton-eliminar {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+/* Efectos hover para botones */
+.boton-agregar:hover {
+    -fx-background-color: #388e3c;
+}
+
+.boton-editar:hover {
+    -fx-background-color: #1976d2;
+}
+
+.boton-eliminar:hover {
+    -fx-background-color: #d32f2f;
+}
+
+/* Formulario de edición */
+.dialogo-formulario .grid-pane {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+}
+
+.dialogo-formulario .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.dialogo-formulario .text-field {
+    -fx-pref-width: 200px;
+}
+
+/* Indicadores de tendencia */
+.tendencia-positiva {
+    -fx-text-fill: #4caf50;
+    -fx-font-weight: bold;
+}
+
+.tendencia-negativa {
+    -fx-text-fill: #f44336;
+    -fx-font-weight: bold;
+}
+
+.tendencia-neutral {
+    -fx-text-fill: #ff9800;
+    -fx-font-weight: bold;
+}
